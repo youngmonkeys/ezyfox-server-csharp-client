@@ -182,6 +182,8 @@ namespace com.tvd12.ezyfoxserver.client
 			array.add(dict);
 			var value = array.get<bool>(0);
 			Console.WriteLine("Hello World! " + array);
+
+			new EzySerializeDeserializeTest().test1();
 		}
 	}
 }
