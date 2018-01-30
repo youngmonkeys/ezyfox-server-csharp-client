@@ -8,6 +8,10 @@ namespace com.tvd12.ezyfoxserver.client.io
 	{
 		protected readonly MemoryStream stream;
 
+		public EzyByteBuffer() : this(new MemoryStream(32768))
+		{
+		}
+
 		public EzyByteBuffer(MemoryStream stream)
 		{
 			this.stream = stream;
@@ -18,16 +22,26 @@ namespace com.tvd12.ezyfoxserver.client.io
 			return new EzyByteBuffer(stream);
 		}
 
+		public static EzyByteBuffer allocate(int capacity)
+		{
+			return new EzyByteBuffer(new MemoryStream(capacity));
+		}
+
 		public byte get()
 		{
 			return (byte)stream.ReadByte();
+		}
+
+		public void get(byte[] dst)
+		{
+			get(dst, 0, dst.Length);
 		}
 
 		public void get(byte[] dst, int offset, int length)
 		{
 			int end = offset + length;
 			for (int i = offset; i < end; i++)
-            	dst[i] = get();
+				dst[i] = get();
 		}
 
 		public byte[] getBytes(int size)
@@ -87,6 +101,40 @@ namespace com.tvd12.ezyfoxserver.client.io
 			return Encoding.UTF8.GetString(getBytes(length));
 		}
 
+		public void put(byte b)
+		{
+			stream.WriteByte(b);
+		}
+
+		public void put(byte[] src)
+		{
+			put(src, 0, src.Length);
+		}
+
+		public void put(byte[] src, int offset, int length)
+		{
+			stream.Write(src, offset, length);
+		}
+
+		public void putInt(int value)
+		{
+			put(BitConverter.GetBytes(value));
+		}
+
+		public void putShort(short value)
+		{
+			put(BitConverter.GetBytes(value));
+		}
+
+		public void flip()
+		{
+		}
+
+		public void clear()
+		{
+			stream.SetLength(0);
+		}
+
 		public int position()
 		{
 			return (int)stream.Position;
@@ -100,6 +148,11 @@ namespace com.tvd12.ezyfoxserver.client.io
 		public int remaining()
 		{
 			return (int)(stream.Length - stream.Position);
+		}
+
+		public override string ToString()
+		{
+			return stream.ToString();
 		}
 	}
 }

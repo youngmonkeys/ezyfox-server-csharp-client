@@ -371,7 +371,7 @@ namespace com.tvd12.ezyfoxserver.client.codec
 			
 	}
 
-	class BinSizeSerializer : EzyCastIntToByte
+	class BinSizeSerializer : EzyCastToByte
 	{
 		public byte[] serialize(int size)
 		{
@@ -400,7 +400,7 @@ namespace com.tvd12.ezyfoxserver.client.codec
 		}
 	}
 
-	class StringSizeSerializer : EzyCastIntToByte
+	class StringSizeSerializer : EzyCastToByte
 	{
 		public byte[] serialize(int size)
 		{
@@ -436,7 +436,7 @@ namespace com.tvd12.ezyfoxserver.client.codec
 		}
 	}
 
-	class ArraySizeSerializer : EzyCastIntToByte
+	class ArraySizeSerializer : EzyCastToByte
 	{
 		public byte[] serialize(int size)
 		{
@@ -465,7 +465,7 @@ namespace com.tvd12.ezyfoxserver.client.codec
 		}
 	}
 
-	class MapSizeSerializer : EzyCastIntToByte
+	class MapSizeSerializer : EzyCastToByte
 	{
 		public byte[] serialize(int size)
 		{
@@ -494,7 +494,7 @@ namespace com.tvd12.ezyfoxserver.client.codec
 		}
 	}
 
-	class IntSerializer : EzyCastIntToByte
+	class IntSerializer : EzyCastToByte
 	{
 		public byte[] serialize(long value)
 		{
@@ -580,7 +580,7 @@ namespace com.tvd12.ezyfoxserver.client.codec
 		}
 	}
 
-	class DoubleSerializer : EzyCastIntToByte
+	class DoubleSerializer : EzyCastToByte
 	{
 		public byte[] serialize(double value)
 		{
@@ -589,7 +589,7 @@ namespace com.tvd12.ezyfoxserver.client.codec
 			
 	}
 
-	class FloatSerializer : EzyCastIntToByte
+	class FloatSerializer : EzyCastToByte
 	{
 
 		public byte[] serialize(float value)

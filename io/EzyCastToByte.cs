@@ -1,6 +1,6 @@
 ﻿namespace com.tvd12.ezyfoxserver.client.io
 {
-	public class EzyCastIntToByte
+	public class EzyCastToByte
 	{
 		public byte cast(int value)
 		{
