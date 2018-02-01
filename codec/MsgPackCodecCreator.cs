@@ -1,8 +1,9 @@
-﻿using com.tvd12.ezyfoxserver.client.handler;
+﻿using System;
+using com.tvd12.ezyfoxserver.client.handler;
 
 namespace com.tvd12.ezyfoxserver.client.codec
 {
-	public class MsgPackCodecCreator
+	public class MsgPackCodecCreator : EzyCodecCreator
 	{
 		protected readonly EzyMessageToBytes messageToBytes 
 			= EzySimpleMessageToBytes.builder().build();
@@ -11,12 +12,12 @@ namespace com.tvd12.ezyfoxserver.client.codec
 		protected readonly EzyMessageDeserializer deserializer 
 			= new MsgPackSimpleDeserializer();
 
-		public EzyNioByteToObjectDecoder newDecoder(int maxRequestSize)
+		public Object newDecoder(int maxRequestSize)
 		{
 			return new MsgPackByteToObjectDecoder(deserializer, maxRequestSize);
 		}
 
-		public EzyNioObjectToByteEncoder newEncoder()
+		public Object newEncoder()
 		{
 			return new MsgPackObjectToByteEncoder(messageToBytes, objectToMessage);
 		}

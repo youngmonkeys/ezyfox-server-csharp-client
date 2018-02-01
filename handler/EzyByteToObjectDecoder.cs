@@ -6,7 +6,7 @@ using com.tvd12.ezyfoxserver.client.codec;
 namespace com.tvd12.ezyfoxserver.client.handler
 {
 
-	public interface EzyNioByteToObjectDecoder
+	public interface EzyByteToObjectDecoder
 	{
 		Object decode(EzyMessage message);
 

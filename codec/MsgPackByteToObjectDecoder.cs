@@ -6,7 +6,7 @@ using static com.tvd12.ezyfoxserver.client.codec.EzyDecodeState;
 
 namespace com.tvd12.ezyfoxserver.client.codec
 {
-	public class MsgPackByteToObjectDecoder : EzyNioByteToObjectDecoder
+	public class MsgPackByteToObjectDecoder : EzyByteToObjectDecoder
 	{
 
 		protected Handlers handlers;

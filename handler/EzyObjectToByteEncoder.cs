@@ -2,7 +2,7 @@
 
 namespace com.tvd12.ezyfoxserver.client.handler
 {
-	public interface EzyNioObjectToByteEncoder
+	public interface EzyObjectToByteEncoder
 	{
 		byte[] encode(Object msg);
 	}

@@ -3,7 +3,7 @@ using com.tvd12.ezyfoxserver.client.handler;
 
 namespace com.tvd12.ezyfoxserver.client.codec
 {
-	public class MsgPackObjectToByteEncoder : EzyNioObjectToByteEncoder
+	public class MsgPackObjectToByteEncoder : EzyObjectToByteEncoder
 	{
 		protected readonly EzyMessageToBytes messageToBytes;
 		protected readonly EzyObjectToMessage objectToMessage;

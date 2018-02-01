@@ -1,34 +1,47 @@
 ﻿using System;
-using System.Net.Sockets;
-using com.tvd12.ezyfoxserver.client.io;
+using System.Threading;
+using com.tvd12.ezyfoxserver.client.util;
 
 namespace com.tvd12.ezyfoxserver.client.socket
 {
-	public class EzySocketReader
+	public abstract class EzySocketReader : EzySocketAdapter
 	{
-		protected readonly EzyByteBuffer readBuffer;
+		protected Object decoder;
+		protected EzyQueue<EzySocketDataEvent> dataEventQueue;
+		protected EzyQueue<EzySocketStatusEvent> statusEventQueue;
 
-		public EzySocketReader()
+		protected override string getThreadName()
 		{
-			this.readBuffer = newReadBuffer();
+			return "socket-reader";
 		}
 
-		public void handle(IAsyncResult result)
+		protected override void process()
 		{
-			StateObject state = (StateObject)result.AsyncState;
-			Socket socket = state.workSocket;
-			int bytesToRead = socket.EndReceive(result);
-			if (bytesToRead > 0)
+			while (active)
 			{
-				byte[] socketBuffer = state.buffer;
-				readBuffer.clear();
-				readBuffer.put(socketBuffer, 0, bytesToRead);
+				Thread.Sleep(getSleepTime());
+				readSocketData();
 			}
 		}
 
-		protected EzyByteBuffer newReadBuffer()
+		protected int getSleepTime()
 		{
-			return new EzyByteBuffer();
+			return 3;
 		}
+
+		protected abstract void readSocketData();
+
+		public abstract void setDecoder(Object decoder);
+
+		public void setDataEventQueue(EzyQueue<EzySocketDataEvent> dataEventQueue)
+		{
+			this.dataEventQueue = dataEventQueue;
+		}
+
+		public void setStatusEventQueue(EzyQueue<EzySocketStatusEvent> statusEventQueue)
+		{
+			this.statusEventQueue = statusEventQueue;
+		}
+
 	}
 }
