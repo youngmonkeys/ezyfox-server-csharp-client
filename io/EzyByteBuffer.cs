@@ -118,16 +118,21 @@ namespace com.tvd12.ezyfoxserver.client.io
 
 		public void putInt(int value)
 		{
-			put(BitConverter.GetBytes(value));
+			byte[] bytes = BitConverter.GetBytes(value);
+			EzyBytes.swapBytes(bytes);
+			put(bytes);
 		}
 
 		public void putShort(short value)
 		{
-			put(BitConverter.GetBytes(value));
+			byte[] bytes = BitConverter.GetBytes(value);
+			EzyBytes.swapBytes(bytes);
+			put(bytes);
 		}
 
 		public void flip()
 		{
+			stream.Position = 0;
 		}
 
 		public void clear()

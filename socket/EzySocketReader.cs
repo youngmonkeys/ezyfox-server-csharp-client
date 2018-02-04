@@ -6,7 +6,6 @@ namespace com.tvd12.ezyfoxserver.client.socket
 {
 	public abstract class EzySocketReader : EzySocketAdapter
 	{
-		protected Object decoder;
 		protected EzyQueue<EzySocketDataEvent> dataEventQueue;
 		protected EzyQueue<EzySocketStatusEvent> statusEventQueue;
 

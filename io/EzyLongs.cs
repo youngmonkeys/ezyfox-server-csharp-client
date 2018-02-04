@@ -4,7 +4,6 @@
 	{
 		private EzyLongs()
 		{
-
 		}
 
 		public static long bin2long(int length)

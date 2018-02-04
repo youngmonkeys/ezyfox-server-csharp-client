@@ -11,6 +11,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
 		protected override void process()
 		{
 			EzyArray data = ticketsQueue.take();
+			getLogger().debug("send: {0}", data);
 			Object bytes = encodeData(data);
 			writeBytes(bytes);
 		}

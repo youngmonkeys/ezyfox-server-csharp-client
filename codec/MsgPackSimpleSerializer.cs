@@ -31,15 +31,6 @@ namespace com.tvd12.ezyfoxserver.client.codec
 			parsers.Add(PRIMITVE_SHORT, input => parseShort(input));
 			parsers.Add(PRIMITVE_STRING, input => parseString(input));
 
-			//parsers.Add(WRAPPER_BOOLEAN, input => parseBoolean(input));
-			//parsers.Add(WRAPPER_BYTE, input => parseByte(input));
-			//parsers.Add(WRAPPER_CHAR, input => parseChar(input));
-			//parsers.Add(WRAPPER_DOUBLE, input => parseDouble(input));
-			//parsers.Add(WRAPPER_INT, input => parseInt(input));
-			//parsers.Add(WRAPPER_LONG, input => parseInt(input));
-			//parsers.Add(WRAPPER_SHORT, input => parseShort(input));
-			//parsers.Add(WRAPPER_STRING, input => parseString(input));
-
 			parsers.Add(PRIMITVE_BOOLEAN_ARRAY, input => parsePrimitiveBooleans(input));
 			parsers.Add(PRIMITVE_BYTE_ARRAY, input => parseBin(input));
 			parsers.Add(PRIMITVE_CHAR_ARRAY, input => parsePrimitiveChars(input));
@@ -49,14 +40,6 @@ namespace com.tvd12.ezyfoxserver.client.codec
 			parsers.Add(PRIMITVE_LONG_ARRAY, input => parsePrimitiveLongs(input));
 			parsers.Add(PRIMITVE_SHORT_ARRAY, input => parsePrimitiveShorts(input));
 			parsers.Add(PRIMITVE_STRING_ARRAY, input => parseStrings(input));
-
-			//parsers.Add(WRAPPER_BOOLEAN_ARRAY, input => parseWrapperBytes(input));
-			//parsers.Add(WRAPPER_BYTE_ARRAY, input => parseWrapperBooleans(input));
-			//parsers.Add(WRAPPER_CHAR_ARRAY, input => parseWrapperChars(input));
-			//parsers.Add(WRAPPER_DOUBLE_ARRAY, input => parseWrapperDoubles(input));
-			//parsers.Add(WRAPPER_INT_ARRAY, input => parseWrapperInts(input));
-			//parsers.Add(WRAPPER_LONG_ARRAY, input => parseWrapperLongs(input));
-			//parsers.Add(WRAPPER_SHORT_ARRAY, input => parseWrapperShorts(input));
 
 			parsers.Add(EZY_OBJECT_TYPE, input => parseObject(input));
 			parsers.Add(EZY_ARRAY_TYPE, input => parseArray(input));

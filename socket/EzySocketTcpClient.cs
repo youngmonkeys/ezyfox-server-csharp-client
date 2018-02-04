@@ -23,12 +23,19 @@ namespace com.tvd12.ezyfoxserver.client.socket
 			return new EzySocketTcpWriter();
 		}
 
-		public override void connect()
+		public override void connect(String host, int port)
 		{
             socket = new TcpClient();
 			((EzySocketTcpReader)socketReader).setSocket(socket);
 			((EzySocketTcpWriter)socketWriter).setSocket(socket);
-			socket.BeginConnect(host, port, new AsyncCallback(handleConnectionResult), socket);
+			try
+			{
+				socket.BeginConnect(host, port, new AsyncCallback(handleConnectionResult), socket);
+			}
+			catch (Exception e)
+			{
+				getLogger().error("connect to server error", e);
+			}
 		}
 
 		private void handleConnectionResult(IAsyncResult result)

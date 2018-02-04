@@ -1,6 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using com.tvd12.ezyfoxserver.client.entity;
+using System.Threading;
+using com.tvd12.ezyfoxserver.client.api;
+using com.tvd12.ezyfoxserver.client.evt;
+using static com.tvd12.ezyfoxserver.client.evt.EzyEventType;
 
 namespace com.tvd12.ezyfoxserver.client
 {
@@ -9,17 +11,14 @@ namespace com.tvd12.ezyfoxserver.client
 	{
 		public static void Main(string[] args)
 		{
-			var tmp = new Dictionary<String, Int32>();
-			tmp["hello"] = 3005;
-			var dict = new EzyObject();
-			dict.putAll(tmp);
-			dict.put("foo", "bar");
-			var array = new EzyArray();
-			array.add(true);
-			array.add("i love you");
-			array.add(dict);
-			var value = array.get<bool>(0);
-			Console.WriteLine("Hello World! " + array);
+			EzyClient client = new EzyClient();
+			client.addEventHandler(CONNECTION_SUCCESS, new EzyConnectionSuccessEventHandler());
+			client.connect("localhost", 3005);
+			while (true)
+			{
+				Thread.Sleep(3);
+				client.processEvents();
+			}
 
 		}
 	}

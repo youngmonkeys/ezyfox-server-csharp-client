@@ -10,10 +10,11 @@ namespace com.tvd12.ezyfoxserver.client.socket
 		protected Thread thread;
 		protected volatile bool active = false;
 
-		protected void newThread()
+		protected Thread newThread()
 		{
-            this.thread = new Thread(run);
-			this.thread.Name = getThreadName();
+            Thread thread = new Thread(run);
+			thread.Name = getThreadName();
+			return thread;
 		}
 
 		public void setActive(bool active)
@@ -23,20 +24,21 @@ namespace com.tvd12.ezyfoxserver.client.socket
 
 		public void start()
 		{
-			thread.Start();
+			this.thread = newThread();
+			this.thread.Start();
 		}
 
 		protected void run()
 		{
-			setActive(true);
-			run0();
+			this.setActive(true);
+			this.run0();
 		}
 
 		public virtual void run0()
 		{
 			while (active)
 			{
-				process();
+				this.process();
 			}
 		}
 

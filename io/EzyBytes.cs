@@ -35,12 +35,16 @@ namespace com.tvd12.ezyfoxserver.client.io
 
 		public static byte[] getBytes(double value)
 		{
-			return BitConverter.GetBytes(value);
+			byte[] bytes = BitConverter.GetBytes(value);
+			swapBytes(bytes);
+			return bytes;
 		}
 
 		public static byte[] getBytes(float value)
 		{
-			return BitConverter.GetBytes(value);
+			byte[] bytes = BitConverter.GetBytes(value);
+			swapBytes(bytes);
+			return bytes;
 		}
 
 		public static byte[] getBytes(long value)
@@ -88,10 +92,34 @@ namespace com.tvd12.ezyfoxserver.client.io
 
 		public static byte[] getBytes(long value, int size)
 		{
+			return getBytes(value, size, true);
+		}
+
+		public static byte[] getBytes(long value, int size, bool swap)
+		{
 			byte[] bytes = new byte[size];
 			for (int i = 0; i < size; i++)
 				bytes[i] = (byte)((value >> ((size - i - 1) * 8) & 0xff));
+			if (swap)
+			{
+				swapBytes(bytes);
+			}
 			return bytes;
+		}
+
+		public static void swapBytes(byte[] bytes)
+		{
+			swapBytes(bytes, bytes.Length);
+		}
+
+		public static void swapBytes(byte[] bytes, int size)
+		{
+			for (int i = 0, k = size - 1; i < k; i++, k--)
+			{
+				byte c = bytes[i];
+				bytes[i] = bytes[k];
+				bytes[k] = c;
+			}
 		}
 	}
 }
