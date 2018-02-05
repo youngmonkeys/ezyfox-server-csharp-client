@@ -1,5 +1,9 @@
 ﻿using System;
-using System.Security.Cryptography;
+using Org.BouncyCastle.Pkcs;
+using Org.BouncyCastle.X509;
+using Org.BouncyCastle.Security;
+using Org.BouncyCastle.Crypto;
+using Org.BouncyCastle.Crypto.Generators;
 
 namespace com.tvd12.ezyfoxserver.client.security
 {
@@ -7,11 +11,16 @@ namespace com.tvd12.ezyfoxserver.client.security
 	{
 		public EzyKeyPair generate(int keySize)
 		{
-			var provider = new RSACryptoServiceProvider(keySize);
-			var privateKey = provider.ExportParameters(true);
-			var publicKey = provider.ExportParameters(false);
-			var privateKeyString = Convert.ToBase64String(privateKey.Modulus);
-			var publicKeyString = Convert.ToBase64String(publicKey.Modulus);
+			RsaKeyPairGenerator generator = new RsaKeyPairGenerator();
+			generator.Init(new KeyGenerationParameters(new SecureRandom(), keySize));
+			var pair = generator.GenerateKeyPair();
+			var privateKey = PrivateKeyInfoFactory.CreatePrivateKeyInfo(pair.Private);
+			byte[] privateKeyBytes = privateKey.ToAsn1Object().GetDerEncoded();
+			string privateKeyString = Convert.ToBase64String(privateKeyBytes);
+
+			var publicKey = SubjectPublicKeyInfoFactory.CreateSubjectPublicKeyInfo(pair.Public);
+			byte[] publicKeyBytes = publicKey.ToAsn1Object().GetDerEncoded();
+			string publicKeyString = Convert.ToBase64String(publicKeyBytes);
 			EzyKeyPair keyPair = new EzyKeyPair(privateKeyString, publicKeyString);
 			return keyPair;
 		}

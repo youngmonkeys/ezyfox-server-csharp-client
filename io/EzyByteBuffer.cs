@@ -53,12 +53,16 @@ namespace com.tvd12.ezyfoxserver.client.io
 
 		public float getFloat()
 		{
-			return BitConverter.ToSingle(getBytes(4), 0);
+			byte[] bytes = getBytes(4);
+			EzyBytes.swapBytes(bytes);
+			return BitConverter.ToSingle(bytes, 0);
 		}
 
 		public double getDouble()
 		{
-			return BitConverter.ToDouble(getBytes(8), 0);
+			byte[] bytes = getBytes(8);
+			EzyBytes.swapBytes(bytes);
+			return BitConverter.ToDouble(bytes, 0);
 		}
 
 		public int getInt()
@@ -73,7 +77,9 @@ namespace com.tvd12.ezyfoxserver.client.io
 
 		public int getUInt(int byteSize)
 		{
-			return EzyInts.bin2uint(getBytes(byteSize));
+			byte[] bytes = getBytes(byteSize);
+			EzyBytes.swapBytes(bytes);
+			return EzyInts.bin2uint(bytes);
 		}
 
 		public long getLong()

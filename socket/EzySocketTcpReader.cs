@@ -22,6 +22,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
 		{
 			this.readBuffer = newReadBuffer();
 			this.readBytes = new byte[getReadBufferSize()];
+			this.messageQueue = new Queue<EzyMessage>();
 		}
 
 		protected override void readSocketData()

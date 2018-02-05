@@ -1,5 +1,4 @@
-﻿using System;
-using com.tvd12.ezyfoxserver.client.evt;
+﻿using com.tvd12.ezyfoxserver.client.evt;
 using com.tvd12.ezyfoxserver.client.handler;
 using com.tvd12.ezyfoxserver.client.request;
 using com.tvd12.ezyfoxserver.client.security;
