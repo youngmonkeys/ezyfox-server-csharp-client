@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+
 namespace com.tvd12.ezyfoxserver.client.entity
 {
 	public interface EzyRoObject : EzyData

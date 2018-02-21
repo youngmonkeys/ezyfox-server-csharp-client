@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Text;
 using System.Collections.Generic;
+using com.tvd12.ezyfoxserver.client.builder;
+
 namespace com.tvd12.ezyfoxserver.client.entity
 {
 	public class EzyArray : EzyRoArray
@@ -15,6 +17,19 @@ namespace com.tvd12.ezyfoxserver.client.entity
 		public void add(Object value)
 		{
 			list.Add(value);
+		}
+
+		public void add<T>(EzyBuilder<T> builder)
+		{
+			list.Add(builder.build());
+		}
+
+		public void addAll<T>(ICollection<T> values)
+		{
+			foreach (T value in values)
+			{
+				list.Add(value);
+			}
 		}
 
 		public int size()
@@ -36,7 +51,7 @@ namespace com.tvd12.ezyfoxserver.client.entity
 		public List<T> toList<T>()
 		{
 			List<T> answer = new List<T>();
-			foreach(Object item in list) 
+			foreach (Object item in list)
 			{
 				answer.Add((T)item);
 			}
