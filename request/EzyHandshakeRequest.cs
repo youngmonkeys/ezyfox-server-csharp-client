@@ -1,72 +1,50 @@
 ﻿using System;
 using com.tvd12.ezyfoxserver.client.entity;
 using com.tvd12.ezyfoxserver.client.constant;
+using com.tvd12.ezyfoxserver.client.factory;
 
 namespace com.tvd12.ezyfoxserver.client.request
 {
-	public class EzyHandshakeRequest : EzyFixedRequest
+	public class EzyHandshakeRequest : EzyRequest
 	{
-		public EzyHandshakeRequest(EzyParams parameters) : base(EzyCommand.HANDSHAKE, parameters)
-		{
-		}
-	}
 
-	public class EzyHandshakeRequestParams : EzyEmptyParams
-	{
-		private String clientId;
-		private String clientKey;
-		private String reconnectToken;
 
-		public override EzyArray serialize()
-		{
-			var array = newArrayBuilder()
-				.append(clientId)
-				.append(clientKey)
-				.append(reconnectToken)
-				.append(getClientType())
-				.append(getClientVersion())
-				.build();
-			return array;
-		}
+		protected readonly String clientId;
+		protected readonly String clientKey;
+		protected readonly String clientType;
+		protected readonly String clientVersion;
+		protected readonly bool enableEncryption;
+		protected readonly String token;
 
-		public String getClientType()
-		{
-			return "csharp";
-		}
-
-		public String getClientVersion()
-		{
-			return "1.0.0";
-		}
-
-		public String getClientId()
-		{
-			return clientId;
-		}
-
-		public String getClientKey()
-		{
-			return clientKey;
-		}
-
-		public String getReconnectToken()
-		{
-			return reconnectToken;
-		}
-
-		public void setClientId(String clientId)
+		public EzyHandshakeRequest(String clientId,
+								   String clientKey,
+								   String clientType,
+								   String clientVersion,
+								   bool enableEncryption, String token)
 		{
 			this.clientId = clientId;
-		}
-
-		public void setClientKey(String clientKey)
-		{
 			this.clientKey = clientKey;
+			this.clientType = clientType;
+			this.clientVersion = clientVersion;
+			this.token = token;
+			this.enableEncryption = enableEncryption;
 		}
 
-		public void setReconnectToken(String reconnectToken)
+		public Object getCommand()
 		{
-			this.reconnectToken = reconnectToken;
+			return EzyCommand.HANDSHAKE;
+		}
+
+		public EzyData serialize()
+		{
+			EzyData data = EzyEntityFactory.newArrayBuilder()
+					.append(clientId)
+					.append(clientKey)
+					.append(clientType)
+					.append(clientVersion)
+					.append(enableEncryption)
+					.append(token).build();
+			return data;
 		}
 	}
 }

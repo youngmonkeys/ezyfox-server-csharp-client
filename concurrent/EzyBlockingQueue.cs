@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading;
-using System.Collections.Generic;
 using com.tvd12.ezyfoxserver.client.util;
 
 namespace com.tvd12.ezyfoxserver.client.concurrent
@@ -29,7 +28,8 @@ namespace com.tvd12.ezyfoxserver.client.concurrent
 					Monitor.Wait(queue);
 				}
 
-				return queue.Dequeue();
+				E e = queue.Dequeue();
+				return e;
 			}
 		}
 
@@ -59,14 +59,16 @@ namespace com.tvd12.ezyfoxserver.client.concurrent
 
 		public override bool offer(E e)
 		{
-			return add(e);
+			bool success = add(e);
+			return success;
 		}
 
 		public override E peek()
 		{
 			lock(queue)
 			{
-				return queue.Peek();
+				E e = queue.Peek();
+				return e;
 			}
 		}
 
@@ -74,7 +76,8 @@ namespace com.tvd12.ezyfoxserver.client.concurrent
 		{
 			lock(queue)
 			{
-				return queue.Dequeue();
+				E e = queue.Dequeue();
+				return e;
 			}
 		}
 
@@ -82,7 +85,8 @@ namespace com.tvd12.ezyfoxserver.client.concurrent
 		{
 			lock (queue)
 			{
-				return queue.Count;
+				int count = queue.Count;
+				return count;
 			}
 		}
 
@@ -96,7 +100,8 @@ namespace com.tvd12.ezyfoxserver.client.concurrent
 
 		public override bool isEmpty()
 		{
-			return size() == 0;
+			bool empty = (size() == 0);
+			return empty;
 		}
 
 	}

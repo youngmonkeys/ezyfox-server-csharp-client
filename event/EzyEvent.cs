@@ -2,6 +2,6 @@
 {
 	public interface EzyEvent
 	{
-		int getType();
+		EzyEventType getType();
 	}
 }

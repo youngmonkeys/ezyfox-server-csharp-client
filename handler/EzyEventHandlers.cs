@@ -1,32 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
 using com.tvd12.ezyfoxserver.client.evt;
-using com.tvd12.ezyfoxserver.client.api;
+using com.tvd12.ezyfoxserver.client.socket;
 
 namespace com.tvd12.ezyfoxserver.client.handler
 {
-	public class EzyEventHandlers
+	public class EzyEventHandlers : EzyAbstractHandlers
 	{
-		private readonly IDictionary<int, Object> handlers;
+		private readonly IDictionary<Object, Object> handlers;
 
-		public EzyEventHandlers()
+		public EzyEventHandlers(EzyClient client, EzyPingSchedule pingSchedule) :
+				base(client, pingSchedule)
 		{
-			this.handlers = new Dictionary<int, Object>();
+			this.handlers = new Dictionary<Object, Object>();
 		}
 
-		public void handleEvent<E>(E evt) where E : EzyEvent
+		public void addHandler(Object eventType, IEzyEventHandler handler)
 		{
-			var eventType = evt.getType();
-			var handler = handlers[eventType];
-			if (handler != null)
-			{
-				((EzyEventHandler<E>)handler).handle(evt);
-			}
-		}
-
-		public void addEventHandler<E>(int eventType, Object handler) where E : EzyEvent
-		{
+			this.configHandler(handler);
 			handlers[eventType] = handler;
+		}
+
+		public EzyEventHandler<E> getHandler<E>(Object eventType) where E : EzyEvent
+		{
+			Object handler = null;
+			if (handlers.ContainsKey(eventType))
+				handler = handlers[eventType];
+			return (EzyEventHandler<E>)handler;
 		}
 	}
 }

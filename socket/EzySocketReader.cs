@@ -1,45 +1,75 @@
 ﻿using System;
+using System.Net.Sockets;
 using System.Threading;
-using com.tvd12.ezyfoxserver.client.util;
+using com.tvd12.ezyfoxserver.client.constant;
+using com.tvd12.ezyfoxserver.client.io;
 
 namespace com.tvd12.ezyfoxserver.client.socket
 {
-	public abstract class EzySocketReader : EzySocketAdapter
+	public class EzySocketReader : EzyAbstractSocketEventHandler
 	{
-		protected EzyQueue<EzySocketDataEvent> dataEventQueue;
-		protected EzyQueue<EzySocketStatusEvent> statusEventQueue;
+		protected TcpClient socketChannel;
+		protected readonly byte[] readBytes;
+		protected readonly EzyByteBuffer readBuffer;
+		protected readonly EzySocketDataHandler socketDataHandler;
 
-		protected override string getThreadName()
+		public EzySocketReader(EzySocketDataHandler socketDataHandler)
 		{
-			return "socket-reader";
+			this.readBuffer = newReadBuffer();
+			this.readBytes = new byte[getReadBufferSize()];
+			this.socketDataHandler = socketDataHandler;
 		}
 
-		protected override void process()
+		public override void handleEvent()
 		{
-			while (active)
+			try
 			{
-				Thread.Sleep(getSleepTime());
-				readSocketData();
+				processSocketChannel();
+				Thread.Sleep(3);
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine("I/O error at socket-reader: " + e);
 			}
 		}
 
-		protected int getSleepTime()
+		private void processSocketChannel()
 		{
-			return 3;
+			if (socketChannel == null)
+				return;
+			if (!socketChannel.Connected)
+				return;
+			int bytesToRead = socketChannel.GetStream().Read(readBytes, 0, getReadBufferSize());
+			if (bytesToRead <= 0)
+			{
+				return;
+			}
+			readBuffer.clear();
+			readBuffer.put(readBytes, 0, bytesToRead);
+			readBuffer.flip();
+			byte[] binary = readBuffer.getBytes(bytesToRead);
+			socketDataHandler.fireBytesReceived(binary);
 		}
 
-		protected abstract void readSocketData();
-
-		public abstract void setDecoder(Object decoder);
-
-		public void setDataEventQueue(EzyQueue<EzySocketDataEvent> dataEventQueue)
+		private void closeConnection()
 		{
-			this.dataEventQueue = dataEventQueue;
+			socketChannel.Close();
+			socketDataHandler.fireSocketDisconnected(EzyDisconnectReason.UNKNOWN);
 		}
 
-		public void setStatusEventQueue(EzyQueue<EzySocketStatusEvent> statusEventQueue)
+		public void setSocketChannel(TcpClient socketChannel)
 		{
-			this.statusEventQueue = statusEventQueue;
+			this.socketChannel = socketChannel;
+		}
+
+		protected EzyByteBuffer newReadBuffer()
+		{
+			return EzyByteBuffer.allocate(getReadBufferSize());
+		}
+
+		protected int getReadBufferSize()
+		{
+			return EzySocketConstants.MAX_READ_BUFFER_SIZE;
 		}
 
 	}

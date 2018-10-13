@@ -254,7 +254,7 @@ namespace com.tvd12.ezyfoxserver.client.codec
 
 		protected int parseUInt(EzyByteBuffer buffer, int size)
 		{
-			return (int)parseULong(buffer, size);
+			return Convert.ToInt32(parseULong(buffer, size));
 		}
 
 		protected long parseULong(EzyByteBuffer buffer, int size)

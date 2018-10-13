@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using com.tvd12.ezyfoxserver.client.io;
-using com.tvd12.ezyfoxserver.client.handler;
 using static com.tvd12.ezyfoxserver.client.codec.EzyDecodeState;
 
 namespace com.tvd12.ezyfoxserver.client.codec
@@ -29,6 +28,11 @@ namespace com.tvd12.ezyfoxserver.client.codec
 		public void decode(EzyByteBuffer bytes, Queue<EzyMessage> queue)
 		{
 			handlers.handle(bytes, queue);
+		}
+
+		public void reset()
+		{
+			handlers.reset();
 		}
 
 	}

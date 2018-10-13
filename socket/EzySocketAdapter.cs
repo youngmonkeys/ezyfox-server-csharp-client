@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using com.tvd12.ezyfoxserver.client.util;
-using com.tvd12.ezyfoxserver.client.logger;
 
 namespace com.tvd12.ezyfoxserver.client.socket
 {

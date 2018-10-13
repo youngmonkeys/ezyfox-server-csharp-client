@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using com.tvd12.ezyfoxserver.client.io;
+using com.tvd12.ezyfoxserver.client.util;
 
 namespace com.tvd12.ezyfoxserver.client.codec
 {
-	public abstract class EzyDecodeHandlers
+	public abstract class EzyDecodeHandlers : EzyResettable
 	{
 		protected int state;
 		protected IDictionary<int, EzyDecodeHandler> handlers;
@@ -27,6 +28,11 @@ namespace com.tvd12.ezyfoxserver.client.codec
 		protected int firstState()
 		{
 			return EzyDecodeState.PREPARE_MESSAGE;
+		}
+
+		public void reset()
+		{
+			this.state = firstState();
 		}
 
 		public abstract class AbstractBuilder

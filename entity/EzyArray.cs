@@ -1,13 +1,21 @@
 ﻿using System;
 using System.Text;
 using System.Collections.Generic;
+using com.tvd12.ezyfoxserver.client.io;
 using com.tvd12.ezyfoxserver.client.builder;
 
 namespace com.tvd12.ezyfoxserver.client.entity
 {
 	public class EzyArray : EzyRoArray
 	{
-		protected readonly List<Object> list = new List<Object>();
+		protected readonly List<Object> list;
+		protected readonly EzyOutputTransformer outputTransformer;
+
+		public EzyArray(EzyOutputTransformer outputTransformer)
+		{
+			this.outputTransformer = outputTransformer;
+			this.list = new List<Object>();
+		}
 
 		public void clear()
 		{
@@ -21,7 +29,8 @@ namespace com.tvd12.ezyfoxserver.client.entity
 
 		public void add<T>(EzyBuilder<T> builder)
 		{
-			list.Add(builder.build());
+			T t = builder.build();
+			list.Add(t);
 		}
 
 		public void addAll<T>(ICollection<T> values)
@@ -34,18 +43,35 @@ namespace com.tvd12.ezyfoxserver.client.entity
 
 		public int size()
 		{
-			return list.Count;
+			int s = list.Count;
+			return s;
 		}
-
 
 		public bool isEmpty()
 		{
-			return size() == 0;
+			bool empty = (size() == 0);
+			return empty;
 		}
 
 		public T get<T>(int index)
 		{
-			return (T)list[index];
+			var answer = list[index];
+			if (outputTransformer == null)
+			{
+				return (T)answer;
+			}
+			T t = outputTransformer.transform<T>(answer);
+			return t;
+
+		}
+
+		public T get<T>(int index, T defValue)
+		{
+			int count = list.Count;
+			if (index >= count)
+				return defValue;
+			T t = get<T>(index);
+			return t;
 		}
 
 		public List<T> toList<T>()
@@ -60,7 +86,7 @@ namespace com.tvd12.ezyfoxserver.client.entity
 
 		public object Clone()
 		{
-			var answer = new EzyArray();
+			var answer = new EzyArray(outputTransformer);
 			foreach (Object item in list)
 			{
 				if (item is ICloneable)
@@ -73,7 +99,8 @@ namespace com.tvd12.ezyfoxserver.client.entity
 
 		public EzyArray duplicate<EzyArray>()
 		{
-			return (EzyArray)Clone();
+			EzyArray c = (EzyArray)Clone();
+			return c;
 		}
 
 		public override string ToString()

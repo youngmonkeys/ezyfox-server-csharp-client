@@ -1,13 +1,20 @@
 ﻿using System;
 using System.Text;
 using System.Collections.Generic;
+using com.tvd12.ezyfoxserver.client.io;
 
 namespace com.tvd12.ezyfoxserver.client.entity
 {
 	public class EzyObject : EzyRoObject
 	{
-		protected readonly Dictionary<Object, Object> dictionary 
-				= new Dictionary<Object, Object>();
+		protected readonly Dictionary<Object, Object> dictionary;
+		protected readonly EzyOutputTransformer outputTransformer;
+
+		public EzyObject(EzyOutputTransformer outputTransformer)
+		{
+			this.outputTransformer = outputTransformer;
+			this.dictionary = new Dictionary<Object, Object>();
+		}
 
 		public void clear()
 		{
@@ -49,7 +56,12 @@ namespace com.tvd12.ezyfoxserver.client.entity
 
 		public V get<V>(Object key)
 		{
-			return (V)dictionary[key];
+			var answer = dictionary[key];
+			if (outputTransformer == null)
+			{
+				return (V)answer;
+			}
+			return outputTransformer.transform<V>(answer);
 		}
 
 		public V get<V>(Object key, V defValue)
@@ -74,7 +86,7 @@ namespace com.tvd12.ezyfoxserver.client.entity
 
 		public object Clone()
 		{
-			var answer = new EzyObject();
+			var answer = new EzyObject(outputTransformer);
 			foreach (Object key in dictionary.Keys)
 			{
 				Object value = dictionary[key];
