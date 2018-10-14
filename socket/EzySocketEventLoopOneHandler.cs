@@ -16,7 +16,7 @@
 			return eventLoop;
 		}
 
-		public void destroy()
+		public override void destroy()
 		{
 			base.destroy();
 			if (eventHandler != null)

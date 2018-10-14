@@ -1,5 +1,4 @@
 ﻿using System;
-using com.tvd12.ezyfoxserver.client.socket;
 using com.tvd12.ezyfoxserver.client.util;
 
 namespace com.tvd12.ezyfoxserver.client.socket
@@ -41,7 +40,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
 			eventLoop.reset();
 		}
 
-		public void destroy()
+		public virtual void destroy()
 		{
 			if (eventLoop != null)
 			{

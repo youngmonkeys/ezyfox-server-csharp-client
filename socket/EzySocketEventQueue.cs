@@ -1,5 +1,4 @@
-﻿using System;
-namespace com.tvd12.ezyfoxserver.client.socket
+﻿namespace com.tvd12.ezyfoxserver.client.socket
 {
 	public interface EzySocketEventQueue
 	{

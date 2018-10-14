@@ -29,12 +29,12 @@ namespace com.tvd12.ezyfoxserver.client.socket
 			}
 		}
 
-		public void destroy()
+		public override void destroy()
 		{
 			packetQueue.clear();
 		}
 
-		public void reset()
+		public override void reset()
 		{
 		}
 

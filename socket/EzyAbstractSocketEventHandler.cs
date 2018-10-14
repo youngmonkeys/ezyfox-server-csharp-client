@@ -4,11 +4,11 @@
 	{
 		public abstract void handleEvent();
 
-		public void reset()
+		public virtual void reset()
 		{
 		}
 
-		public void destroy()
+		public virtual void destroy()
 		{
 		}
 	}
