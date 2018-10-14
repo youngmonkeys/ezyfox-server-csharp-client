@@ -21,6 +21,8 @@ namespace com.tvd12.ezyfoxserver.client
 
 		void disconnect();
 
+		void processEvents();
+
 		EzyClientConfig getConfig();
 
 		EzyZone getZone();

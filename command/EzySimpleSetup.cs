@@ -22,7 +22,7 @@ public class EzySimpleSetup : EzySetup
 		return this;
 	}
 
-	public EzySetup addEventHandler(EzyEventType eventType, IEzyEventHandler eventHandler)
+	public EzySetup addEventHandler(EzyEventType eventType, EzyEventHandler eventHandler)
 	{
 		handlerManager.addEventHandler(eventType, eventHandler);
 		return this;

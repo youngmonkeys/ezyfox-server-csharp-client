@@ -11,6 +11,11 @@ namespace com.tvd12.ezyfoxserver.client.evt
 			this.reason = reason;
 		}
 
+		public static EzyConnectionFailureEvent timeout()
+		{
+			return new EzyConnectionFailureEvent(EzyConnectionFailedReason.TIME_OUT);
+		}
+
 		public static EzyConnectionFailureEvent networkUnreachable()
 		{
 			return new EzyConnectionFailureEvent(EzyConnectionFailedReason.NETWORK_UNREACHABLE);

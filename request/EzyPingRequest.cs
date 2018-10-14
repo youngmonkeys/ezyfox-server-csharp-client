@@ -7,7 +7,7 @@ namespace com.tvd12.ezyfoxserver.client.request
 {
 	public class EzyPingRequest : EzyRequest
 	{
-		public int getCommand()
+		public Object getCommand()
 		{
 			return EzyCommand.PING;
 		}

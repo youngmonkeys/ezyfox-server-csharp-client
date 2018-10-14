@@ -7,26 +7,26 @@ namespace com.tvd12.ezyfoxserver.client.handler
 {
 	public class EzyEventHandlers : EzyAbstractHandlers
 	{
-		private readonly IDictionary<Object, Object> handlers;
+		private readonly IDictionary<Object, EzyEventHandler> handlers;
 
 		public EzyEventHandlers(EzyClient client, EzyPingSchedule pingSchedule) :
 				base(client, pingSchedule)
 		{
-			this.handlers = new Dictionary<Object, Object>();
+			this.handlers = new Dictionary<Object, EzyEventHandler>();
 		}
 
-		public void addHandler(Object eventType, IEzyEventHandler handler)
+		public EzyEventHandler getHandler(Object eventType)
+		{
+			EzyEventHandler handler = null;
+			if (handlers.ContainsKey(eventType))
+				handler = handlers[eventType];
+			return handler;
+		}
+
+		public void addHandler(Object eventType, EzyEventHandler handler)
 		{
 			this.configHandler(handler);
 			handlers[eventType] = handler;
-		}
-
-		public EzyEventHandler<E> getHandler<E>(Object eventType) where E : EzyEvent
-		{
-			Object handler = null;
-			if (handlers.ContainsKey(eventType))
-				handler = handlers[eventType];
-			return (EzyEventHandler<E>)handler;
 		}
 	}
 }

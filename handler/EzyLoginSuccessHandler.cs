@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using com.tvd12.ezyfoxserver.client.evt;
-using com.tvd12.ezyfoxserver.client.handler;
-using com.tvd12.ezyfoxserver.client.request;
 using com.tvd12.ezyfoxserver.client.entity;
-using com.tvd12.ezyfoxserver.client.wrapper;
 using com.tvd12.ezyfoxserver.client.constant;
 
 namespace com.tvd12.ezyfoxserver.client.handler

@@ -8,11 +8,11 @@ namespace com.tvd12.ezyfoxserver.client.manager
 	{
 		EzyDataHandler getDataHandler(Object cmd);
 
-		EzyEventHandler<E> getEventHandler<E>(Object eventType) where E : EzyEvent;
+		EzyEventHandler getEventHandler(Object eventType);
 
 		void addDataHandler(Object cmd, EzyDataHandler dataHandler);
 
-		void addEventHandler(Object eventType, IEzyEventHandler eventHandler);
+		void addEventHandler(Object eventType, EzyEventHandler eventHandler);
 
 		EzyAppDataHandlers getAppDataHandlers(String appName);
 	}

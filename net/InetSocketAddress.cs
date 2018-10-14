@@ -21,5 +21,10 @@ namespace com.tvd12.ezyfoxserver.client.net
 		{
 			return this.port;
 		}
+
+		public override string ToString()
+		{
+			return string.Format("{0}:{1}", host, port);
+		}
 	}
 }

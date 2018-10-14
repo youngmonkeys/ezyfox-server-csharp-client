@@ -4,7 +4,6 @@ using com.tvd12.ezyfoxserver.client.constant;
 using com.tvd12.ezyfoxserver.client.factory;
 using com.tvd12.ezyfoxserver.client.handler;
 using com.tvd12.ezyfoxserver.client.request;
-using com.tvd12.ezyfoxserver.client.wrapper;
 
 namespace com.tvd12.ezyfoxserver.client.entity
 {
@@ -70,9 +69,9 @@ namespace com.tvd12.ezyfoxserver.client.entity
 			return instance;
 		}
 
-		public EzyAppDataHandler<D> getDataHandler<D>(Object cmd) where D : EzyData
+		public EzyAppDataHandler getDataHandler(Object cmd)
 		{
-			EzyAppDataHandler<D> handler = dataHandlers.getHandler<D>(cmd);
+			EzyAppDataHandler handler = dataHandlers.getHandler(cmd);
 			return handler;
 		}
 

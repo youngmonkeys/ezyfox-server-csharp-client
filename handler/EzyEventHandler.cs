@@ -6,8 +6,8 @@ namespace com.tvd12.ezyfoxserver.client.handler
 	{
 	}
 
-	public interface EzyEventHandler<E> : IEzyEventHandler where E : EzyEvent
+	public interface EzyEventHandler : IEzyEventHandler
 	{
-		void handle(E evt);
+		void handle(EzyEvent evt);
 	}
 }

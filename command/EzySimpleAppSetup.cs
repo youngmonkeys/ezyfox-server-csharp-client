@@ -14,7 +14,7 @@ namespace com.tvd12.ezyfoxserver.client.command
 			this.dataHandlers = dataHandlers;
 		}
 
-		public EzyAppSetup addDataHandler(Object cmd, IEzyAppDataHandler dataHandler)
+		public EzyAppSetup addDataHandler(Object cmd, EzyAppDataHandler dataHandler)
 		{
 			dataHandlers.addHandler(cmd, dataHandler);
 			return this;

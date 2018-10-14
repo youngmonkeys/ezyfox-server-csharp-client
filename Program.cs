@@ -4,6 +4,10 @@ using com.tvd12.ezyfoxserver.client.util;
 using com.tvd12.ezyfoxserver.client.evt;
 using com.tvd12.ezyfoxserver.client.request;
 using static com.tvd12.ezyfoxserver.client.evt.EzyEventType;
+using com.tvd12.ezyfoxserver.client.config;
+using com.tvd12.ezyfoxserver.client.command;
+using com.tvd12.ezyfoxserver.client.handler;
+using com.tvd12.ezyfoxserver.client.constant;
 
 namespace com.tvd12.ezyfoxserver.client
 {
@@ -12,11 +16,17 @@ namespace com.tvd12.ezyfoxserver.client
 	{
 		public static void Main(string[] args)
 		{
-			EzyClient client = new EzyClient();
-			client.addEventHandler(CONNECTION_SUCCESS, new EzyConnectionSuccessEventHandler());
-			client.addEventHandler(HANDSHAKE, new ExHandshakeEventHandler());
-			client.addEventHandler(LOGIN_SUCCESS, new ExLoginSuccessEventHandler());
-			client.connect("localhost", 3005);
+			EzyClientConfig clientConfig = EzyClientConfig
+				.builder()
+				.zoneName("freechat")
+				.build();
+			EzyClient client = EzyClients.getInstance().newDefaultClient(clientConfig);
+			EzySetup setup = client.get<EzySetup>();
+			setup.addEventHandler(EzyEventType.CONNECTION_SUCCESS, new EzyConnectionSuccessHandler());
+			setup.addEventHandler(EzyEventType.CONNECTION_FAILURE, new EzyConnectionFailureHandler());
+			setup.addDataHandler(EzyCommand.HANDSHAKE, new ExHandshakeEventHandler());
+			client.connect("31.12.1.2", 3005);
+
 			while (true)
 			{
 				Thread.Sleep(3);
@@ -26,21 +36,11 @@ namespace com.tvd12.ezyfoxserver.client
 		}
 	}
 
-	class ExLoginSuccessEventHandler : EzyLoginSuccessEventHandler
+	class ExHandshakeEventHandler : EzyHandshakeHandler
 	{
-		
-	}
-
-	class ExHandshakeEventHandler : EzyHandshakeEventHandler
-	{
-		protected override request.EzyLoginRequestParams defaultLoginRequestParams()
+		protected override EzyRequest getLoginRequest()
 		{
-			var parameters = base.defaultLoginRequestParams();
-			parameters.setZoneName("freechat");
-			parameters.setUsername("dungtv");
-			parameters.setPassword("123456");
-			parameters.setData(EzyEntityArrays.newArray());
-			return parameters;
-		}	
+			return new EzyLoginRequest("freechat", "dungtv", "123456");
+		}
 	}
 }

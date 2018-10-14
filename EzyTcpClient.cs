@@ -29,6 +29,7 @@ namespace com.tvd12.ezyfoxserver.client
 
 		private readonly EzySocketClient socketClient;
 		private readonly EzyPingSchedule pingSchedule;
+		private readonly EzyMainThreadQueue mainThreadQueue;
 
 		public EzyTcpClient(EzyClientConfig config)
 		{
@@ -40,6 +41,7 @@ namespace com.tvd12.ezyfoxserver.client
 			this.pingManager = new EzySimplePingManager();
 			this.appsById = new Dictionary<int, EzyApp>();
 			this.pingSchedule = new EzyPingSchedule(this);
+			this.mainThreadQueue = new EzyMainThreadQueue();
 			this.handlerManager = newHandlerManager();
 			this.socketClient = newSocketClient();
 			this.initProperties();
@@ -72,6 +74,7 @@ namespace com.tvd12.ezyfoxserver.client
 		{
 			EzyTcpSocketClient client = new EzyTcpSocketClient(
 					config,
+					mainThreadQueue,
 					handlerManager,
 					pingManager,
 					pingSchedule, unloggableCommands);
@@ -128,6 +131,11 @@ namespace com.tvd12.ezyfoxserver.client
 		public void send(Object cmd, EzyData data)
 		{
 			socketClient.send(cmd, data);
+		}
+
+		public void processEvents()
+		{
+			mainThreadQueue.polls();
 		}
 
 		public T get<T>()

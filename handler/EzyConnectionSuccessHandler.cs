@@ -1,4 +1,5 @@
-﻿using com.tvd12.ezyfoxserver.client.constant;
+﻿using System;
+using com.tvd12.ezyfoxserver.client.constant;
 using com.tvd12.ezyfoxserver.client.evt;
 using com.tvd12.ezyfoxserver.client.request;
 
@@ -6,8 +7,7 @@ namespace com.tvd12.ezyfoxserver.client.handler
 {
 	public class EzyConnectionSuccessHandler : EzyAbstractEventHandler<EzyEvent>
 	{
-
-		public override void handle(EzyEvent evt)
+		protected override sealed void process(EzyEvent evt)
 		{
 			updateConnectionStatus();
 			sendHandshakeRequest();
@@ -19,7 +19,7 @@ namespace com.tvd12.ezyfoxserver.client.handler
 			client.setStatus(EzyConnectionStatus.CONNECTED);
 		}
 
-		protected void postHandle()
+		protected virtual void postHandle()
 		{
 		}
 
@@ -32,14 +32,37 @@ namespace com.tvd12.ezyfoxserver.client.handler
 		protected EzyRequest newHandshakeRequest()
 		{
 			EzyHandshakeRequest request = new EzyHandshakeRequest(
-					UUID.randomUUID().toString(),
-					"",
-					"ANDROID",
-					"1.0.0",
-					false,
-					""
-			);
+				   getClientId(),
+				   getClientKey(),
+				   "CSHARP",
+				   "1.0.0",
+				   isEnableEncryption(),
+				   getStoredToken()
+		   );
 			return request;
+		}
+
+		protected virtual String getClientId()
+		{
+			Guid guid = Guid.NewGuid();
+			String id = guid.ToString();
+			return id;
+		}
+
+		protected virtual String getClientKey()
+		{
+			String key = "";
+			return key;
+		}
+
+		protected virtual bool isEnableEncryption()
+		{
+			return false;
+		}
+
+		protected virtual String getStoredToken()
+		{
+			return "";
 		}
 	}
 

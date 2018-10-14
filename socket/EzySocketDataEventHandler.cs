@@ -10,18 +10,21 @@ namespace com.tvd12.ezyfoxserver.client.socket
 {
 	public class EzySocketDataEventHandler : EzyAbstractSocketEventHandler
 	{
+		private readonly EzyMainThreadQueue mainThreadQueue;
 		private readonly EzySocketDataHandler dataHandler;
 		private readonly EzyPingManager pingManager;
 		private readonly EzyHandlerManager handlerManager;
 		private readonly EzySocketEventQueue socketEventQueue;
 		private readonly ISet<Object> unloggableCommands;
 
-		public EzySocketDataEventHandler(EzySocketDataHandler dataHandler,
+		public EzySocketDataEventHandler(EzyMainThreadQueue mainThreadQueue,
+		                                 EzySocketDataHandler dataHandler,
 										 EzyPingManager pingManager,
 										 EzyHandlerManager handlerManager,
 										 EzySocketEventQueue socketEventQueue,
 										 ISet<Object> unloggableCommands)
 		{
+			this.mainThreadQueue = mainThreadQueue;
 			this.dataHandler = dataHandler;
 			this.pingManager = pingManager;
 			this.handlerManager = handlerManager;
@@ -50,9 +53,9 @@ namespace com.tvd12.ezyfoxserver.client.socket
 		private void processEvent(EzyEvent evt)
 		{
 			EzyEventType eventType = evt.getType();
-			EzyEventHandler<EzyEvent> handler = handlerManager.getEventHandler<EzyEvent>(eventType);
+			EzyEventHandler handler = handlerManager.getEventHandler(eventType);
 			if (handler != null)
-				handler.handle(evt);
+				mainThreadQueue.add(evt, handler);
 			else
 				Console.WriteLine("has no handler with event: " + eventType);
 		}
@@ -82,7 +85,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
 		{
 			EzyDataHandler handler = handlerManager.getDataHandler(cmd);
 			if (handler != null)
-				handler.handle(responseData);
+				mainThreadQueue.add(responseData, handler);
 			else
 				Console.WriteLine("has no handler with command: " + cmd);
 		}

@@ -28,6 +28,9 @@ namespace com.tvd12.ezyfoxserver.client.manager
 		private EzyEventHandlers newEventHandlers()
 		{
 			EzyEventHandlers handlers = new EzyEventHandlers(client, pingSchedule);
+			handlers.addHandler(EzyEventType.CONNECTION_SUCCESS, new EzyConnectionSuccessHandler());
+			handlers.addHandler(EzyEventType.CONNECTION_FAILURE, new EzyConnectionFailureHandler());
+			handlers.addHandler(EzyEventType.DISCONNECTION, new EzyDisconnectionHandler());
 			return handlers;
 		}
 
@@ -44,9 +47,9 @@ namespace com.tvd12.ezyfoxserver.client.manager
 			return dataHandlers.getHandler(cmd);
 		}
 
-		public EzyEventHandler<E> getEventHandler<E>(Object eventType) where E : EzyEvent
+		public EzyEventHandler getEventHandler(Object eventType)
 		{
-			return eventHandlers.getHandler<E>(eventType);
+			return eventHandlers.getHandler(eventType);
 		}
 
 		public EzyAppDataHandlers getAppDataHandlers(String appName)
@@ -69,7 +72,7 @@ namespace com.tvd12.ezyfoxserver.client.manager
 			dataHandlers.addHandler(cmd, dataHandler);
 		}
 
-		public void addEventHandler(Object eventType, IEzyEventHandler eventHandler)
+		public void addEventHandler(Object eventType, EzyEventHandler eventHandler)
 		{
 			eventHandlers.addHandler(eventType, eventHandler);
 		}

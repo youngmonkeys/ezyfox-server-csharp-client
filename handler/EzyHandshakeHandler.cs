@@ -21,7 +21,7 @@ namespace com.tvd12.ezyfoxserver.client.handler
 			postHandle(data);
 		}
 
-		protected void postHandle(EzyArray data)
+		protected virtual void postHandle(EzyArray data)
 		{
 		}
 

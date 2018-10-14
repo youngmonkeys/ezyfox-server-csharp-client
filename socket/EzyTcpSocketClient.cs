@@ -24,6 +24,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
 		protected SocketAddress socketAddress;
 		protected EzySocketThread socketThread;
 		protected readonly EzyReconnectConfig reconnectConfig;
+		protected readonly EzyMainThreadQueue mainThreadQueue;
 		protected readonly EzyHandlerManager handlerManager;
 		protected readonly ISet<Object> unloggableCommands;
 		protected readonly EzyCodecFactory codecFactory;
@@ -40,12 +41,14 @@ namespace com.tvd12.ezyfoxserver.client.socket
 		protected readonly EzySocketWritingLoopHandler socketWritingLoopHandler;
 
 		public EzyTcpSocketClient(EzyClientConfig clientConfig,
+								  EzyMainThreadQueue mainThreadQueue,
 								  EzyHandlerManager handlerManager,
 								  EzyPingManager pingManager,
 								  EzyPingSchedule pingSchedule,
 								  ISet<Object> unloggableCommands)
 		{
 			this.reconnectConfig = clientConfig.getReconnect();
+			this.mainThreadQueue = mainThreadQueue;
 			this.handlerManager = handlerManager;
 			this.pingManager = pingManager;
 			this.pingSchedule = pingSchedule;
@@ -88,6 +91,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
 		private EzySocketDataEventHandler newSocketDataEventHandler()
 		{
 			return new EzySocketDataEventHandler(
+					mainThreadQueue,
 					dataHandler,
 					pingManager,
 					handlerManager,
@@ -149,36 +153,56 @@ namespace com.tvd12.ezyfoxserver.client.socket
 		protected override void connect0()
 		{
 			Console.WriteLine("connecting to server");
-			EzyEvent evt = null;
-			try
-			{
-				String host = socketAddress.getHost();
-				int port = socketAddress.getPort();
-				startConnectTime = DateTime.Now;
-				socketChannel = new TcpClient();
-				socketChannel.BeginConnect(host, port, new AsyncCallback(handleConnectionResult), socketChannel);
-			}
-			catch (TimeoutException e)
-			{
-				evt = EzyConnectionFailureEvent.unknownHost();
-			}
-			catch (Exception e)
-			{
-				evt = EzyConnectionFailureEvent.unknown();
-			}
-			EzySocketEvent socketEvent = new EzySimpleSocketEvent(EzySocketEventType.EVENT, evt);
-			dataHandler.fireSocketEvent(socketEvent);
+			String host = socketAddress.getHost();
+			int port = socketAddress.getPort();
+			startConnectTime = DateTime.Now;
+			socketChannel = new TcpClient();
+			socketChannel.BeginConnect(host, port, new AsyncCallback(handleConnectionResult), socketChannel);
 		}
 
 		private void handleConnectionResult(IAsyncResult result)
 		{
-			socketReader.setSocketChannel(socketChannel);
-			dataHandler.setSocketChannel(socketChannel);
-			dataHandler.setDisconnected(false);
-			reconnectCount = 0;
-			EzyEvent evt = new EzyConnectionSuccessEvent();
+			EzyEvent evt = null;
+			try
+			{
+				socketChannel.EndConnect(result);
+				socketReader.setSocketChannel(socketChannel);
+				dataHandler.setSocketChannel(socketChannel);
+				dataHandler.setDisconnected(false);
+				reconnectCount = 0;
+				evt = new EzyConnectionSuccessEvent();
+			}
+			catch (Exception ex)
+			{
+				if (ex is SocketException)
+				{
+					SocketException s = (SocketException)ex;
+					switch ((SocketError)s.ErrorCode)
+					{
+						case SocketError.NetworkUnreachable:
+							evt = EzyConnectionFailureEvent.networkUnreachable();
+							break;
+						case SocketError.TimedOut:
+							evt = EzyConnectionFailureEvent.timeout();
+							break;
+						default:
+							evt = EzyConnectionFailureEvent.connectionRefused();
+							break;
+					}
+				}
+				else if (ex is ArgumentException)
+				{
+					evt = EzyConnectionFailureEvent.unknownHost();
+				}
+				else
+				{
+					evt = EzyConnectionFailureEvent.unknown();
+				}
+				Console.WriteLine("connect to server: " + socketAddress + " error: " + ex);
+			}
 			EzySocketEvent socketEvent = new EzySimpleSocketEvent(EzySocketEventType.EVENT, evt);
 			dataHandler.fireSocketEvent(socketEvent);
+
 		}
 
 		private long getReconnectSleepTime()

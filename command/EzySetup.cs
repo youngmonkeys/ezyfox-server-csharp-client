@@ -8,7 +8,7 @@ namespace com.tvd12.ezyfoxserver.client.command
 	{
 		EzySetup addDataHandler(Object cmd, EzyDataHandler dataHandler);
 
-		EzySetup addEventHandler(EzyEventType eventType, IEzyEventHandler eventHandler);
+		EzySetup addEventHandler(EzyEventType eventType, EzyEventHandler eventHandler);
 
 		EzyAppSetup setupApp(String appName);
 

@@ -6,7 +6,7 @@ namespace com.tvd12.ezyfoxserver.client.handler
 {
 	public class EzyAppResponseHandler : EzyAbstractDataHandler
 	{
-		public void handle(EzyArray data)
+		public override void handle(EzyArray data)
 		{
 			int appId = data.get<int>(0);
 			EzyArray commandData = data.get<EzyArray>(1);
@@ -18,7 +18,7 @@ namespace com.tvd12.ezyfoxserver.client.handler
 			if (dataHandler != null)
 				dataHandler.handle(app, responseData);
 			else
-				Log.w("ezyfox-client", "app: " + app.getName() + " has no handler for command: " + cmd);
+				Console.WriteLine("app: " + app.getName() + " has no handler for command: " + cmd);
 		}
 	}
 }

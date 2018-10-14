@@ -7,8 +7,6 @@ namespace com.tvd12.ezyfoxserver.client.request
 {
 	public class EzyHandshakeRequest : EzyRequest
 	{
-
-
 		protected readonly String clientId;
 		protected readonly String clientKey;
 		protected readonly String clientType;

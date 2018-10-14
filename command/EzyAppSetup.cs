@@ -5,7 +5,7 @@ namespace com.tvd12.ezyfoxserver.client.command
 {
 	public interface EzyAppSetup
 	{
-		EzyAppSetup addDataHandler(Object cmd, IEzyAppDataHandler dataHandler);
+		EzyAppSetup addDataHandler(Object cmd, EzyAppDataHandler dataHandler);
 
 		EzySetup done();
 

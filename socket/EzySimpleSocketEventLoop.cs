@@ -9,7 +9,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
 		protected String threadName;
 		protected Action action;
 
-		protected sealed void eventLoop()
+		protected override sealed void eventLoop()
 		{
 			Console.WriteLine("ezyfox-client", currentThreadName() + " event loop has started");
 			action();
