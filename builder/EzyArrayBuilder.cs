@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using com.tvd12.ezyfoxserver.client.io;
 using com.tvd12.ezyfoxserver.client.entity;
 
 namespace com.tvd12.ezyfoxserver.client.builder
@@ -7,10 +8,12 @@ namespace com.tvd12.ezyfoxserver.client.builder
 	public class EzyArrayBuilder : EzyBuilder<EzyArray>
 	{
 		protected EzyArray product;
+		protected EzyOutputTransformer outputTransformer;
 
-		public EzyArrayBuilder()
+		public EzyArrayBuilder(EzyOutputTransformer outputTransformer)
 		{
-			this.product = newProduct();
+			this.outputTransformer = outputTransformer;
+            this.product = newProduct();
 		}
 
 		public EzyArrayBuilder append(Object value)
@@ -22,6 +25,15 @@ namespace com.tvd12.ezyfoxserver.client.builder
 		public EzyArrayBuilder append<T>(EzyBuilder<T> builder)
 		{
 			product.add(builder);
+			return this;
+		}
+
+		public EzyArrayBuilder append<T>(params T[] values)
+		{
+			foreach (T v in values)
+			{
+				product.add(v);
+			}
 			return this;
 		}
 
@@ -38,7 +50,7 @@ namespace com.tvd12.ezyfoxserver.client.builder
 
 		protected EzyArray newProduct()
 		{
-			return new EzyArray();
+			return new EzyArray(outputTransformer);
 		}
 
 	}

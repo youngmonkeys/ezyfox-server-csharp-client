@@ -1,118 +1,43 @@
 ﻿using System;
-using com.tvd12.ezyfoxserver.client.evt;
 using com.tvd12.ezyfoxserver.client.util;
 using com.tvd12.ezyfoxserver.client.socket;
-using com.tvd12.ezyfoxserver.client.handler;
-using com.tvd12.ezyfoxserver.client.request;
 using com.tvd12.ezyfoxserver.client.entity;
-using static com.tvd12.ezyfoxserver.client.socket.EzySocketStatus;
+using com.tvd12.ezyfoxserver.client.manager;
+using com.tvd12.ezyfoxserver.client.config;
+using com.tvd12.ezyfoxserver.client.constant;
 
 namespace com.tvd12.ezyfoxserver.client
 {
 
-	public class EzyClient : EzyLoggable, EzyRequestDeliver
+	public interface EzyClient :
+		EzySender,
+		EzyAppByIdGroup, EzyInstanceFetcher
 	{
-		private EzyEventHandlers eventHandlers;
-		private EzySocketClient socketTcpClient;
-		private EzyRequestSerializer<EzyArray> requestSerializer;
+		void connect(String host, int port);
 
-		public EzyClient()
-		{
-			this.eventHandlers = new EzyEventHandlers();
-			this.requestSerializer = new EzyArrayRequestSerializer();
-		}
+		void connect();
 
-		public void handleEvent(EzyEvent evt)
-		{
-			eventHandlers.handleEvent(evt);
-		}
+		bool reconnect();
 
-		public void addEventHandler<E>(int eventType, EzyEventHandler<E> handler) where E : EzyEvent
-		{
-			if (handler is EzyClientAware)
-			{
-				((EzyClientAware)handler).setClient(this);
-			}
-			if (handler is EzyRequestDeliverAware)
-			{
-				((EzyRequestDeliverAware)handler).setRequestDeliver(this);
-			}
-			eventHandlers.addEventHandler<E>(eventType, handler);
-		}
+		void disconnect();
 
-		public void connect(String host, int port)
-		{
-			socketTcpClient = new EzySocketTcpClient();
-			socketTcpClient.setDataEventHandler(newDataEventHandler());
-			socketTcpClient.setStatusEventHanlder(newStatusEventHandler());
-			socketTcpClient.connect(host, port);
-		}
+		void processEvents();
 
-		public void processEvents()
-		{
-			socketTcpClient.processEvents();
-		}
+		EzyClientConfig getConfig();
 
-		public void send(EzyRequest request)
-		{
-			var message = requestSerializer.serialize(request);
-			socketTcpClient.sendMessage(message);
-		}
+		EzyZone getZone();
 
-		private EzySocketDataEventHandler newDataEventHandler()
-		{
-			EzySocketTcpDataEventHandler handler = new EzySocketTcpDataEventHandler();
-			handler.setEventHandlers(eventHandlers);
-			return handler;
-		}
+		String getZoneName();
 
-		private EzySocketStatusEventHandler newStatusEventHandler()
-		{
-			EzySocketTcpStatusEventHandler handler = new EzySocketTcpStatusEventHandler();
-			handler.setEventHandlers(eventHandlers);
-			return handler;
-		}
+		EzyUser getMe();
 
-		private class EzySocketTcpDataEventHandler : EzySocketDataEventHandler
-		{
-			private EzyEventHandlers eventHandlers;
+		EzyConnectionStatus getStatus();
 
-			public void handle(EzySocketDataEvent evt)
-			{
-				EzyArray data = evt.getData();
-				int command = data.get<int>(0);
-				EzyArray parameters = data.get<EzyArray>(1);
-			}
+		void setStatus(EzyConnectionStatus status);
 
-			public void setEventHandlers(EzyEventHandlers eventHandlers)
-			{
-				this.eventHandlers = eventHandlers;
-			}
-		}
+		EzyPingManager getPingManager();
 
-		private class EzySocketTcpStatusEventHandler : EzySocketStatusEventHandler
-		{
-			private EzyEventHandlers eventHandlers;
-
-			public void handle(EzySocketStatusEvent evt)
-			{
-				int status = evt.getSocketStatus();
-				switch (status)
-				{
-					case CONNECTED:
-						EzyConnectionSuccessEvent hevent = new EzyConnectionSuccessEvent();
-						eventHandlers.handleEvent(hevent);
-						break;
-					default:
-						break;
-				}
-			}
-
-			public void setEventHandlers(EzyEventHandlers eventHandlers)
-			{
-				this.eventHandlers = eventHandlers;
-			}
-		}
+		EzyHandlerManager getHandlerManager();
 
 	}
 }

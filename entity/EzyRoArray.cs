@@ -11,6 +11,8 @@ namespace com.tvd12.ezyfoxserver.client.entity
 
 		T get<T>(int index);
 
+		T get<T>(int index, T defValue);
+
 		List<T> toList<T>();
 	}
 }

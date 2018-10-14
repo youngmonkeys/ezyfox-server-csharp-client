@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using com.tvd12.ezyfoxserver.client.io;
 using com.tvd12.ezyfoxserver.client.entity;
 
 namespace com.tvd12.ezyfoxserver.client.builder
@@ -7,10 +8,12 @@ namespace com.tvd12.ezyfoxserver.client.builder
 	public class EzyObjectBuilder : EzyBuilder<EzyObject>
 	{
 		protected EzyObject product;
+		protected EzyOutputTransformer outputTransformer;
 
-		public EzyObjectBuilder()
+		public EzyObjectBuilder(EzyOutputTransformer outputTransformer)
 		{
-			this.product = newProduct();
+			this.outputTransformer = outputTransformer;
+            this.product = newProduct();
 		}
 
 		public EzyObjectBuilder append(Object key, Object value)
@@ -32,7 +35,7 @@ namespace com.tvd12.ezyfoxserver.client.builder
 
 		protected EzyObject newProduct()
 		{
-			return new EzyObject();
+			return new EzyObject(outputTransformer);
 		}
 	}
 }

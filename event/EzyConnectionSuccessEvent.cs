@@ -2,7 +2,7 @@
 {
 	public class EzyConnectionSuccessEvent : EzyEvent
 	{
-		public int getType()
+		public EzyEventType getType()
 		{
 			return EzyEventType.CONNECTION_SUCCESS;
 		}

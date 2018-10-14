@@ -1,15 +1,11 @@
 ﻿namespace com.tvd12.ezyfoxserver.client.evt
 {
-	public sealed class EzyEventType
+	public enum EzyEventType
 	{
-		public const int CONNECTION_SUCCESS = 0;
-		public const int CONNECTION_FAILURE = 1;
-		public const int HANDSHAKE = 2;
-		public const int LOGIN_SUCCESS = 3;
-		public const int ACCESS_APP_SUCCESS = 4;
-
-		private EzyEventType()
-		{
-		}
+        CONNECTION_SUCCESS = 1,
+		CONNECTION_FAILURE = 2,
+		DISCONNECTION = 3,
+		LOST_PING = 4,
+		TRY_CONNECT = 5
 	}
 }

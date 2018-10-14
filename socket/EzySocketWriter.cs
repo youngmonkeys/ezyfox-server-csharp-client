@@ -1,35 +1,42 @@
 ﻿using System;
-using com.tvd12.ezyfoxserver.client.entity;
-using com.tvd12.ezyfoxserver.client.concurrent;
+using System.Threading;
 
 namespace com.tvd12.ezyfoxserver.client.socket
 {
-	public abstract class EzySocketWriter : EzySocketAdapter
+	public class EzySocketWriter : EzyAbstractSocketEventHandler
 	{
-		protected EzyBlockingQueue<EzyArray> ticketsQueue;
+		protected readonly EzyPacketQueue packetQueue;
+		protected readonly EzySocketDataHandler dataHandler;
 
-		protected override void process()
+		public EzySocketWriter(EzyPacketQueue packetQueue,
+							   EzySocketDataHandler dataHandler)
 		{
-			EzyArray data = ticketsQueue.take();
-			getLogger().debug("send: {0}", data);
-			Object bytes = encodeData(data);
-			writeBytes(bytes);
+			this.packetQueue = packetQueue;
+			this.dataHandler = dataHandler;
 		}
 
-		protected abstract void writeBytes(Object bytes);
-		protected abstract Object encodeData(EzyArray data);
-
-		protected override string getThreadName()
+		public override void handleEvent()
 		{
-			return "socket-writer";
+			try
+			{
+				EzyPacket packet = packetQueue.take();
+				dataHandler.firePacketSend(packet);
+				packet.release();
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine("socket-writer thread interrupted: " + Thread.CurrentThread + " error: " + e);
+			}
 		}
 
-		public abstract void setEncoder(Object encoder);
-
-
-		public void setTicketsQueue(EzyBlockingQueue<EzyArray> ticketsQueue)
+		public override void destroy()
 		{
-			this.ticketsQueue = ticketsQueue;
+			packetQueue.clear();
 		}
+
+		public override void reset()
+		{
+		}
+
 	}
 }

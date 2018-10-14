@@ -7,12 +7,12 @@ namespace com.tvd12.ezyfoxserver.client.util
 	{
 		protected EzyArrayBuilder newArrayBuilder()
 		{
-			return EzyEntityFactory.create<EzyArrayBuilder>();
+			return EzyEntityFactory.newArrayBuilder();
 		}
 
 		protected EzyObjectBuilder newObjectBuilder()
 		{
-			return EzyEntityFactory.create<EzyObjectBuilder>();
+			return EzyEntityFactory.newObjectBuilder();
 		}
 	}
 }

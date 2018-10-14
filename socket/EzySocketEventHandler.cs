@@ -1,7 +1,9 @@
-﻿namespace com.tvd12.ezyfoxserver.client.socket
+﻿using com.tvd12.ezyfoxserver.client.util;
+
+namespace com.tvd12.ezyfoxserver.client.socket
 {
-	public interface EzySocketEventHandler<E> where E : EzySocketEvent
+	public interface EzySocketEventHandler : EzyDestroyable, EzyResettable
 	{
-		void handle(E e);
+		void handleEvent();
 	}
 }

@@ -1,15 +1,13 @@
-﻿using com.tvd12.ezyfoxserver.client.util;
-using com.tvd12.ezyfoxserver.client.evt;
+﻿using com.tvd12.ezyfoxserver.client.evt;
 
 namespace com.tvd12.ezyfoxserver.client.handler
 {
-	public interface EzyEventHandler<E> where E : EzyEvent
+	public interface IEzyEventHandler
 	{
-		void handle(E evt);
 	}
 
-	public abstract class EzyAbstractEventHandler<E> : EzyLoggable, EzyEventHandler<E> where E : EzyEvent
+	public interface EzyEventHandler : IEzyEventHandler
 	{
-		public abstract void handle(E evt);
+		void handle(EzyEvent evt);
 	}
 }

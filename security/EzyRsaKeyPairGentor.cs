@@ -9,7 +9,15 @@ namespace com.tvd12.ezyfoxserver.client.security
 {
 	public class EzyRsaKeyPairGentor : EzyKeyPairGentor
 	{
+		protected EzyKeyPairStore keyPairStore;
+
 		public EzyKeyPair generate(int keySize)
+		{
+			preGenerate();
+			return generate0(keySize);
+		}
+
+		private EzyKeyPair generate0(int keySize)
 		{
 			RsaKeyPairGenerator generator = new RsaKeyPairGenerator();
 			generator.Init(new KeyGenerationParameters(new SecureRandom(), keySize));
@@ -22,7 +30,21 @@ namespace com.tvd12.ezyfoxserver.client.security
 			byte[] publicKeyBytes = publicKey.ToAsn1Object().GetDerEncoded();
 			string publicKeyString = Convert.ToBase64String(publicKeyBytes);
 			EzyKeyPair keyPair = new EzyKeyPair(privateKeyString, publicKeyString);
+			keyPairStore.store(keyPair);
 			return keyPair;
+		}
+
+		private void preGenerate()
+		{
+			if (keyPairStore == null)
+			{
+				keyPairStore = new EzySystemKeyPairStore();
+			}
+		}
+
+		public void setKeyPairStore(EzyKeyPairStore keyPairStore)
+		{
+			this.keyPairStore = keyPairStore;
 		}
 	}
 }
