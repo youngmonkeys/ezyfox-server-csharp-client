@@ -25,7 +25,7 @@ setup.addDataHandler(EzyCommand.HANDSHAKE, new ExHandshakeEventHandler());
 
 ```csharp
 client.connect("31.12.1.2", 3005);
-```csharp
+```
 
 **3. Handle socket's events on main thread**
 
