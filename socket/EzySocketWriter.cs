@@ -25,7 +25,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
 			}
 			catch (Exception e)
 			{
-				Console.WriteLine("socket-writer thread interrupted: " + Thread.CurrentThread + " error: " + e);
+                logger.warn("socket-writer thread interrupted: " + Thread.CurrentThread + " error", e);
 			}
 		}
 

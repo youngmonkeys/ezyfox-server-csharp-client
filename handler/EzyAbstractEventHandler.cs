@@ -5,6 +5,7 @@ using com.tvd12.ezyfoxserver.client.evt;
 namespace com.tvd12.ezyfoxserver.client.handler
 {
 	public abstract class EzyAbstractEventHandler<E> : 
+        EzyLoggable,
 		EzyEventHandler, 
 		EzyClientAware where E : EzyEvent
 	{

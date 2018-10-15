@@ -4,6 +4,7 @@ using com.tvd12.ezyfoxserver.client.command;
 using com.tvd12.ezyfoxserver.client.config;
 using com.tvd12.ezyfoxserver.client.constant;
 using com.tvd12.ezyfoxserver.client.entity;
+using com.tvd12.ezyfoxserver.client.logger;
 using com.tvd12.ezyfoxserver.client.manager;
 using com.tvd12.ezyfoxserver.client.request;
 using com.tvd12.ezyfoxserver.client.socket;
@@ -30,6 +31,7 @@ namespace com.tvd12.ezyfoxserver.client
 		private readonly EzySocketClient socketClient;
 		private readonly EzyPingSchedule pingSchedule;
 		private readonly EzyMainThreadQueue mainThreadQueue;
+        private readonly EzyLogger logger;
 
 		public EzyTcpClient(EzyClientConfig config)
 		{
@@ -44,6 +46,7 @@ namespace com.tvd12.ezyfoxserver.client
 			this.mainThreadQueue = new EzyMainThreadQueue();
 			this.handlerManager = newHandlerManager();
 			this.socketClient = newSocketClient();
+            this.logger = EzyLoggerFactory.getLogger(GetType());
 			this.initProperties();
 		}
 
@@ -91,7 +94,7 @@ namespace com.tvd12.ezyfoxserver.client
 			}
 			catch (Exception e)
 			{
-				Console.WriteLine("connect to server error: " + e);
+                logger.error("connect to server error", e);
 			}
 		}
 

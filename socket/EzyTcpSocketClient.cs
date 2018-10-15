@@ -11,6 +11,7 @@ using com.tvd12.ezyfoxserver.client.factory;
 using com.tvd12.ezyfoxserver.client.manager;
 using com.tvd12.ezyfoxserver.client.net;
 using com.tvd12.ezyfoxserver.client.request;
+using com.tvd12.ezyfoxserver.client.util;
 
 namespace com.tvd12.ezyfoxserver.client.socket
 {
@@ -132,7 +133,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
 			long reconnectSleepTime = getReconnectSleepTime();
 			handleConnection(reconnectSleepTime);
 			reconnectCount++;
-			Console.Write("try reconnect to server: " + reconnectCount + ", wating time: " + reconnectSleepTime);
+            logger.info("try reconnect to server: " + reconnectCount + ", wating time: " + reconnectSleepTime);
 			EzyEvent tryConnectEvent = new EzyTryConnectEvent(reconnectCount);
 			EzySocketEvent tryConnectSocketEvent
 					= new EzySimpleSocketEvent(EzySocketEventType.EVENT, tryConnectEvent);
@@ -152,7 +153,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
 
 		protected override void connect0()
 		{
-			Console.WriteLine("connecting to server");
+            logger.info("connecting to server");
 			String host = socketAddress.getHost();
 			int port = socketAddress.getPort();
 			startConnectTime = DateTime.Now;
@@ -166,6 +167,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
 			try
 			{
 				socketChannel.EndConnect(result);
+                logger.info("connected to server");
 				socketReader.setSocketChannel(socketChannel);
 				dataHandler.setSocketChannel(socketChannel);
 				dataHandler.setDisconnected(false);
@@ -198,7 +200,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
 				{
 					evt = EzyConnectionFailureEvent.unknown();
 				}
-				Console.WriteLine("connect to server: " + socketAddress + " error: " + ex);
+                logger.info("connect to server: " + socketAddress + " error", ex);
 			}
 			EzySocketEvent socketEvent = new EzySimpleSocketEvent(EzySocketEventType.EVENT, evt);
 			dataHandler.fireSocketEvent(socketEvent);
@@ -224,11 +226,11 @@ namespace com.tvd12.ezyfoxserver.client.socket
 		public override void send(Object cmd, EzyData data)
 		{
 			EzyArray array = EzyEntityFactory.newArrayBuilder()
-											 .append((EzyCommand)cmd)
+											 .append((int)cmd)
 											 .append(data)
 											 .build();
 			if (!unloggableCommands.Contains(cmd))
-				Console.WriteLine("send command: " + cmd + " and data: " + data);
+                logger.info("send command: " + cmd + " and data: " + data);
 			EzyPackage pack = new EzySimplePackage(array);
 			try
 			{
@@ -236,7 +238,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
 			}
 			catch (Exception e)
 			{
-				Console.WriteLine("send cmd: " + cmd + " with data: " + data + " error", e);
+                logger.info("send cmd: " + cmd + " with data: " + data + " error", e);
 			}
 		}
 
@@ -257,7 +259,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
 			}
 			catch (Exception e)
 			{
-				Console.WriteLine("close socket error", e);
+                logger.info("close socket error", e);
 			}
 		}
 
@@ -284,7 +286,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
 			socketWritingLoopHandler.reset();
 		}
 
-		public class EzySocketThread
+        public class EzySocketThread : EzyLoggable
 		{
 			private readonly Thread thread;
 			private readonly EzyTcpSocketClient client;
@@ -305,14 +307,14 @@ namespace com.tvd12.ezyfoxserver.client.socket
 			{
 				try
 				{
-					Console.WriteLine("sleeping " + sleepTime + "ms before connect to server");
+                    logger.info("sleeping " + sleepTime + "ms before connect to server");
 					sleepBeforeConnect(sleepTime);
 					client.connect0();
 					startDataEventHandlingLoop();
 				}
 				catch (Exception e)
 				{
-					Console.WriteLine("start connect to server error: " + e);
+                    logger.info("start connect to server error", e);
 				}
 			}
 

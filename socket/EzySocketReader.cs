@@ -29,7 +29,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
 			}
 			catch (Exception e)
 			{
-				Console.WriteLine("I/O error at socket-reader: " + e);
+                logger.warn("I/O error at socket-reader", e);
 			}
 		}
 

@@ -10,7 +10,7 @@ namespace com.tvd12.ezyfoxserver.client.handler
 
 		protected override sealed void process(EzyConnectionFailureEvent evt)
 		{
-			Console.WriteLine("connection failure, reason = " + evt.getReason());
+            logger.info("connection failure, reason = " + evt.getReason());
 			EzyClientConfig config = client.getConfig();
 			EzyReconnectConfig reconnectConfig = config.getReconnect();
 			bool should = shouldReconnect(evt);

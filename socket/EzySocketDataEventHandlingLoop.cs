@@ -3,7 +3,7 @@ using com.tvd12.ezyfoxserver.client.util;
 
 namespace com.tvd12.ezyfoxserver.client.socket
 {
-	public class EzySocketDataEventHandlingLoop : EzyStartable
+    public class EzySocketDataEventHandlingLoop : EzyLoggable, EzyStartable
 	{
 		private volatile bool active = true;
 		private readonly EzySocketDataEventHandler socketDataEventHandler;
@@ -20,7 +20,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
 
 		public void start()
 		{
-			Console.WriteLine("socket data event handling loop start");
+            logger.info("socket data event handling loop start");
 			while (active)
 			{
 				socketDataEventHandler.handleEvent();

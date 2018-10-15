@@ -1,9 +1,10 @@
 ﻿using com.tvd12.ezyfoxserver.client.entity;
 using com.tvd12.ezyfoxserver.client.request;
+using com.tvd12.ezyfoxserver.client.util;
 
 namespace com.tvd12.ezyfoxserver.client.socket
 {
-	public abstract class EzyAbstractSocketClient : EzySocketClient
+	public abstract class EzyAbstractSocketClient : EzyLoggable, EzySocketClient
 	{
 		public abstract void connect();
 		public abstract void connect(string host, int port);
