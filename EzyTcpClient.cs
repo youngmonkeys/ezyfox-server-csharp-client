@@ -63,8 +63,8 @@ namespace com.tvd12.ezyfoxserver.client
 		private ISet<Object> newUnloggableCommands()
 		{
 			ISet<Object> set = new HashSet<Object>();
-			//set.Add(EzyCommand.PING);
-			//set.Add(EzyCommand.PONG);
+			set.Add(EzyCommand.PING);
+			set.Add(EzyCommand.PONG);
 			return set;
 		}
 
