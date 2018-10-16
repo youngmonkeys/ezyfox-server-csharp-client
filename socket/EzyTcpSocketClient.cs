@@ -40,6 +40,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
 		protected readonly EzySocketDataEventHandler socketDataEventHandler;
 		protected readonly EzySocketReadingLoopHandler socketReadingLoopHandler;
 		protected readonly EzySocketWritingLoopHandler socketWritingLoopHandler;
+        protected readonly EzySocketDataEventLoopHandler socketDataEventLoopHandler;
 
 		public EzyTcpSocketClient(EzyClientConfig clientConfig,
 								  EzyMainThreadQueue mainThreadQueue,
@@ -64,6 +65,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
 			this.socketDataEventHandler = newSocketDataEventHandler();
 			this.socketReadingLoopHandler = newSocketReadingLoopHandler();
 			this.socketWritingLoopHandler = newSocketWritingLoopHandler();
+            this.socketDataEventLoopHandler = newSocketDataEventLoopHandler();
 			this.pingSchedule.setDataHandler(dataHandler);
 			this.startComponents();
 		}
@@ -72,6 +74,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
 		{
 			this.socketReadingLoopHandler.start();
 			this.socketWritingLoopHandler.start();
+            this.socketDataEventLoopHandler.start();
 		}
 
 		private EzyResponseApi newResponseApi()
@@ -112,6 +115,13 @@ namespace com.tvd12.ezyfoxserver.client.socket
 			handler.setEventHandler(socketWriter);
 			return handler;
 		}
+
+        private EzySocketDataEventLoopHandler newSocketDataEventLoopHandler()
+        {
+            EzySocketDataEventLoopHandler handler = new EzySocketDataEventLoopHandler();
+            handler.setEventHandler(socketDataEventHandler);
+            return handler;
+        }
 
 		public override void connect(String host, int port)
 		{
@@ -289,8 +299,8 @@ namespace com.tvd12.ezyfoxserver.client.socket
         public class EzySocketThread : EzyLoggable
 		{
 			private readonly Thread thread;
+            private volatile bool cancelled;
 			private readonly EzyTcpSocketClient client;
-			private EzySocketDataEventHandlingLoop socketDataEventHandlingLoop;
 
 			public EzySocketThread(EzyTcpSocketClient client) : this(0, client)
 			{
@@ -299,6 +309,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
 			public EzySocketThread(long sleepTime, EzyTcpSocketClient client)
 			{
 				this.client = client;
+                this.cancelled = false;
 				this.thread = new Thread(() => handleConnect(sleepTime));
 				this.thread.Name = "socket-connection";
 			}
@@ -309,8 +320,8 @@ namespace com.tvd12.ezyfoxserver.client.socket
 				{
                     logger.info("sleeping " + sleepTime + "ms before connect to server");
 					sleepBeforeConnect(sleepTime);
-					client.connect0();
-					startDataEventHandlingLoop();
+                    if (!cancelled)
+                        client.connect0();
 				}
 				catch (Exception e)
 				{
@@ -324,13 +335,6 @@ namespace com.tvd12.ezyfoxserver.client.socket
 					Thread.Sleep((int)sleepTime);
 			}
 
-			private void startDataEventHandlingLoop()
-			{
-				socketDataEventHandlingLoop =
-					new EzySocketDataEventHandlingLoop(client.socketDataEventHandler);
-				socketDataEventHandlingLoop.start();
-			}
-
 			public void start()
 			{
 				thread.Start();
@@ -338,8 +342,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
 
 			public void cancel()
 			{
-				if (socketDataEventHandlingLoop != null)
-					socketDataEventHandlingLoop.setActive(false);
+                this.cancelled = true;
 			}
 		}
 	}
