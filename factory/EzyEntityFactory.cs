@@ -10,6 +10,7 @@ namespace com.tvd12.ezyfoxserver.client.factory
 				= new EzyEntityBuilderCreator();
 
 		public static readonly EzyArray EMPTY_ARRAY = newArray();
+        public static readonly EzyObject EMPTY_OJBECT = newObject();
 
 		public static T create<T>()
 		{
