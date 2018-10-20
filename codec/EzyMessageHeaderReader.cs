@@ -26,12 +26,11 @@ namespace com.tvd12.ezyfoxserver.client.codec
 
 		public EzyMessageHeader read(byte header)
 		{
-			return EzyMessageHeaderBuilder.newInstance()
-					.setBigSize(readBigSize(header))
-					.setEncrypted(readEncrypted(header))
-					.setCompressed(readCompressed(header))
-					.setText(readText(header))
-					.build();
+            return new EzySimpleMessageHeader(
+                readBigSize(header),
+                readEncrypted(header),
+                readCompressed(header),
+                readText(header));
 		}
 	}
 }

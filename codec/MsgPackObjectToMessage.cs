@@ -23,20 +23,14 @@ namespace com.tvd12.ezyfoxserver.client.codec
 
 		private EzyMessage convert(byte[] content)
 		{
-			return EzyMessageBuilder.newInstance()
-					.setSize(content.Length)
-					.setContent(content)
-					.setHeader(newHeader(content))
-					.build();
+            EzyMessage message = new EzySimpleMessage(newHeader(content), content, content.Length);
+            return message;
 		}
 
 		private EzyMessageHeader newHeader(byte[] content)
 		{
-			return EzyMessageHeaderBuilder.newInstance()
-					.setBigSize(isBigMessage(content))
-					.setEncrypted(false)
-					.setCompressed(false)
-					.build();
+            EzyMessageHeader header = new EzySimpleMessageHeader(isBigMessage(content), false, false, false);
+            return header;
 		}
 
 		private bool isBigMessage(byte[] content)

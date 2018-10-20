@@ -59,11 +59,7 @@ namespace com.tvd12.ezyfoxserver.client.codec
 
 		public EzyMessage get()
 		{
-			return EzyMessageBuilder.newInstance()
-					.setHeader(header)
-					.setSize(size)
-					.setContent(content)
-					.build();
+            return new EzySimpleMessage(header, content, size);
 		}
 
 		private void readHeader(byte header)

@@ -11,9 +11,12 @@ namespace com.tvd12.ezyfoxserver.client.socket
 
 		protected override sealed void eventLoop()
 		{
-			Console.WriteLine("ezyfox-client", currentThreadName() + " event loop has started");
-			action();
-			Console.WriteLine("ezyfox-client", currentThreadName() + " event loop has stopped");
+            logger.info(currentThreadName() + " event loop has started");
+            while (active)
+            {
+                action();
+            }
+            logger.info(currentThreadName() + " event loop has stopped");
 		}
 
 		public void setThreadListSize(int threadListSize)

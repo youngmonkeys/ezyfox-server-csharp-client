@@ -19,6 +19,10 @@ namespace com.tvd12.ezyfoxserver.client.logger
 			return loggerSupply(type);
 		}
 
+        public static EzyLogger getLogger<T>() {
+            return getLogger(typeof(T));
+        }
+
 		public static void setLoggerSupply(EzyLoggerSupply supply)
 		{
 			loggerSupply = supply;

@@ -11,7 +11,7 @@ using com.tvd12.ezyfoxserver.client.util;
 
 namespace com.tvd12.ezyfoxserver.client.socket
 {
-	public class EzySocketDataHandler : EzyResettable
+    public class EzySocketDataHandler : EzyLoggable, EzyResettable
 	{
 		protected TcpClient socketChannel;
 		protected volatile bool disconnected;
@@ -32,6 +32,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
 			this.decodeMessageThread = new EzyDecodeMessageThread(decoder,
 																  data => handleReceivedData(data),
 																  ex => fireExceptionCaught(ex));
+            this.decodeMessageThread.start();
 		}
 
 		public void setDisconnected(bool disconnected)
@@ -75,6 +76,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
 
 		private void fireExceptionCaught(Exception e)
 		{
+            logger.error("exeception caught", e);
 		}
 
 		private void handleReceivedMesssage(EzyMessage message)
@@ -89,7 +91,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
 			bool success = eventQueue.add(evt);
 			if (!success)
 			{
-				Console.WriteLine("response queue is full, drop incomming response");
+                logger.warn("response queue is full, drop incomming response");
 			}
 		}
 

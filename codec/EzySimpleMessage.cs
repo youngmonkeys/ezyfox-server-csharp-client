@@ -10,6 +10,13 @@ namespace com.tvd12.ezyfoxserver.client.codec
 		private EzyMessageHeader header;
 		private int byteCount;
 
+        public EzySimpleMessage(EzyMessageHeader header, byte[] content, int size) {
+            this.header = header;
+            this.content = content;
+            this.size = size;
+            this.byteCount = 1 + getSizeLength() + getContent().Length;
+        }
+
 		public void setSize(int size)
 		{
 			this.size = size;
@@ -23,11 +30,6 @@ namespace com.tvd12.ezyfoxserver.client.codec
 		public void setHeader(EzyMessageHeader header)
 		{
 			this.header = header;
-		}
-
-		public void countBytes()
-		{
-			this.byteCount = 1 + getSizeLength() + getContent().Length;
 		}
 
 		public EzyMessageHeader getHeader()

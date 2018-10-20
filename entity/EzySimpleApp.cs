@@ -38,7 +38,7 @@ namespace com.tvd12.ezyfoxserver.client.entity
 					.append(data);
 			EzyData requestData = EzyEntityFactory.newArrayBuilder()
 					.append(id)
-					.append(commandData)
+                    .append(commandData.build())
 					.build();
 			client.send(EzyCommand.APP_REQUEST, requestData);
 		}

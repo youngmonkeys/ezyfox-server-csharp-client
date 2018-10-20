@@ -10,6 +10,17 @@ namespace com.tvd12.ezyfoxserver.client.codec
 		protected bool compressed;
 		protected bool text;
 
+        public EzySimpleMessageHeader(bool bigSize,
+                                      bool encrypted, 
+                                      bool compressed, 
+                                      bool text)
+        {
+            this.bigSize = bigSize;
+            this.encrypted = encrypted;
+            this.compressed = compressed;
+            this.text = text;
+        }
+
 		public void setBigSize(bool bigSize)
 		{
 			this.bigSize = bigSize;

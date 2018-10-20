@@ -38,12 +38,12 @@ namespace com.tvd12.ezyfoxserver.client.handler
 			}
 		}
 
-		protected EzyArray newAccessAppData(EzyArray appData)
+        protected virtual EzyArray newAccessAppData(EzyArray appData)
 		{
 			return appData;
 		}
 
-		protected EzyUser newUser(EzyArray data)
+        protected virtual EzyUser newUser(EzyArray data)
 		{
 			long userId = data.get<long>(2);
 			String username = data.get<String>(3);
@@ -51,7 +51,7 @@ namespace com.tvd12.ezyfoxserver.client.handler
 			return user;
 		}
 
-		protected EzyZone newZone(EzyArray data)
+        protected virtual EzyZone newZone(EzyArray data)
 		{
 			int zoneId = data.get<int>(0);
 			String zoneName = data.get<String>(1);
@@ -65,6 +65,7 @@ namespace com.tvd12.ezyfoxserver.client.handler
 
 		protected virtual void handleReconnectSuccess(EzyData responseData)
 		{
+            handleLoginSuccess(responseData);
 		}
 	}
 }

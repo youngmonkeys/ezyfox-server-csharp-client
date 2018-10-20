@@ -7,7 +7,7 @@ using com.tvd12.ezyfoxserver.client.util;
 
 namespace com.tvd12.ezyfoxserver.client.socket
 {
-	public class EzyMainThreadQueue
+    public class EzyMainThreadQueue : EzyLoggable
 	{
 		private readonly EzyQueue<EzyEventHandlerExecutor> eventExecutors;
 		private readonly EzyQueue<EzyDataHandlerExecutor> dataExecutors;
@@ -71,7 +71,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
 		}
 	}
 
-	public class EzyEventHandlerExecutor
+    public class EzyEventHandlerExecutor : EzyLoggable
 	{
 		private readonly EzyEvent evt;
 		private readonly EzyEventHandler handler;
@@ -90,12 +90,12 @@ namespace com.tvd12.ezyfoxserver.client.socket
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine("handle event: " + evt + " error: " + ex);
+                logger.error("handle event: " + evt + " error", ex);
 			}
 		}
 	}
 
-	public class EzyDataHandlerExecutor
+    public class EzyDataHandlerExecutor : EzyLoggable
 	{
 		private readonly EzyArray data;
 		private readonly EzyDataHandler handler;
@@ -114,7 +114,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine("handle data: " + data + " error: " + ex);
+                logger.error("handle data: " + data + " error", ex);
 			}
 		}
 	}

@@ -18,7 +18,7 @@ namespace com.tvd12.ezyfoxserver.client.handler
 			if (dataHandler != null)
 				dataHandler.handle(app, responseData);
 			else
-				Console.WriteLine("app: " + app.getName() + " has no handler for command: " + cmd);
+                logger.warn("app: " + app.getName() + " has no handler for command: " + cmd);
 		}
 	}
 }

@@ -7,6 +7,7 @@ using com.tvd12.ezyfoxserver.client.util;
 namespace com.tvd12.ezyfoxserver.client.socket
 {
 	public abstract class EzySocketEventLoop :
+        EzyLoggable,
 		EzyStartable,
 		EzyDestroyable,
 		EzyResettable

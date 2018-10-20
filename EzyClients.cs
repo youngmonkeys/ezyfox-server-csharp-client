@@ -6,7 +6,6 @@ namespace com.tvd12.ezyfoxserver.client
 {
 	public sealed class EzyClients
 	{
-
 		private String defaultClientName;
 		private readonly IDictionary<Object, EzyClient> clients;
 		private static readonly EzyClients INSTANCE = new EzyClients();
@@ -44,6 +43,8 @@ namespace com.tvd12.ezyfoxserver.client
 
 		public EzyClient getClient(Object name)
 		{
+            if (name == null)
+                return null;
 			if (clients.ContainsKey(name))
 				return clients[name];
 			throw new ArgumentException("has no client with name: " + name);

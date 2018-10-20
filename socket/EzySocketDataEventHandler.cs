@@ -46,7 +46,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
 			}
 			catch (Exception e)
 			{
-				Console.WriteLine("can't take socket response: " + e);
+                logger.error("can't take socket response", e);
 			}
 		}
 
@@ -57,7 +57,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
 			if (handler != null)
 				mainThreadQueue.add(evt, handler);
 			else
-				Console.WriteLine("has no handler with event: " + eventType);
+                logger.warn("has no handler with event: " + eventType);
 		}
 
 		private void processResponse(EzyResponse response)
@@ -67,7 +67,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
 			EzyArray data = response.getData();
 			EzyArray responseData = data.get<EzyArray>(1, null);
 			if (!unloggableCommands.Contains(cmd))
-				Console.WriteLine("received command: " + cmd + " and data: " + responseData);
+                logger.debug("received command: " + cmd + " and data: " + responseData);
 			if (EzyCommand.DISCONNECT.Equals(cmd))
 				handleDisconnection(responseData);
 			else
@@ -87,7 +87,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
 			if (handler != null)
 				mainThreadQueue.add(responseData, handler);
 			else
-				Console.WriteLine("has no handler with command: " + cmd);
+                logger.warn("has no handler with command: " + cmd);
 		}
 	}
 }

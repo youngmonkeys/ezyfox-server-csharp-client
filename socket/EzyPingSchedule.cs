@@ -4,10 +4,11 @@ using com.tvd12.ezyfoxserver.client.constant;
 using com.tvd12.ezyfoxserver.client.evt;
 using com.tvd12.ezyfoxserver.client.manager;
 using com.tvd12.ezyfoxserver.client.request;
+using com.tvd12.ezyfoxserver.client.util;
 
 namespace com.tvd12.ezyfoxserver.client.socket
 {
-	public class EzyPingSchedule
+    public class EzyPingSchedule : EzyLoggable
 	{
 		private Thread thread;
 		private EzySocketDataHandler dataHandler;
@@ -51,7 +52,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
 			}
 			catch (Exception e)
 			{
-				Console.WriteLine("ping thread has interrupted: " + e);
+                logger.warn("ping thread has interrupted", e);
 			}
 		}
 
@@ -70,7 +71,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
 			}
 			if (lostPingCount > 1)
 			{
-				Console.WriteLine("lost ping count: " + lostPingCount);
+                logger.info("lost ping count: " + lostPingCount);
 				EzyLostPingEvent evt = new EzyLostPingEvent(lostPingCount);
 				EzySocketEvent socketEvent = new EzySimpleSocketEvent(EzySocketEventType.EVENT, evt);
 				dataHandler.fireSocketEvent(socketEvent);
