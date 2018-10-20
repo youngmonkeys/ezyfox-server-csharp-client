@@ -25,7 +25,7 @@ namespace com.tvd12.ezyfoxserver.client
 			setup.addEventHandler(EzyEventType.CONNECTION_SUCCESS, new EzyConnectionSuccessHandler());
 			setup.addEventHandler(EzyEventType.CONNECTION_FAILURE, new EzyConnectionFailureHandler());
 			setup.addDataHandler(EzyCommand.HANDSHAKE, new ExHandshakeEventHandler());
-			client.connect("31.12.1.2", 3005);
+			client.connect("127.0.0.1", 3005);
 
 			while (true)
 			{
