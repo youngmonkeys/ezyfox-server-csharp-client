@@ -54,7 +54,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
 		private void closeConnection()
 		{
 			socketChannel.Close();
-			socketDataHandler.fireSocketDisconnected(EzyDisconnectReason.UNKNOWN);
+			socketDataHandler.fireSocketDisconnected((int)EzyDisconnectReason.UNKNOWN);
 		}
 
 		public void setSocketChannel(TcpClient socketChannel)

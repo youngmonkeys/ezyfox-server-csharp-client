@@ -77,8 +77,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
 		private void handleDisconnection(EzyArray responseData)
 		{
 			int reasonId = responseData.get<int>(0, 0);
-			EzyDisconnectReason disconnectReason = (EzyDisconnectReason)reasonId;
-			dataHandler.fireSocketDisconnected(disconnectReason);
+            dataHandler.fireSocketDisconnected(reasonId);
 		}
 
 		private void handleResponseData(Object cmd, EzyArray responseData)

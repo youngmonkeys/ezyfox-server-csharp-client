@@ -62,7 +62,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
 			int maxLostPingCount = pingManager.getMaxLostPingCount();
 			if (lostPingCount >= maxLostPingCount)
 			{
-				dataHandler.fireSocketDisconnected(EzyDisconnectReason.SERVER_NOT_RESPONDING);
+                dataHandler.fireSocketDisconnected((int)EzyDisconnectReason.SERVER_NOT_RESPONDING);
 			}
 			else
 			{

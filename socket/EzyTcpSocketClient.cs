@@ -273,7 +273,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
 			}
 		}
 
-		public void onDisconnected(EzyDisconnectReason reason)
+		public void onDisconnected(int reason)
 		{
 			handleDisconnected();
 		}

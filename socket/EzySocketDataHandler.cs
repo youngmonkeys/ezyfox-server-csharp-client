@@ -57,7 +57,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
 			}
 		}
 
-		public void fireSocketDisconnected(EzyDisconnectReason reason)
+		public void fireSocketDisconnected(int reason)
 		{
 			if (disconnected)
 				return;
