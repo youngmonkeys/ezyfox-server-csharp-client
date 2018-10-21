@@ -25,16 +25,16 @@ namespace com.tvd12.ezyfoxserver.client.handler
 			}
 		}
 
-		protected void preHandle(EzyDisconnectionEvent evt)
+        protected virtual void preHandle(EzyDisconnectionEvent evt)
 		{
 		}
 
-		protected bool shouldReconnect(EzyDisconnectionEvent evt)
+        protected virtual bool shouldReconnect(EzyDisconnectionEvent evt)
 		{
 			return true;
 		}
 
-		protected void control(EzyDisconnectionEvent evt)
+        protected virtual void control(EzyDisconnectionEvent evt)
 		{
 		}
 	}

@@ -1,6 +1,5 @@
 ﻿using System;
 using com.tvd12.ezyfoxserver.client.entity;
-using com.tvd12.ezyfoxserver.client.handler;
 
 namespace com.tvd12.ezyfoxserver.client.handler
 {

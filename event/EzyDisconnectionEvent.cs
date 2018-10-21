@@ -4,14 +4,14 @@ namespace com.tvd12.ezyfoxserver.client.evt
 {
 	public class EzyDisconnectionEvent : EzyEvent
 	{
-		private readonly EzyDisconnectReason reason;
+		private readonly int reason;
 
-		public EzyDisconnectionEvent(EzyDisconnectReason reason)
+		public EzyDisconnectionEvent(int reason)
 		{
 			this.reason = reason;
 		}
 
-		public EzyDisconnectReason getReason()
+		public int getReason()
 		{
 			return reason;
 		}
