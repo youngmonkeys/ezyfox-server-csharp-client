@@ -14,13 +14,24 @@ namespace com.tvd12.ezyfoxserver.client.handler
 			EzyZone zone = newZone(data);
 			((EzyMeAware)client).setMe(user);
 			((EzyZoneAware)client).setZone(zone);
-			handleResponseAppDatas(joinedApps);
-			handleResponseData(responseData);
-			if (joinedApps.isEmpty())
-				handleLoginSuccess(responseData);
-			else
-				handleReconnectSuccess(responseData);
+            handleResponseData(responseData);
+            Boolean allowReconnect = allowReconnection();
+            Int32 appCount = joinedApps.size();
+            Boolean shouldConnect = allowReconnect && appCount > 0;
+            if (shouldConnect)
+            {
+                handleResponseAppDatas(joinedApps);
+                handleReconnectSuccess(responseData);
+            }
+            else 
+            {
+                handleLoginSuccess(responseData);
+            }	
 		}
+
+        protected virtual bool allowReconnection() {
+            return false;
+        }
 
 		protected virtual void handleResponseData(EzyData responseData)
 		{
