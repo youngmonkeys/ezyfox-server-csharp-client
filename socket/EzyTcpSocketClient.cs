@@ -240,7 +240,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
 											 .append(data)
 											 .build();
 			if (!unloggableCommands.Contains(cmd))
-                logger.info("send command: " + cmd + " and data: " + data);
+                logger.debug("send command: " + cmd + " and data: " + data);
 			EzyPackage pack = new EzySimplePackage(array);
 			try
 			{

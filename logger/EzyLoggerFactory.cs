@@ -40,7 +40,10 @@ namespace com.tvd12.ezyfoxserver.client.logger
 
 		public void trace(String format, params Object[] args)
 		{
-			Console.WriteLine("TRACE:: " + format, args);
+            if(args.Length == 0)
+			    Console.WriteLine("TRACE:: " + format);
+            else
+                Console.WriteLine("TRACE:: " + format, args);
 		}
 
 		public void trace(String message, Exception e)
@@ -50,7 +53,10 @@ namespace com.tvd12.ezyfoxserver.client.logger
 
 		public void debug(String format, params Object[] args)
 		{
-			Console.WriteLine("DEBUG:: " + format, args);
+            if (args.Length == 0)
+                Console.WriteLine("DEBUG:: " + format);
+            else
+                Console.WriteLine("DEBUG:: " + format, args);
 		}
 
 		public void debug(String message, Exception e)
@@ -60,7 +66,10 @@ namespace com.tvd12.ezyfoxserver.client.logger
 
 		public void info(String format, params Object[] args)
 		{
-			Console.WriteLine("INFO:: " + format, args);
+            if (args.Length == 0)
+    			Console.WriteLine("INFO:: " + format);
+            else
+                Console.WriteLine("INFO:: " + format, args);
 		}
 
 		public void info(String message, Exception e)
@@ -70,7 +79,10 @@ namespace com.tvd12.ezyfoxserver.client.logger
 
 		public void warn(String format, params Object[] args)
 		{
-			Console.WriteLine("WARN:: " + format, args);
+            if (args.Length == 0)
+    			Console.WriteLine("WARN:: " + format);
+            else
+                Console.WriteLine("WARN:: " + format, args);
 		}
 
 		public void warn(String message, Exception e)
@@ -80,7 +92,10 @@ namespace com.tvd12.ezyfoxserver.client.logger
 
 		public void error(String format, params Object[] args)
 		{
-			Console.WriteLine("ERROR:: " + format, args);
+            if (args.Length == 0)
+			    Console.WriteLine("ERROR:: " + format);
+            else
+                Console.WriteLine("ERROR:: " + format, args);
 		}
 
 		public void error(String message, Exception e)

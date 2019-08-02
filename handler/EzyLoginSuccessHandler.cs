@@ -15,7 +15,7 @@ namespace com.tvd12.ezyfoxserver.client.handler
 			((EzyMeAware)client).setMe(user);
 			((EzyZoneAware)client).setZone(zone);
             handleLoginSuccess(joinedApps, responseData);
-            logger.debug("user: {} logged in successfully", user);
+            logger.debug("user: " + user + " logged in successfully");
 		}
 
         protected virtual EzyUser newUser(EzyArray data)
