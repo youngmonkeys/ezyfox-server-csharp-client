@@ -276,7 +276,7 @@ namespace com.tvd12.ezyfoxserver.client.codec
 			int size = array.size();
 			byte[][] bytess = new byte[size + 1][];
 			bytess[0] = parseArraySize(size);
-			for (int i = 0; i < size; i++)
+			for (int i = 0; i < size; ++i)
 			{
 				bytess[index++] = serialize(array.get<Object>(i));
 			}
@@ -289,7 +289,7 @@ namespace com.tvd12.ezyfoxserver.client.codec
 			int size = array.Length;
 			byte[][] bytess = new byte[size + 1][];
 			bytess[0] = parseArraySize(size);
-			for (int i = 0; i < size; i++)
+			for (int i = 0; i < size; ++i)
 			{
 				bytess[index++] = serialize(array[i]);
 			}

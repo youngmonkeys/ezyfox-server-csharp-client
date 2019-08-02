@@ -11,7 +11,7 @@ namespace com.tvd12.ezyfoxserver.client.concurrent
 
 		public ThreadList(int size, String threadName, ThreadStart task)
 		{
-			for (int i = 0; i < size; i++)
+			for (int i = 0; i < size; ++i)
 			{
 				Thread thread = new Thread(task);
 				thread.Name = threadName;

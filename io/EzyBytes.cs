@@ -98,7 +98,7 @@ namespace com.tvd12.ezyfoxserver.client.io
 		public static byte[] getBytes(long value, int size, bool swap)
 		{
 			byte[] bytes = new byte[size];
-			for (int i = 0; i < size; i++)
+			for (int i = 0; i < size; ++i)
 				bytes[i] = (byte)((value >> ((size - i - 1) * 8) & 0xff));
 			if (swap)
 			{
@@ -114,7 +114,7 @@ namespace com.tvd12.ezyfoxserver.client.io
 
 		public static void swapBytes(byte[] bytes, int size)
 		{
-			for (int i = 0, k = size - 1; i < k; i++, k--)
+			for (int i = 0, k = size - 1; i < k; ++i, --k)
 			{
 				byte c = bytes[i];
 				bytes[i] = bytes[k];

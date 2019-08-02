@@ -45,7 +45,7 @@ namespace com.tvd12.ezyfoxserver.client.io
 		public void get(byte[] dst, int offset, int length)
 		{
 			int end = offset + length;
-			for (int i = offset; i < end; i++)
+			for (int i = offset; i < end; ++i)
 				dst[i] = (byte)stream.ReadByte();
 		}
 
