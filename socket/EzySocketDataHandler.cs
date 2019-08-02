@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net.Sockets;
 using System.Threading;
 using com.tvd12.ezyfoxserver.client.callback;
@@ -86,8 +86,8 @@ namespace com.tvd12.ezyfoxserver.client.socket
 
 		private void handleReceivedData(Object data)
 		{
-			EzyResponse reponse = newSocketResponse(data);
-			EzySocketEvent evt = new EzySimpleSocketEvent(EzySocketEventType.RESPONSE, reponse);
+			EzyResponse response = newSocketResponse(data);
+			EzySocketEvent evt = new EzySimpleSocketEvent(EzySocketEventType.RESPONSE, response);
 			bool success = eventQueue.add(evt);
 			if (!success)
 			{

@@ -14,44 +14,8 @@ namespace com.tvd12.ezyfoxserver.client.handler
 			EzyZone zone = newZone(data);
 			((EzyMeAware)client).setMe(user);
 			((EzyZoneAware)client).setZone(zone);
-            handleResponseData(responseData);
-            Boolean allowReconnect = allowReconnection();
-            Int32 appCount = joinedApps.size();
-            Boolean shouldConnect = allowReconnect && appCount > 0;
-            if (shouldConnect)
-            {
-                handleResponseAppDatas(joinedApps);
-                handleReconnectSuccess(responseData);
-            }
-            else 
-            {
-                handleLoginSuccess(responseData);
-            }	
-		}
-
-        protected virtual bool allowReconnection() {
-            return false;
-        }
-
-		protected virtual void handleResponseData(EzyData responseData)
-		{
-		}
-
-		protected virtual void handleResponseAppDatas(EzyArray appDatas)
-		{
-			EzyDataHandler appAccessHandler =
-					handlerManager.getDataHandler(EzyCommand.APP_ACCESS);
-			for (int i = 0; i < appDatas.size(); i++)
-			{
-				EzyArray appData = appDatas.get<EzyArray>(i);
-				EzyArray accessAppData = newAccessAppData(appData);
-				appAccessHandler.handle(accessAppData);
-			}
-		}
-
-        protected virtual EzyArray newAccessAppData(EzyArray appData)
-		{
-			return appData;
+            handleLoginSuccess(joinedApps, responseData);
+            logger.debug("user: {} logged in successfully", user);
 		}
 
         protected virtual EzyUser newUser(EzyArray data)
@@ -70,13 +34,8 @@ namespace com.tvd12.ezyfoxserver.client.handler
 			return zone;
 		}
 
-		protected virtual void handleLoginSuccess(EzyData responseData)
+        protected virtual void handleLoginSuccess(EzyArray joinedApps, EzyData responseData)
 		{
-		}
-
-		protected virtual void handleReconnectSuccess(EzyData responseData)
-		{
-            handleLoginSuccess(responseData);
 		}
 	}
 }
