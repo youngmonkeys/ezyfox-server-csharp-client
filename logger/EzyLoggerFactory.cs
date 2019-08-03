@@ -1,27 +1,53 @@
 ﻿using System;
 using System.Text;
 using System.Threading;
+using System.Collections.Generic;
+
+using static com.tvd12.ezyfoxserver.client.reflect.EzyClasses;
 using static com.tvd12.ezyfoxserver.client.logger.EzyLoggerLevel;
 
 using static com.tvd12.ezyfoxserver.client.io.EzyDateTimes;
 
 namespace com.tvd12.ezyfoxserver.client.logger
 {
-	public delegate EzyLogger EzyLoggerSupply(Type type);
+	public delegate EzyLogger EzyLoggerSupply(object name);
 
 	public class EzyLoggerFactory
 	{
-		private static EzyLoggerSupply loggerSupply
-				= (type) => new EzySimpleLogger(type);
+		private static EzyLoggerSupply loggerSupply 
+            = (name) => new EzySimpleLogger(name);
+
+        private static readonly IDictionary<object, EzyLogger> loggers 
+            = new Dictionary<object, EzyLogger>();
 
 		public static EzyLogger getLogger()
 		{
-			return getLogger(typeof(EzyLoggerFactory));
+			return getLogger("DefaultLogger");
 		}
 
-		public static EzyLogger getLogger(Type type)
+        public static EzyLogger getLogger(object name)
 		{
-			return loggerSupply(type);
+            EzyLogger logger = null;
+            if(loggers.ContainsKey(name)) 
+            {
+                logger = loggers[name];
+            }
+            else 
+            {
+                lock (loggers)
+                {
+                    if(loggers.ContainsKey(name)) 
+                    {
+                        logger = loggers[name];   
+                    }
+                    else 
+                    {
+                        logger = loggerSupply(name);
+                        loggers[name] = logger;
+                    }
+                }
+            }
+            return logger;
 		}
 
         public static EzyLogger getLogger<T>() {
@@ -36,11 +62,11 @@ namespace com.tvd12.ezyfoxserver.client.logger
 
 	public class EzySimpleLogger : EzyLogger
 	{
-		protected Type type;
+        protected object name;
 
-		public EzySimpleLogger(Type type)
+        public EzySimpleLogger(object name)
 		{
-			this.type = type;
+            this.name = (name is Type) ? getClassName((Type)name, 1) : name;
 		}
 
 		public void trace(String format, params Object[] args)
@@ -118,6 +144,8 @@ namespace com.tvd12.ezyfoxserver.client.logger
                 .Append(level)
                 .Append(" | ")
                 .Append(Thread.CurrentThread.Name)
+                .Append(" | ")
+                .Append(name)
                 .Append(" | ")
                 .Append(message);
             return builder.ToString();
