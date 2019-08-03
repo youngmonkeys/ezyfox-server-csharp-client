@@ -59,7 +59,7 @@ appSetup.addDataHandler("broadcastMessage", new MessageResponseHandler());
 client.connect("localhost", 3005);
 ```
 
-**3. Handle socket's events on main thread**
+**6. Handle socket's events on main thread**
 
 For one client:
 
