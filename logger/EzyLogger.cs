@@ -26,17 +26,14 @@ namespace com.tvd12.ezyfoxserver.client.logger
 		void error(String message, Exception e);
 	}
 
-    public sealed class EzyLoggerLevel
+    public enum EzyLoggerLevel
     {
 
-        private EzyLoggerLevel() {
-        }
-
-        public static readonly String TRACE = "TRACE";
-        public static readonly String DEBUG = "DEBUG";
-        public static readonly String INFO = "INFO";
-        public static readonly String WARN = "WARN";
-        public static readonly String ERROR = "ERROR";
+        TRACE = 1,
+        DEBUG = 2,
+        INFO = 3,
+        WARN = 4,
+        ERROR = 5
 
     }
 }
