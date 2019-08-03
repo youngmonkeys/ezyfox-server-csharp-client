@@ -82,8 +82,13 @@ namespace com.tvd12.ezyfoxserver.client
 
 		public EzyClient getDefaultClient()
 		{
-			EzyClient client = getClient(defaultClientName);
-			return client;
+            lock (clients)
+            {
+                if (defaultClientName == null)
+                    return null;
+                EzyClient client = getClient0(defaultClientName);
+                return client;
+            }
 		}
 
         public void getClients(IList<EzyClient> cachedClients) 
