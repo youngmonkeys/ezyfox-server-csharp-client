@@ -1,20 +1,18 @@
-﻿using System;
-using System.Threading;
-using com.tvd12.ezyfoxserver.client.constant;
+﻿using com.tvd12.ezyfoxserver.client.constant;
 using com.tvd12.ezyfoxserver.client.evt;
 using com.tvd12.ezyfoxserver.client.manager;
 using com.tvd12.ezyfoxserver.client.request;
 using com.tvd12.ezyfoxserver.client.util;
+using com.tvd12.ezyfoxserver.client.concurrent;
 
 namespace com.tvd12.ezyfoxserver.client.socket
 {
     public class EzyPingSchedule : EzyLoggable
 	{
-		private Thread thread;
+        private EzyScheduleAtFixedRate schedule;
 		private EzySocketDataHandler dataHandler;
 		private readonly EzyClient client;
 		private readonly EzyPingManager pingManager;
-		private volatile bool active = true;
 
 		public EzyPingSchedule(EzyClient client)
 		{
@@ -25,35 +23,27 @@ namespace com.tvd12.ezyfoxserver.client.socket
 
 		public void start()
 		{
-			thread = new Thread(loop);
-			active = true;
-			thread.Name = "ping-schedule";
-			thread.Start();
+            lock(this) 
+            {
+                int periodMillis = pingManager.getPingPeriod();
+                this.schedule = newSchedule();
+                this.schedule.schedule(sendPingRequest, periodMillis, periodMillis);
+            }
 		}
 
-		public void loop()
-		{
-			while (active)
-				handle();
-		}
+        private EzyScheduleAtFixedRate newSchedule() {
+            EzyScheduleAtFixedRate answer = new EzyScheduleAtFixedRate("ping-schedule");
+            return answer;
+        }
 
 		public void stop()
 		{
-			this.active = false;
-		}
-
-		private void handle()
-		{
-			try
-			{
-				int periodMillis = pingManager.getPingPeriod();
-				Thread.Sleep(periodMillis);
-				sendPingRequest();
-			}
-			catch (Exception e)
-			{
-                logger.warn("ping thread has interrupted", e);
-			}
+            lock (this)
+            {
+                if (schedule != null)
+                    this.schedule.stop();
+                this.schedule = null;
+            }
 		}
 
 		private void sendPingRequest()
