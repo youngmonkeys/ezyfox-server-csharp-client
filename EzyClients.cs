@@ -22,39 +22,79 @@ namespace com.tvd12.ezyfoxserver.client
 
 		public EzyClient newClient(EzyClientConfig config)
 		{
-			EzyClient client = new EzyTcpClient(config);
-			addClient(client);
-			if (defaultClientName == null)
-				defaultClientName = client.getZoneName();
-			return client;
+            lock (clients)
+            {
+                return newClient0(config);
+            }
 		}
 
-		public EzyClient newDefaultClient(EzyClientConfig config)
-		{
-			EzyClient client = newClient(config);
-			defaultClientName = config.getZoneName();
-			return client;
+        private EzyClient newClient0(EzyClientConfig config)
+        {
+            String clientName = config.getClientName();
+            if (clients.ContainsKey(clientName))
+                return clients[clientName];
+            EzyClient client = new EzyTcpClient(config);
+            addClient0(client);
+            if (defaultClientName == null)
+                defaultClientName = client.getName();
+            return client;
+        }
+
+        public EzyClient newDefaultClient(EzyClientConfig config)
+        {
+            lock (clients)
+            {
+                EzyClient client = newClient0(config);
+                defaultClientName = client.getName();
+                return client;
+            }
 		}
 
 		public void addClient(EzyClient client)
 		{
-			this.clients[client.getZoneName()] = client;
+            lock(clients)
+            {
+                addClient0(client);
+            }
 		}
+
+        private void addClient0(EzyClient client)
+        {
+            this.clients[client.getName()] = client;
+        }
 
 		public EzyClient getClient(Object name)
 		{
-            if (name == null)
-                return null;
-			if (clients.ContainsKey(name))
-				return clients[name];
-			throw new ArgumentException("has no client with name: " + name);
+            lock (clients)
+            {
+                return getClient0(name);
+            }
 		}
+
+        private EzyClient getClient0(Object name)
+        {
+            if (name == null)
+                throw new ArgumentException("can not get client with name: null");
+            if (clients.ContainsKey(name))
+                return clients[name];
+            return null;
+        }
 
 		public EzyClient getDefaultClient()
 		{
 			EzyClient client = getClient(defaultClientName);
 			return client;
 		}
+
+        public void getClients(IList<EzyClient> cachedClients) 
+        {
+            cachedClients.Clear();
+            lock(clients)
+            {
+                foreach (EzyClient client in clients.Values)
+                    cachedClients.Add(client);
+            }
+        }
 
 	}
 }

@@ -23,6 +23,8 @@ namespace com.tvd12.ezyfoxserver.client
 
 		void processEvents();
 
+        String getName();
+
 		EzyClientConfig getConfig();
 
 		EzyZone getZone();

@@ -5,13 +5,14 @@ namespace com.tvd12.ezyfoxserver.client.config
 {
 	public class EzyClientConfig
 	{
-
-		private readonly String zoneName;
-		private readonly EzyReconnectConfig reconnect;
+        protected readonly String zoneName;
+        protected readonly String clientName;
+        protected readonly EzyReconnectConfig reconnect;
 
 		protected EzyClientConfig(Builder builder)
 		{
 			this.zoneName = builder._zoneName;
+            this.clientName = builder._clientName;
 			this.reconnect = builder._reconnectConfigBuilder.build();
 		}
 
@@ -19,6 +20,13 @@ namespace com.tvd12.ezyfoxserver.client.config
 		{
 			return zoneName;
 		}
+
+        public String getClientName()
+        {
+            if (clientName == null)
+                return zoneName;
+            return clientName;
+        }
 
 		public EzyReconnectConfig getReconnect()
 		{
@@ -32,8 +40,9 @@ namespace com.tvd12.ezyfoxserver.client.config
 
 		public class Builder : EzyBuilder<EzyClientConfig>
 		{
-			public String _zoneName;
-			public readonly EzyReconnectConfig.Builder _reconnectConfigBuilder;
+            public String _zoneName;
+            public String _clientName;
+            public readonly EzyReconnectConfig.Builder _reconnectConfigBuilder;
 
 			public Builder()
 			{
@@ -45,6 +54,12 @@ namespace com.tvd12.ezyfoxserver.client.config
 				this._zoneName = zoneName;
 				return this;
 			}
+
+            public Builder clientName(String clientName)
+            {
+                this._clientName = clientName;
+                return this;
+            }
 
 			public EzyReconnectConfig.Builder reconnectConfigBuilder()
 			{

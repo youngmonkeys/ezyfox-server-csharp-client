@@ -16,26 +16,28 @@ namespace com.tvd12.ezyfoxserver.client
 		EzyClient, EzyMeAware, EzyZoneAware
 	{
 
-		private EzyUser me;
-		private EzyZone zone;
-		private readonly String zoneName;
-		private readonly EzyClientConfig config;
-		private readonly EzyPingManager pingManager;
-		private readonly EzyHandlerManager handlerManager;
-		private readonly IDictionary<int, EzyApp> appsById;
+        protected EzyUser me;
+        protected EzyZone zone;
+        protected readonly String name;
+        protected readonly String zoneName;
+        protected readonly EzyClientConfig config;
+        protected readonly EzyPingManager pingManager;
+        protected readonly EzyHandlerManager handlerManager;
+        protected readonly IDictionary<int, EzyApp> appsById;
 
-		private EzyConnectionStatus status;
-		private readonly Object statusLock;
-		private readonly ISet<Object> unloggableCommands;
+        protected EzyConnectionStatus status;
+        protected readonly Object statusLock;
+        protected readonly ISet<Object> unloggableCommands;
 
-		private readonly EzySocketClient socketClient;
-		private readonly EzyPingSchedule pingSchedule;
-		private readonly EzyMainThreadQueue mainThreadQueue;
-        private readonly EzyLogger logger;
+        protected readonly EzySocketClient socketClient;
+        protected readonly EzyPingSchedule pingSchedule;
+        protected readonly EzyMainThreadQueue mainThreadQueue;
+        protected readonly EzyLogger logger;
 
 		public EzyTcpClient(EzyClientConfig config)
 		{
 			this.config = config;
+            this.name = config.getClientName();
 			this.zoneName = config.getZoneName();
 			this.status = EzyConnectionStatus.NULL;
 			this.statusLock = new Object();
@@ -50,17 +52,17 @@ namespace com.tvd12.ezyfoxserver.client
 			this.initProperties();
 		}
 
-		private void initProperties()
+        protected void initProperties()
 		{
 			this.properties.put(typeof(EzySetup), newSetupCommand());
 		}
 
-		private EzyHandlerManager newHandlerManager()
+        protected EzyHandlerManager newHandlerManager()
 		{
 			return new EzySimpleHandlerManager(this, pingSchedule);
 		}
 
-		private ISet<Object> newUnloggableCommands()
+        protected ISet<Object> newUnloggableCommands()
 		{
 			ISet<Object> set = new HashSet<Object>();
 			set.Add(EzyCommand.PING);
@@ -68,12 +70,12 @@ namespace com.tvd12.ezyfoxserver.client
 			return set;
 		}
 
-		private EzySetup newSetupCommand()
+        protected EzySetup newSetupCommand()
 		{
 			return new EzySimpleSetup(handlerManager);
 		}
 
-		private EzySocketClient newSocketClient()
+        protected EzySocketClient newSocketClient()
 		{
 			EzyTcpSocketClient client = new EzyTcpSocketClient(
 					config,
@@ -114,7 +116,7 @@ namespace com.tvd12.ezyfoxserver.client
 			return success;
 		}
 
-		private void resetComponents()
+        protected void resetComponents()
 		{
 			this.me = null;
 			this.zone = null;
@@ -146,6 +148,11 @@ namespace com.tvd12.ezyfoxserver.client
 			T instance = getProperty<T>();
 			return instance;
 		}
+
+        public String getName() 
+        {
+            return name;    
+        }
 
 		public EzyClientConfig getConfig()
 		{
