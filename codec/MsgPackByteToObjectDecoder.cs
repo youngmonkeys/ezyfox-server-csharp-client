@@ -30,11 +30,6 @@ namespace com.tvd12.ezyfoxserver.client.codec
 			handlers.handle(bytes, queue);
 		}
 
-		public void reset()
-		{
-			handlers.reset();
-		}
-
 	}
 
 	public abstract class AbstractHandler : EzyDecodeHandler

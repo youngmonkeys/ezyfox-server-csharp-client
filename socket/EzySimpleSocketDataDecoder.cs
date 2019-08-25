@@ -91,13 +91,5 @@ namespace com.tvd12.ezyfoxserver.client.socket
 			return EzyByteBuffer.wrap(bytes);
 		}
 
-		public void reset()
-		{
-			queue.Clear();
-			decoder.reset();
-			if (buffer != null)
-				buffer.clear();
-			buffer = null;
-		}
 	}
 }

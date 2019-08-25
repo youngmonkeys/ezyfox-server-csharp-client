@@ -4,7 +4,7 @@ using com.tvd12.ezyfoxserver.client.util;
 
 namespace com.tvd12.ezyfoxserver.client.codec
 {
-	public abstract class EzyDecodeHandlers : EzyResettable
+	public abstract class EzyDecodeHandlers
 	{
 		protected int state;
 		protected IDictionary<int, EzyDecodeHandler> handlers;
@@ -28,11 +28,6 @@ namespace com.tvd12.ezyfoxserver.client.codec
 		protected int firstState()
 		{
 			return EzyDecodeState.PREPARE_MESSAGE;
-		}
-
-		public void reset()
-		{
-			this.state = firstState();
 		}
 
 		public abstract class AbstractBuilder

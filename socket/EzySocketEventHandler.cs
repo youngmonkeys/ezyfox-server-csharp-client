@@ -2,7 +2,7 @@
 
 namespace com.tvd12.ezyfoxserver.client.socket
 {
-	public interface EzySocketEventHandler : EzyDestroyable, EzyResettable
+	public interface EzySocketEventHandler : EzyDestroyable
 	{
 		void handleEvent();
 	}

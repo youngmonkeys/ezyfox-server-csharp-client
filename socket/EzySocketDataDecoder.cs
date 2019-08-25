@@ -5,7 +5,7 @@ using com.tvd12.ezyfoxserver.client.util;
 
 namespace com.tvd12.ezyfoxserver.client.socket
 {
-	public interface EzySocketDataDecoder : EzyResettable
+	public interface EzySocketDataDecoder
 	{
 		Object decode(EzyMessage message);
 
