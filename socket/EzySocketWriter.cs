@@ -1,42 +1,38 @@
 ﻿using System;
 using System.Threading;
+using com.tvd12.ezyfoxserver.client.concurrent;
+using com.tvd12.ezyfoxserver.client.entity;
+using com.tvd12.ezyfoxserver.client.util;
 
 namespace com.tvd12.ezyfoxserver.client.socket
 {
-	public class EzySocketWriter : EzyAbstractSocketEventHandler
+    public abstract class EzySocketWriter : EzySocketAdapter
 	{
-		protected readonly EzyPacketQueue packetQueue;
-		protected readonly EzySocketDataHandler dataHandler;
+		protected EzyPacketQueue packetQueue;
 
-		public EzySocketWriter(EzyPacketQueue packetQueue,
-							   EzySocketDataHandler dataHandler)
-		{
-			this.packetQueue = packetQueue;
-			this.dataHandler = dataHandler;
-		}
 
-		public override void handleEvent()
-		{
-			try
-			{
-				EzyPacket packet = packetQueue.take();
-				dataHandler.firePacketSend(packet);
-				packet.release();
-			}
-			catch (Exception e)
-			{
-                logger.warn("socket-writer thread interrupted: " + Thread.CurrentThread + " error", e);
-			}
-		}
+        protected override void update()
+        {
+            while(true)
+            {
+                if (!active) 
+                    return;
+                EzyPacket packet = packetQueue.take();
+                writeToSocket(packet);
+                packet.release();
+            }
+        }
 
-		public override void destroy()
-		{
-			packetQueue.clear();
-		}
+        protected abstract void writeToSocket(EzyPacket packet);
 
-		public override void reset()
-		{
-		}
+        public void setPacketQueue(EzyPacketQueue packetQueue) 
+        {
+            this.packetQueue = packetQueue;    
+        }
 
+        protected override string getThreadName()
+        {
+            return "ezyfox-socket-writer";
+        }
 	}
 }

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using com.tvd12.ezyfoxserver.client.constant;
+using com.tvd12.ezyfoxserver.client.entity;
 using com.tvd12.ezyfoxserver.client.socket;
 
 namespace com.tvd12.ezyfoxserver.client.handler
@@ -8,8 +10,7 @@ namespace com.tvd12.ezyfoxserver.client.handler
 	{
 		private readonly IDictionary<Object, EzyDataHandler> handlers;
 
-		public EzyDataHandlers(EzyClient client, EzyPingSchedule pingSchedule) :
-			base(client, pingSchedule)
+		public EzyDataHandlers(EzyClient client) : base(client)
 		{
 			this.handlers = new Dictionary<Object, EzyDataHandler>();
 		}
@@ -27,6 +28,19 @@ namespace com.tvd12.ezyfoxserver.client.handler
 				handler = handlers[cmd];
 			return handler;
 		}
+
+        public void handle(EzyCommand cmd, EzyArray data)
+        {
+            if (handlers.ContainsKey(cmd)) 
+            {
+                EzyDataHandler hd = handlers[cmd];
+                hd.handle(data);
+            }
+            else
+            {
+                logger.warn("has no handler for command: " + cmd);
+            }
+        }
 
 	}
 }

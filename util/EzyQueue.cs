@@ -43,19 +43,24 @@ namespace com.tvd12.ezyfoxserver.client.util
 			return queue.Dequeue();
 		}
 
+        public virtual E take() {
+            return queue.Dequeue();
+        }
+
 		public virtual E remove()
 		{
 			return queue.Dequeue();
 		}
 
+        public virtual void pollAll(IList<E> list) 
+        {
+            while (queue.Count > 0)
+                list.Add(queue.Dequeue());    
+        }
+
 		public virtual int size()
 		{
 			return queue.Count;
-		}
-
-		public virtual int getCapacity()
-		{
-			return capacity;
 		}
 
 		public virtual bool isEmpty()
@@ -67,5 +72,10 @@ namespace com.tvd12.ezyfoxserver.client.util
 		{
 			queue.Clear();
 		}
+
+        public virtual int getCapacity()
+        {
+            return capacity;
+        }
 	}
 }

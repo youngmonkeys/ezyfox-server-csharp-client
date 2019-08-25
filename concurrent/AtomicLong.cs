@@ -4,7 +4,7 @@ namespace com.tvd12.ezyfoxserver.client.concurrent
 {
 	public class AtomicLong
 	{
-		private long value = 0;
+        protected long value = 0;
 
 		public AtomicLong()
 		{

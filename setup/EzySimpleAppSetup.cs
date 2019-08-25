@@ -1,12 +1,12 @@
 ﻿using System;
 using com.tvd12.ezyfoxserver.client.handler;
 
-namespace com.tvd12.ezyfoxserver.client.command
+namespace com.tvd12.ezyfoxserver.client.setup
 {
 	public class EzySimpleAppSetup : EzyAppSetup
 	{
-		private readonly EzyAppDataHandlers dataHandlers;
-		private readonly EzySetup parent;
+        protected readonly EzyAppDataHandlers dataHandlers;
+        protected readonly EzySetup parent;
 
 		public EzySimpleAppSetup(EzyAppDataHandlers dataHandlers, EzySetup parent)
 		{

@@ -10,16 +10,16 @@ namespace com.tvd12.ezyfoxserver.client.manager
 	public class EzySimpleHandlerManager : EzyHandlerManager
 	{
 
-		private readonly EzyClient client;
-		private readonly EzyPingSchedule pingSchedule;
-		private readonly EzyEventHandlers eventHandlers;
-		private readonly EzyDataHandlers dataHandlers;
-		private readonly IDictionary<String, EzyAppDataHandlers> appDataHandlerss;
+        protected readonly EzyClient client;
+        protected readonly EzyPingSchedule pingSchedule;
+        protected readonly EzyEventHandlers eventHandlers;
+        protected readonly EzyDataHandlers dataHandlers;
+        protected readonly IDictionary<String, EzyAppDataHandlers> appDataHandlerss;
 
-		public EzySimpleHandlerManager(EzyClient client, EzyPingSchedule pingSchedule)
+		public EzySimpleHandlerManager(EzyClient client)
 		{
 			this.client = client;
-			this.pingSchedule = pingSchedule;
+            this.pingSchedule = client.getPingSchedule();
 			this.eventHandlers = newEventHandlers();
 			this.dataHandlers = newDataHandlers();
 			this.appDataHandlerss = new Dictionary<String, EzyAppDataHandlers>();
@@ -27,7 +27,7 @@ namespace com.tvd12.ezyfoxserver.client.manager
 
 		private EzyEventHandlers newEventHandlers()
 		{
-			EzyEventHandlers handlers = new EzyEventHandlers(client, pingSchedule);
+			EzyEventHandlers handlers = new EzyEventHandlers(client);
 			handlers.addHandler(EzyEventType.CONNECTION_SUCCESS, new EzyConnectionSuccessHandler());
 			handlers.addHandler(EzyEventType.CONNECTION_FAILURE, new EzyConnectionFailureHandler());
 			handlers.addHandler(EzyEventType.DISCONNECTION, new EzyDisconnectionHandler());
@@ -36,11 +36,20 @@ namespace com.tvd12.ezyfoxserver.client.manager
 
 		private EzyDataHandlers newDataHandlers()
 		{
-			EzyDataHandlers handlers = new EzyDataHandlers(client, pingSchedule);
+			EzyDataHandlers handlers = new EzyDataHandlers(client);
 			handlers.addHandler(EzyCommand.PONG, new EzyPongHandler());
 			handlers.addHandler(EzyCommand.APP_REQUEST, new EzyAppResponseHandler());
 			return handlers;
 		}
+
+        public EzyEventHandlers getEventHandlers() 
+        {
+            return eventHandlers;    
+        }
+        public EzyDataHandlers getDataHandlers() 
+        {
+            return dataHandlers;    
+        }
 
 		public EzyDataHandler getDataHandler(Object cmd)
 		{

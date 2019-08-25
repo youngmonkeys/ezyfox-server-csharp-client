@@ -6,7 +6,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
 	{
 		protected override String getThreadName()
 		{
-			return "socket-writer";
+			return "ezyfox-socket-writer";
 		}
 	}
 

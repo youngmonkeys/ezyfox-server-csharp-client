@@ -2,7 +2,7 @@
 using com.tvd12.ezyfoxserver.client.evt;
 using com.tvd12.ezyfoxserver.client.handler;
 
-namespace com.tvd12.ezyfoxserver.client.command
+namespace com.tvd12.ezyfoxserver.client.setup
 {
 	public interface EzySetup
 	{

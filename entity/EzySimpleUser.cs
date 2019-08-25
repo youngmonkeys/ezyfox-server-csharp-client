@@ -2,7 +2,7 @@
 
 namespace com.tvd12.ezyfoxserver.client.entity
 {
-	public class EzySimpleUser : EzyUser
+    public class EzySimpleUser : EzyEntity, EzyUser
 	{
 		protected readonly long id;
 		protected readonly String name;

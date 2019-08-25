@@ -9,4 +9,23 @@
 		FAILURE = 4,
 		RECONNECTING = 5
 	}
+
+    public sealed class EzyConnectionStatuses {
+        
+        private EzyConnectionStatuses() { 
+        }            
+
+        public static bool isClientConnectable(EzyConnectionStatus status) {
+            return status == EzyConnectionStatus.NULL ||
+                   status == EzyConnectionStatus.DISCONNECTED ||
+                   status == EzyConnectionStatus.FAILURE;
+        }
+
+        public static bool isClientReconnectable(EzyConnectionStatus status)
+        {
+            return status == EzyConnectionStatus.DISCONNECTED ||
+                   status == EzyConnectionStatus.FAILURE;
+        }
+
+    }
 }

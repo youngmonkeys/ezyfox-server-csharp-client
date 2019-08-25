@@ -6,7 +6,7 @@ namespace com.tvd12.ezyfoxserver.client.evt
 	{
 		private readonly EzyConnectionFailedReason reason;
 
-		private EzyConnectionFailureEvent(EzyConnectionFailedReason reason)
+		public EzyConnectionFailureEvent(EzyConnectionFailedReason reason)
 		{
 			this.reason = reason;
 		}

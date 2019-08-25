@@ -3,7 +3,7 @@ using com.tvd12.ezyfoxserver.client.manager;
 
 namespace com.tvd12.ezyfoxserver.client.entity
 {
-	public class EzySimpleZone : EzyZone
+    public class EzySimpleZone : EzyEntity, EzyZone
 	{
 		protected readonly int id;
 		protected readonly String name;

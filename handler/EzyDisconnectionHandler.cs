@@ -16,11 +16,11 @@ namespace com.tvd12.ezyfoxserver.client.handler
 			bool should = shouldReconnect(evt);
 			bool mustReconnect = reconnectConfig.isEnable() && should;
 			bool reconnecting = false;
+            client.setStatus(EzyConnectionStatus.DISCONNECTED);
 			if (mustReconnect)
 				reconnecting = client.reconnect();
 			if (!reconnecting)
 			{
-				client.setStatus(EzyConnectionStatus.DISCONNECTED);
 				control(evt);
 			}
 		}

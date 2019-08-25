@@ -9,14 +9,9 @@ namespace com.tvd12.ezyfoxserver.client.handler
 	{
 		protected override sealed void process(EzyEvent evt)
 		{
-			updateConnectionStatus();
+            client.setStatus(EzyConnectionStatus.CONNECTED);
 			sendHandshakeRequest();
 			postHandle();
-		}
-
-		private void updateConnectionStatus()
-		{
-			client.setStatus(EzyConnectionStatus.CONNECTED);
 		}
 
 		protected virtual void postHandle()

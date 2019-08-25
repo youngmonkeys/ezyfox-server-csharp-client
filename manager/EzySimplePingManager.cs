@@ -5,9 +5,9 @@ namespace com.tvd12.ezyfoxserver.client.manager
 {
 	public class EzySimplePingManager : EzyPingManager
 	{
-		private int pingPeriod;
-		private int maxLostPingCount;
-		private readonly AtomicInteger lostPingCount;
+        protected int pingPeriod;
+        protected int maxLostPingCount;
+        protected readonly AtomicInteger lostPingCount;
 
 		public EzySimplePingManager()
 		{

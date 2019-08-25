@@ -26,17 +26,17 @@ namespace com.tvd12.ezyfoxserver.client.entity
 
 		public void send(EzyRequest request)
 		{
-			Object cmd = request.getCommand();
+			String cmd = (String)request.getCommand();
 			EzyData data = request.serialize();
 			send(cmd, data);
 		}
 
-		public void send(Object cmd, EzyData data)
+		public void send(String cmd, EzyData data)
 		{
 			EzyArrayBuilder commandData = EzyEntityFactory.newArrayBuilder()
 					.append(cmd)
 					.append(data);
-			EzyData requestData = EzyEntityFactory.newArrayBuilder()
+            EzyArray requestData = EzyEntityFactory.newArrayBuilder()
 					.append(id)
                     .append(commandData.build())
 					.build();
@@ -61,12 +61,6 @@ namespace com.tvd12.ezyfoxserver.client.entity
 		public EzyZone getZone()
 		{
 			return zone;
-		}
-
-		public T get<T>()
-		{
-			T instance = getProperty<T>();
-			return instance;
 		}
 
 		public EzyAppDataHandler getDataHandler(Object cmd)

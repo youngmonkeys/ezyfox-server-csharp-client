@@ -2,7 +2,7 @@
 
 namespace com.tvd12.ezyfoxserver.client.socket
 {
-	public interface EzyDisconnectionDelegate
+    public interface EzySocketDelegate
 	{
 		void onDisconnected(int reason);
 	}

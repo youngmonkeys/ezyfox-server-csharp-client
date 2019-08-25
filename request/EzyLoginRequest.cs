@@ -7,10 +7,10 @@ namespace com.tvd12.ezyfoxserver.client.request
 {
 	public class EzyLoginRequest : EzyRequest
 	{
-		private readonly String zoneName;
-		private readonly String username;
-		private readonly String password;
-		private readonly EzyData data;
+        protected readonly String zoneName;
+        protected readonly String username;
+        protected readonly String password;
+        protected readonly EzyData data;
 
 		public EzyLoginRequest(String zoneName,
 							   String username,

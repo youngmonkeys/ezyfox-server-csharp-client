@@ -1,76 +1,86 @@
 ﻿using System;
 using System.Net.Sockets;
 using System.Threading;
+using System.Collections.Generic;
+using com.tvd12.ezyfoxserver.client.util;
+using com.tvd12.ezyfoxserver.client.concurrent;
 using com.tvd12.ezyfoxserver.client.constant;
 using com.tvd12.ezyfoxserver.client.io;
+using com.tvd12.ezyfoxserver.client.codec;
+using com.tvd12.ezyfoxserver.client.entity;
+using com.tvd12.ezyfoxserver.client.callback;
+
 
 namespace com.tvd12.ezyfoxserver.client.socket
 {
-	public class EzySocketReader : EzyAbstractSocketEventHandler
+    public abstract class EzySocketReader : EzySocketAdapter
 	{
-		protected TcpClient socketChannel;
-		protected readonly byte[] readBytes;
-		protected readonly EzyByteBuffer readBuffer;
-		protected readonly EzySocketDataHandler socketDataHandler;
+        protected EzyByteBuffer readBuffer;
+        protected EzyQueue<EzyArray> dataQueue;
+        protected EzySocketDataDecoder decoder;
+        protected readonly int readBufferSize;
+        protected readonly EzyCallback<EzyMessage> decodeBytesCallback;
 
-		public EzySocketReader(EzySocketDataHandler socketDataHandler)
+        public EzySocketReader()
 		{
-			this.readBuffer = newReadBuffer();
-			this.readBytes = new byte[getReadBufferSize()];
-			this.socketDataHandler = socketDataHandler;
+            this.readBufferSize = EzySocketConstants.MAX_READ_BUFFER_SIZE;
+            this.decodeBytesCallback = message => onMesssageReceived(message);
 		}
 
-		public override void handleEvent()
+        protected EzyByteBuffer newReadBuffer(int bufferSize)
+        {
+            return EzyByteBuffer.allocate(bufferSize);
+        }
+
+        protected override void run()
+        {
+            this.readBuffer = newReadBuffer(readBufferSize);
+            this.dataQueue = new EzySynchronizedQueue<EzyArray>();
+            base.run();
+        }
+
+        protected override void update()
 		{
-			try
-			{
-				processSocketChannel();
-				Thread.Sleep(3);
-			}
-			catch (Exception e)
-			{
-                logger.warn("I/O error at socket-reader", e);
-			}
+            byte[] readBytes = new byte[readBufferSize];
+            while(true) 
+            {
+                Thread.Sleep(3);
+
+                if (!active)
+                    return;
+                int bytesToRead = readSocketData(readBytes);
+                if (bytesToRead <= 0)
+                    return;
+                readBuffer.clear();
+                readBuffer.put(readBytes, 0, bytesToRead);
+                readBuffer.flip();
+                byte[] binary = readBuffer.getBytes(bytesToRead);
+                decoder.decode(binary, decodeBytesCallback);
+            }
+			
 		}
 
-		private void processSocketChannel()
-		{
-			if (socketChannel == null)
-				return;
-			if (!socketChannel.Connected)
-				return;
-			int bytesToRead = socketChannel.GetStream().Read(readBytes, 0, getReadBufferSize());
-			if (bytesToRead <= 0)
-			{
-				return;
-			}
-			readBuffer.clear();
-			readBuffer.put(readBytes, 0, bytesToRead);
-			readBuffer.flip();
-			byte[] binary = readBuffer.getBytes(bytesToRead);
-			socketDataHandler.fireBytesReceived(binary);
-		}
+        protected abstract int readSocketData(byte[] readBytes);
 
-		private void closeConnection()
-		{
-			socketChannel.Close();
-			socketDataHandler.fireSocketDisconnected((int)EzyDisconnectReason.UNKNOWN);
-		}
+        public void popMessages(IList<EzyArray> buffer)
+        {
+            dataQueue.pollAll(buffer);
+        }
 
-		public void setSocketChannel(TcpClient socketChannel)
-		{
-			this.socketChannel = socketChannel;
-		}
+        private void onMesssageReceived(EzyMessage message)
+        {
+            Object data = decoder.decode(message);
+            dataQueue.add((EzyArray)data);
+        }
 
-		protected EzyByteBuffer newReadBuffer()
-		{
-			return EzyByteBuffer.allocate(getReadBufferSize());
-		}
+        public void setDecoder(EzySocketDataDecoder decoder)
+        {
+            this.decoder = decoder;
+        }
 
-		protected int getReadBufferSize()
-		{
-			return EzySocketConstants.MAX_READ_BUFFER_SIZE;
-		}
-
+        protected override string getThreadName()
+        {
+            return "ezyfox-socket-reader";
+        }
 	}
 }

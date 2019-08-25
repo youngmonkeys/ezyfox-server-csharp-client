@@ -15,30 +15,8 @@ namespace com.tvd12.ezyfoxserver.client.concurrent
 		{
 		}
 
-		public E take()
-		{
-			lock (queue)
-			{
-				// If we have items remaining in the queue, skip over this. 
-				while (queue.Count <= 0)
-				{
-					// Release the lock and block on this line until someone
-					// adds something to the queue, resuming once they 
-					// release the lock again.
-					Monitor.Wait(queue);
-				}
-
-				E e = queue.Dequeue();
-				return e;
-			}
-		}
-
 		public override bool add(E e)
 		{
-			if (e == null)
-			{
-				throw new ArgumentNullException("cannot push null value to queue");
-			}
 
 			lock (queue)
 			{
@@ -71,6 +49,30 @@ namespace com.tvd12.ezyfoxserver.client.concurrent
 				return e;
 			}
 		}
+
+        public override E poll() 
+        {
+            E e = take();
+            return e;
+        }
+
+        public override E take()
+        {
+            lock (queue)
+            {
+                // If we have items remaining in the queue, skip over this. 
+                while (queue.Count <= 0)
+                {
+                    // Release the lock and block on this line until someone
+                    // adds something to the queue, resuming once they 
+                    // release the lock again.
+                    Monitor.Wait(queue);
+                }
+
+                E e = queue.Dequeue();
+                return e;
+            }
+        }
 
 		public override E remove()
 		{

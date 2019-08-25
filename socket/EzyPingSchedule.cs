@@ -9,14 +9,16 @@ namespace com.tvd12.ezyfoxserver.client.socket
 {
     public class EzyPingSchedule : EzyLoggable
 	{
-        private EzyScheduleAtFixedRate schedule;
-		private EzySocketDataHandler dataHandler;
-		private readonly EzyClient client;
-		private readonly EzyPingManager pingManager;
+        protected readonly EzyClient client;
+        protected readonly EzyRequest pingRequest;
+        protected readonly EzyPingManager pingManager;
+        protected EzyScheduleAtFixedRate schedule;
+        protected EzySocketEventQueue socketEventQueue;
 
 		public EzyPingSchedule(EzyClient client)
 		{
 			this.client = client;
+            this.pingRequest = new EzyPingRequest();
 			this.pingManager = client.getPingManager();
 
 		}
@@ -32,7 +34,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
 		}
 
         private EzyScheduleAtFixedRate newSchedule() {
-            EzyScheduleAtFixedRate answer = new EzyScheduleAtFixedRate("ping-schedule");
+            EzyScheduleAtFixedRate answer = new EzyScheduleAtFixedRate("ezyfox-ping-schedule");
             return answer;
         }
 
@@ -52,25 +54,25 @@ namespace com.tvd12.ezyfoxserver.client.socket
 			int maxLostPingCount = pingManager.getMaxLostPingCount();
 			if (lostPingCount >= maxLostPingCount)
 			{
-                dataHandler.fireSocketDisconnected((int)EzyDisconnectReason.SERVER_NOT_RESPONDING);
+                EzyEvent evt = new EzyDisconnectionEvent((int)EzyDisconnectReason.SERVER_NOT_RESPONDING);
+                socketEventQueue.addEvent(evt);
 			}
 			else
 			{
-				EzyRequest request = new EzyPingRequest();
-				client.send(request);
+				
+				client.send(pingRequest);
 			}
 			if (lostPingCount > 1)
 			{
                 logger.info("lost ping count: " + lostPingCount);
-				EzyLostPingEvent evt = new EzyLostPingEvent(lostPingCount);
-				EzySocketEvent socketEvent = new EzySimpleSocketEvent(EzySocketEventType.EVENT, evt);
-				dataHandler.fireSocketEvent(socketEvent);
+                EzyEvent evt = new EzyLostPingEvent(lostPingCount);
+                socketEventQueue.addEvent(evt);
 			}
 		}
 
-		public void setDataHandler(EzySocketDataHandler dataHandler)
-		{
-			this.dataHandler = dataHandler;
-		}
+        public void setSocketEventQueue(EzySocketEventQueue socketEventQueue)
+        {
+            this.socketEventQueue = socketEventQueue;
+        }
 	}
 }

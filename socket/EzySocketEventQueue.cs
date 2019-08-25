@@ -1,17 +1,40 @@
-﻿namespace com.tvd12.ezyfoxserver.client.socket
+﻿using System;
+using System.Collections.Generic;
+using com.tvd12.ezyfoxserver.client.evt;
+
+namespace com.tvd12.ezyfoxserver.client.socket
 {
-	public interface EzySocketEventQueue
-	{
-		int size();
+    public class EzySocketEventQueue
+    {
+        protected readonly Queue<EzyEvent> events;
 
-		void clear();
+        public EzySocketEventQueue()
+        {
+            this.events = new Queue<EzyEvent>();
+        }
 
-		bool isFull();
+        public void addEvent(EzyEvent evt)
+        {
+            lock (events)
+            {
+                events.Enqueue(evt);
+            }
+        }
 
-		bool isEmpty();
+        public void popAll(IList<EzyEvent> buffer)
+        {
+            lock (this)
+            {
+                while (events.Count > 0)
+                    buffer.Add(events.Dequeue());
+            }
+        }
 
-		bool add(EzySocketEvent evt);
-
-		EzySocketEvent take();
+        public void clear() {
+            lock(this) 
+            {
+                events.Clear();
+            }
+        }
 	}
 }

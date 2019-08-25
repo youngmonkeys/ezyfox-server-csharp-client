@@ -4,7 +4,7 @@ namespace com.tvd12.ezyfoxserver.client.concurrent
 {
 	public class AtomicInteger
 	{
-		private int value = 0;
+        protected int value = 0;
 
 		public int get()
 		{

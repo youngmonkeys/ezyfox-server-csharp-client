@@ -7,7 +7,7 @@ namespace com.tvd12.ezyfoxserver.client.concurrent
 {
 	public class ThreadList : EzyStartable, EzyDestroyable
 	{
-		private readonly IList<Thread> threads = new List<Thread>();
+        protected readonly IList<Thread> threads = new List<Thread>();
 
 		public ThreadList(int size, String threadName, ThreadStart task)
 		{

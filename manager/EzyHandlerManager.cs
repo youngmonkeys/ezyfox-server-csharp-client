@@ -6,6 +6,10 @@ namespace com.tvd12.ezyfoxserver.client.manager
 {
 	public interface EzyHandlerManager
 	{
+        EzyEventHandlers getEventHandlers();
+
+        EzyDataHandlers getDataHandlers();
+
 		EzyDataHandler getDataHandler(Object cmd);
 
 		EzyEventHandler getEventHandler(Object eventType);
