@@ -4,7 +4,7 @@ using com.tvd12.ezyfoxserver.client.util;
 
 namespace com.tvd12.ezyfoxserver.client.concurrent
 {
-	public class EzyBlockingQueue<E> : EzyQueue<E>
+    public class EzyBlockingQueue<E> : EzySynchronizedQueue<E>
 	{
 
 		public EzyBlockingQueue() : base()
@@ -35,27 +35,6 @@ namespace com.tvd12.ezyfoxserver.client.concurrent
 			return true;
 		}
 
-		public override bool offer(E e)
-		{
-			bool success = add(e);
-			return success;
-		}
-
-		public override E peek()
-		{
-			lock(queue)
-			{
-				E e = queue.Peek();
-				return e;
-			}
-		}
-
-        public override E poll() 
-        {
-            E e = take();
-            return e;
-        }
-
         public override E take()
         {
             lock (queue)
@@ -73,38 +52,6 @@ namespace com.tvd12.ezyfoxserver.client.concurrent
                 return e;
             }
         }
-
-		public override E remove()
-		{
-			lock(queue)
-			{
-				E e = queue.Dequeue();
-				return e;
-			}
-		}
-
-		public override int size()
-		{
-			lock (queue)
-			{
-				int count = queue.Count;
-				return count;
-			}
-		}
-
-		public override void clear()
-		{
-			lock (queue)
-			{
-				queue.Clear();
-			}
-		}
-
-		public override bool isEmpty()
-		{
-			bool empty = (size() == 0);
-			return empty;
-		}
 
 	}
 }
