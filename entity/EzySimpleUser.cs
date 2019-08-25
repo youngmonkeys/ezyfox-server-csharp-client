@@ -22,9 +22,5 @@ namespace com.tvd12.ezyfoxserver.client.entity
 		{
 			return name;
 		}
-
-		public void destroy()
-		{
-		}
 	}
 }

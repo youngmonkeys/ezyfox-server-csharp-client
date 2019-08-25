@@ -68,10 +68,5 @@ namespace com.tvd12.ezyfoxserver.client.entity
 			EzyAppDataHandler handler = dataHandlers.getHandler(cmd);
 			return handler;
 		}
-
-		public void destroy()
-		{
-		}
-
 	}
 }

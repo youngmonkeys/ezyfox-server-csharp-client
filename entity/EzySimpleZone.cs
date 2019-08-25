@@ -37,10 +37,5 @@ namespace com.tvd12.ezyfoxserver.client.entity
 		{
 			return appManager;
 		}
-
-		public void destroy()
-		{
-			appManager.clear();
-		}
 	}
 }

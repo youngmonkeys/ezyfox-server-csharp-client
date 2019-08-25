@@ -5,7 +5,7 @@ using com.tvd12.ezyfoxserver.client.util;
 
 namespace com.tvd12.ezyfoxserver.client.concurrent
 {
-	public class ThreadList : EzyStartable, EzyDestroyable
+	public class ThreadList : EzyStartable
 	{
         protected readonly IList<Thread> threads = new List<Thread>();
 
@@ -23,11 +23,6 @@ namespace com.tvd12.ezyfoxserver.client.concurrent
 		{
 			foreach (Thread thread in threads)
 				thread.Start();
-		}
-
-		public void destroy()
-		{
-			threads.Clear();
 		}
 	}
 }

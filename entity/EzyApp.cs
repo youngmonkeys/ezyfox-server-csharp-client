@@ -5,7 +5,7 @@ using com.tvd12.ezyfoxserver.client.util;
 
 namespace com.tvd12.ezyfoxserver.client.entity
 {
-	public interface EzyApp : EzyDestroyable
+	public interface EzyApp
 	{
 		int getId();
 		String getName();
