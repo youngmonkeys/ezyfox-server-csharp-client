@@ -31,7 +31,6 @@ namespace com.tvd12.ezyfoxserver.client
 
         protected readonly EzySocketClient socketClient;
         protected readonly EzyPingSchedule pingSchedule;
-        protected readonly EzyMainThreadQueue mainThreadQueue;
         protected readonly EzyLogger logger;
 
 		public EzyTcpClient(EzyClientConfig config)
@@ -61,6 +60,7 @@ namespace com.tvd12.ezyfoxserver.client
 		{
 			EzyTcpSocketClient client = new EzyTcpSocketClient();
             client.setPingSchedule(pingSchedule);
+            client.setPingManager(pingManager);
             client.setHandlerManager(handlerManager);
             client.setReconnectConfig(config.getReconnect());
             client.setUnloggableCommands(unloggableCommands);
@@ -136,7 +136,7 @@ namespace com.tvd12.ezyfoxserver.client
 
 		public void processEvents()
 		{
-			mainThreadQueue.polls();
+            socketClient.processEventMessages();
 		}
 
         public String getName() 

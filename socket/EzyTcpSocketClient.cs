@@ -103,7 +103,9 @@ namespace com.tvd12.ezyfoxserver.client.socket
         protected override void startAdapters()
         {
             ((EzyTcpSocketReader)socketReader).setSocket(socket);
+            socketReader.start();
             ((EzyTcpSocketWriter)socketWriter).setSocket(socket);
+            socketWriter.start();
         }
 
         protected override void resetSocket()
@@ -113,7 +115,8 @@ namespace com.tvd12.ezyfoxserver.client.socket
 
         protected override void closeSocket()
         {
-            this.socket.Close();
+            if(socket != null)
+                this.socket.Close();
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net.Sockets;
 using System.Threading;
 using com.tvd12.ezyfoxserver.client.codec;
 using com.tvd12.ezyfoxserver.client.config;
@@ -9,7 +8,6 @@ using com.tvd12.ezyfoxserver.client.entity;
 using com.tvd12.ezyfoxserver.client.evt;
 using com.tvd12.ezyfoxserver.client.handler;
 using com.tvd12.ezyfoxserver.client.manager;
-using com.tvd12.ezyfoxserver.client.net;
 using com.tvd12.ezyfoxserver.client.util;
 using static com.tvd12.ezyfoxserver.client.constant.EzySocketStatuses;
 
@@ -22,21 +20,20 @@ namespace com.tvd12.ezyfoxserver.client.socket
         protected int reconnectCount;
         protected DateTime connectTime;
         protected int disconnectReason;
-        protected EzyConnectionFailedReason connectionFailedReason;
         protected EzyReconnectConfig reconnectConfig;
-        protected EzyMainThreadQueue mainThreadQueue;
         protected EzyHandlerManager handlerManager;
         protected ISet<Object> unloggableCommands;
+        protected EzyPingManager pingManager;
         protected EzyPingSchedule pingSchedule;
         protected EzyEventHandlers eventHandlers;
         protected EzyDataHandlers dataHandlers;
         protected EzySocketReader socketReader;
         protected EzySocketWriter socketWriter;
+        protected EzyConnectionFailedReason connectionFailedReason;
         protected readonly EzyCodecFactory codecFactory;
         protected readonly EzyPacketQueue packetQueue;
         protected readonly EzySocketEventQueue socketEventQueue;
         protected readonly EzyResponseApi responseApi;
-        protected readonly EzyPingManager pingManager;
         protected readonly IList<EzyEvent> localEventQueue;
         protected readonly IList<EzyArray> localMessageQueue;
         protected readonly IList<EzySocketStatus> localSocketStatuses;
@@ -49,6 +46,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
             this.socketEventQueue = new EzySocketEventQueue();
             this.responseApi = newResponseApi();
             this.localEventQueue = new List<EzyEvent>();
+            this.localMessageQueue = new List<EzyArray>();
             this.localSocketStatuses = new List<EzySocketStatus>();
             this.socketStatuses = new EzyValueStack<EzySocketStatus>(EzySocketStatus.NOT_CONNECT);
         }
@@ -149,7 +147,9 @@ namespace com.tvd12.ezyfoxserver.client.socket
         protected void updateAdapters() 
         {
             Object decoder = codecFactory.newDecoder(EzyConnectionType.SOCKET);
-            socketReader.setDecoder((EzySocketDataDecoder)decoder);
+            EzySocketDataDecoder socketDataDecoder = new EzySimpleSocketDataDecoder(decoder);
+            socketReader.setDecoder(socketDataDecoder);
+            socketWriter.setPacketQueue(packetQueue);
         }
 
         protected abstract void startAdapters();
@@ -306,6 +306,11 @@ namespace com.tvd12.ezyfoxserver.client.socket
         public int getPort()
         {
             return this.port;
+        }
+
+        public void setPingManager(EzyPingManager pingManager) 
+        {
+            this.pingManager = pingManager;    
         }
 
         public void setPingSchedule(EzyPingSchedule pingSchedule)
