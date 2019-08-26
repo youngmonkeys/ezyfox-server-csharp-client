@@ -43,12 +43,6 @@ namespace com.tvd12.ezyfoxserver.client.concurrent
 
         public override E poll()
         {
-            E e = take();
-            return e;
-        }
-
-        public override E take()
-        {
             lock (queue)
             {
                 E e = queue.Dequeue();
@@ -56,7 +50,7 @@ namespace com.tvd12.ezyfoxserver.client.concurrent
             }
         }
 
-        public override E remove()
+        public override E take()
         {
             lock (queue)
             {
@@ -89,12 +83,6 @@ namespace com.tvd12.ezyfoxserver.client.concurrent
             {
                 queue.Clear();
             }
-        }
-
-        public override bool isEmpty()
-        {
-            bool empty = (size() == 0);
-            return empty;
         }
     }
 }

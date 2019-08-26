@@ -43,14 +43,10 @@ namespace com.tvd12.ezyfoxserver.client.util
 			return queue.Dequeue();
 		}
 
-        public virtual E take() {
+        public virtual E take() 
+        {
             return queue.Dequeue();
         }
-
-		public virtual E remove()
-		{
-			return queue.Dequeue();
-		}
 
         public virtual void pollAll(IList<E> list) 
         {
