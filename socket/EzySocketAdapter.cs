@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using com.tvd12.ezyfoxserver.client.util;
-using com.tvd12.ezyfoxserver.client.entity;
 namespace com.tvd12.ezyfoxserver.client.socket
 {
     public abstract class EzySocketAdapter : EzyLoggable

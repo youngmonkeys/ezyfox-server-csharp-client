@@ -39,6 +39,7 @@ namespace com.tvd12.ezyfoxserver.client.manager
 			EzyDataHandlers handlers = new EzyDataHandlers(client);
 			handlers.addHandler(EzyCommand.PONG, new EzyPongHandler());
 			handlers.addHandler(EzyCommand.APP_REQUEST, new EzyAppResponseHandler());
+            handlers.addHandler(EzyCommand.LOGIN_ERROR, new EzyLoginErrorHandler());
 			return handlers;
 		}
 

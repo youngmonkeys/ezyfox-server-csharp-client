@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using com.tvd12.ezyfoxserver.client.constant;
 using com.tvd12.ezyfoxserver.client.entity;
-using com.tvd12.ezyfoxserver.client.socket;
 
 namespace com.tvd12.ezyfoxserver.client.handler
 {

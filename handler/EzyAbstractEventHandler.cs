@@ -1,5 +1,4 @@
-﻿using System;
-using com.tvd12.ezyfoxserver.client.util;
+﻿using com.tvd12.ezyfoxserver.client.util;
 using com.tvd12.ezyfoxserver.client.evt;
 
 namespace com.tvd12.ezyfoxserver.client.handler

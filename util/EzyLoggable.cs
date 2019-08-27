@@ -1,5 +1,4 @@
-﻿using System;
-using com.tvd12.ezyfoxserver.client.logger;
+﻿using com.tvd12.ezyfoxserver.client.logger;
 
 namespace com.tvd12.ezyfoxserver.client.util
 {

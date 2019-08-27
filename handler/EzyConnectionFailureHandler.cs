@@ -1,5 +1,4 @@
-﻿using System;
-using com.tvd12.ezyfoxserver.client.config;
+﻿using com.tvd12.ezyfoxserver.client.config;
 using com.tvd12.ezyfoxserver.client.constant;
 using com.tvd12.ezyfoxserver.client.evt;
 
@@ -16,11 +15,11 @@ namespace com.tvd12.ezyfoxserver.client.handler
 			bool should = shouldReconnect(evt);
 			bool mustReconnect = reconnectConfig.isEnable() && should;
 			bool reconnecting = false;
+            client.setStatus(EzyConnectionStatus.FAILURE);
 			if (mustReconnect)
 				reconnecting = client.reconnect();
 			if (!reconnecting)
 			{
-				client.setStatus(EzyConnectionStatus.FAILURE);
 				control(evt);
 			}
 		}

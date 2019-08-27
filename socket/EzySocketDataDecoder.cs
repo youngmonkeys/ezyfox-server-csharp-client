@@ -1,7 +1,6 @@
 ﻿using System;
 using com.tvd12.ezyfoxserver.client.callback;
 using com.tvd12.ezyfoxserver.client.codec;
-using com.tvd12.ezyfoxserver.client.util;
 
 namespace com.tvd12.ezyfoxserver.client.socket
 {

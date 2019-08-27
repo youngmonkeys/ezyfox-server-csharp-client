@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Collections.Generic;
 
 namespace com.tvd12.ezyfoxserver.client.socket

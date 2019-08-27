@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using com.tvd12.ezyfoxserver.client.entity;
 using com.tvd12.ezyfoxserver.client.builder;
 
