@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using com.tvd12.ezyfoxserver.client.evt;
 
 namespace com.tvd12.ezyfoxserver.client.socket
@@ -23,15 +22,16 @@ namespace com.tvd12.ezyfoxserver.client.socket
 
         public void popAll(IList<EzyEvent> buffer)
         {
-            lock (this)
+            lock (events)
             {
                 while (events.Count > 0)
                     buffer.Add(events.Dequeue());
             }
         }
 
-        public void clear() {
-            lock(this) 
+        public void clear() 
+        {
+            lock(events) 
             {
                 events.Clear();
             }

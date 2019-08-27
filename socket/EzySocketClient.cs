@@ -175,6 +175,8 @@ namespace com.tvd12.ezyfoxserver.client.socket
         public void onDisconnected(int reason)
         {
             pingSchedule.stop();
+            packetQueue.clear();
+            packetQueue.wakeup();
             socketEventQueue.clear();
             closeSocket();
             clearAdapters();

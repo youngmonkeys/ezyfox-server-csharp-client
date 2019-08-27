@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net.Sockets;
 using System.Threading;
 using System.Collections.Generic;
 using com.tvd12.ezyfoxserver.client.util;
@@ -15,7 +14,6 @@ namespace com.tvd12.ezyfoxserver.client.socket
 {
     public abstract class EzySocketReader : EzySocketAdapter
 	{
-        protected EzyByteBuffer readBuffer;
         protected EzyQueue<EzyArray> dataQueue;
         protected EzySocketDataDecoder decoder;
         protected readonly int readBufferSize;
@@ -34,7 +32,6 @@ namespace com.tvd12.ezyfoxserver.client.socket
 
         protected override void run()
         {
-            this.readBuffer = newReadBuffer(readBufferSize);
             this.dataQueue = new EzySynchronizedQueue<EzyArray>();
             base.run();
         }
@@ -45,16 +42,12 @@ namespace com.tvd12.ezyfoxserver.client.socket
             while(true) 
             {
                 Thread.Sleep(3);
-
                 if (!active)
                     return;
                 int bytesToRead = readSocketData(readBytes);
                 if (bytesToRead <= 0)
                     return;
-                readBuffer.clear();
-                readBuffer.put(readBytes, 0, bytesToRead);
-                readBuffer.flip();
-                byte[] binary = readBuffer.getBytes(bytesToRead);
+                byte[] binary = EzyBytes.copyBytes(readBytes, bytesToRead);
                 decoder.decode(binary, decodeBytesCallback);
             }
 			

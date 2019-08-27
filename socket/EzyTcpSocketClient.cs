@@ -1,16 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net.Sockets;
-using System.Threading;
-using com.tvd12.ezyfoxserver.client.codec;
-using com.tvd12.ezyfoxserver.client.config;
 using com.tvd12.ezyfoxserver.client.constant;
-using com.tvd12.ezyfoxserver.client.entity;
-using com.tvd12.ezyfoxserver.client.evt;
-using com.tvd12.ezyfoxserver.client.manager;
-using com.tvd12.ezyfoxserver.client.net;
-using com.tvd12.ezyfoxserver.client.util;
-using static com.tvd12.ezyfoxserver.client.constant.EzySocketStatuses;
 
 namespace com.tvd12.ezyfoxserver.client.socket
 {
@@ -25,8 +15,16 @@ namespace com.tvd12.ezyfoxserver.client.socket
 
         protected override int readSocketData(byte[] readBytes)
         {
-            int bytesToRead = socket.GetStream().Read(readBytes, 0, readBufferSize);
-            return bytesToRead;
+            try
+            {
+                int bytesToRead = socket.GetStream().Read(readBytes, 0, readBufferSize);;
+                return bytesToRead;
+            }
+            catch(Exception ex) 
+            {
+                logger.warn("I/O error at socket-reader", ex);
+                return -1;    
+            }
         }
     }
 
@@ -34,12 +32,22 @@ namespace com.tvd12.ezyfoxserver.client.socket
     {
         protected TcpClient socket;
 
-        protected override void writeToSocket(EzyPacket packet)
+        protected override int writeToSocket(EzyPacket packet)
         {
-            byte[] buffer = (byte[])packet.getData();
-            NetworkStream stream = socket.GetStream();
-            stream.Write(buffer, 0, buffer.Length);
-            stream.Flush();
+            try
+            {
+                byte[] buffer = (byte[])packet.getData();
+                NetworkStream stream = socket.GetStream();
+                stream.Write(buffer, 0, buffer.Length);
+                stream.Flush();
+                int writtenBytes = buffer.Length;
+                return writtenBytes;
+            }
+            catch(Exception ex) 
+            {
+                logger.warn("I/O error at socket-writer", ex);
+                return -1;
+            }
         }
 
         public void setSocket(TcpClient socket)

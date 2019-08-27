@@ -13,5 +13,7 @@
 		bool isEmpty();
 
 		bool add(EzyPacket packet);
+
+        void wakeup();
 	}
 }

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading;
-using com.tvd12.ezyfoxserver.client.util;
+﻿using System.Threading;
 
 namespace com.tvd12.ezyfoxserver.client.concurrent
 {
@@ -50,6 +48,15 @@ namespace com.tvd12.ezyfoxserver.client.concurrent
 
                 E e = queue.Dequeue();
                 return e;
+            }
+        }
+
+        public void wakeup() 
+        {
+            lock(queue)
+            {
+                queue.Enqueue(default(E));
+                Monitor.Pulse(queue);
             }
         }
 

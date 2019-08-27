@@ -1,10 +1,4 @@
-﻿using System;
-using System.Threading;
-using com.tvd12.ezyfoxserver.client.concurrent;
-using com.tvd12.ezyfoxserver.client.entity;
-using com.tvd12.ezyfoxserver.client.util;
-
-namespace com.tvd12.ezyfoxserver.client.socket
+﻿namespace com.tvd12.ezyfoxserver.client.socket
 {
     public abstract class EzySocketWriter : EzySocketAdapter
 	{
@@ -15,15 +9,19 @@ namespace com.tvd12.ezyfoxserver.client.socket
         {
             while(true)
             {
-                if (!active) 
+                if (!active)
                     return;
                 EzyPacket packet = packetQueue.take();
-                writeToSocket(packet);
+                if (packet == null)
+                    return;
+                int writtenBytes = writeToSocket(packet);
                 packet.release();
+                if (writtenBytes <= 0)
+                    return;
             }
         }
 
-        protected abstract void writeToSocket(EzyPacket packet);
+        protected abstract int writeToSocket(EzyPacket packet);
 
         public void setPacketQueue(EzyPacketQueue packetQueue) 
         {

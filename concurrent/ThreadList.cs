@@ -24,5 +24,11 @@ namespace com.tvd12.ezyfoxserver.client.concurrent
 			foreach (Thread thread in threads)
 				thread.Start();
 		}
+
+        public void interrupt()
+        {
+            foreach (Thread thread in threads)
+                thread.Interrupt();
+        }
 	}
 }

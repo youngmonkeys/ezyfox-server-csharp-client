@@ -1,5 +1,4 @@
-﻿using System;
-using com.tvd12.ezyfoxserver.client.concurrent;
+﻿using com.tvd12.ezyfoxserver.client.concurrent;
 
 namespace com.tvd12.ezyfoxserver.client.socket
 {
@@ -20,8 +19,8 @@ namespace com.tvd12.ezyfoxserver.client.socket
 
 		public int size()
 		{
-			int size = queue.size();
-			return size;
+			int queueSize = queue.size();
+            return queueSize;
 		}
 
 		public void clear()
@@ -38,8 +37,8 @@ namespace com.tvd12.ezyfoxserver.client.socket
 
 		public bool isFull()
 		{
-			int size = queue.size();
-			bool full = size >= capacity;
+            int queueSize = queue.size();
+            bool full = queueSize >= capacity;
 			return full;
 		}
 
@@ -51,11 +50,16 @@ namespace com.tvd12.ezyfoxserver.client.socket
 
 		public bool add(EzyPacket packet)
 		{
-			int size = queue.size();
-			if (size >= capacity)
+            int queueSize = queue.size();
+            if (queueSize >= capacity)
 				return false;
 			bool success = queue.offer(packet);
 			return success;
 		}
+
+        public void wakeup()
+        {
+            queue.wakeup();    
+        }
 	}
 }
