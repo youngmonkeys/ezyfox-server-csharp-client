@@ -1,5 +1,4 @@
-﻿using System;
-namespace com.tvd12.ezyfoxserver.client.evt
+﻿namespace com.tvd12.ezyfoxserver.client.evt
 {
 	public class EzyLostPingEvent : EzyEvent
 	{

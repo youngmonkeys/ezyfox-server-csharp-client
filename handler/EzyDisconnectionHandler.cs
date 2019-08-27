@@ -9,7 +9,8 @@ namespace com.tvd12.ezyfoxserver.client.handler
 	{
 		protected override void process(EzyDisconnectionEvent evt)
 		{
-            logger.info("handle disconnection, reason = " + evt.getReason());
+            String reasonName = EzyDisconnectReasons.getDisconnectReasonName(evt.getReason());
+            logger.info("handle disconnection, reason = " + reasonName);
 			preHandle(evt);
 			EzyClientConfig config = client.getConfig();
 			EzyReconnectConfig reconnectConfig = config.getReconnect();
