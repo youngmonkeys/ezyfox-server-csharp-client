@@ -11,6 +11,7 @@ namespace com.tvd12.ezyfoxserver.client.entity
 		EzyClient getClient();
 		EzyZone getZone();
         void send(EzyRequest request);
+        void send(String cmd);
         void send(String cmd, EzyData data);
 		EzyAppDataHandler getDataHandler(Object cmd);
 	}

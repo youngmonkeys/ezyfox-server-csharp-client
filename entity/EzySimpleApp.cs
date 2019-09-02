@@ -31,6 +31,11 @@ namespace com.tvd12.ezyfoxserver.client.entity
 			send(cmd, data);
 		}
 
+        public void send(String cmd)
+        {
+            send(cmd, EzyEntityFactory.EMPTY_OJBECT);
+        }
+
 		public void send(String cmd, EzyData data)
 		{
 			EzyArrayBuilder commandData = EzyEntityFactory.newArrayBuilder()
