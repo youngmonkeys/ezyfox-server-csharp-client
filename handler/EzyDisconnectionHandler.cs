@@ -32,6 +32,9 @@ namespace com.tvd12.ezyfoxserver.client.handler
 
         protected virtual bool shouldReconnect(EzyDisconnectionEvent evt)
 		{
+            int reason = evt.getReason();
+            if (reason == (int)EzyDisconnectReason.ANOTHER_SESSION_LOGIN)
+                return false;
 			return true;
 		}
 
