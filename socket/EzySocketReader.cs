@@ -36,7 +36,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
             byte[] readBytes = new byte[readBufferSize];
             while(true) 
             {
-                Thread.Sleep(3);
+                Thread.Sleep(1);
                 if (!active)
                     return;
                 int bytesToRead = readSocketData(readBytes);
