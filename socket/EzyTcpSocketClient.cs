@@ -17,7 +17,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
         {
             try
             {
-                int bytesToRead = socket.GetStream().Read(readBytes, 0, readBufferSize);;
+                int bytesToRead = socket.GetStream().Read(readBytes, 0, readBufferSize);
                 return bytesToRead;
             }
             catch(Exception ex) 
