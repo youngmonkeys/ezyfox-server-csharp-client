@@ -114,15 +114,15 @@ namespace com.tvd12.ezyfoxserver.client.socket
         protected void connect1(int sleepTime)
         {
             DateTime currentTime = DateTime.Now;
-            int dt = (int)(currentTime - connectTime).TotalMilliseconds;
-            int realSleepTime = sleepTime;
+            long dt = (long)(currentTime - connectTime).TotalMilliseconds;
+            long realSleepTime = sleepTime;
             if (sleepTime <= 0)
             {
                 if (dt < 2000) //delay 2000ms
                     realSleepTime = 2000 - dt;
             }
             if (realSleepTime >= 0)
-                Thread.Sleep(realSleepTime);
+                Thread.Sleep((int)realSleepTime);
             socketStatuses.push(EzySocketStatus.CONNECTING);
             bool success = this.connectNow();
             connectTime = DateTime.Now;

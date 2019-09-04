@@ -90,7 +90,5 @@ namespace com.tvd12.ezyfoxserver.client.util
                 return size;
             }
         }
-
-
     }
 }

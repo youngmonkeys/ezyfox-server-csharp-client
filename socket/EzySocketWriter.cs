@@ -4,7 +4,6 @@
 	{
 		protected EzyPacketQueue packetQueue;
 
-
         protected override void update()
         {
             while(true)

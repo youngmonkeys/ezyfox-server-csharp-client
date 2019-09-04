@@ -15,7 +15,8 @@
         private EzyConnectionStatuses() { 
         }            
 
-        public static bool isClientConnectable(EzyConnectionStatus status) {
+        public static bool isClientConnectable(EzyConnectionStatus status) 
+        {
             return status == EzyConnectionStatus.NULL ||
                    status == EzyConnectionStatus.DISCONNECTED ||
                    status == EzyConnectionStatus.FAILURE;

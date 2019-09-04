@@ -25,11 +25,6 @@ namespace com.tvd12.ezyfoxserver.client.socket
             this.decodeBytesCallback = message => onMesssageReceived(message);
 		}
 
-        protected EzyByteBuffer newReadBuffer(int bufferSize)
-        {
-            return EzyByteBuffer.allocate(bufferSize);
-        }
-
         protected override void run()
         {
             this.dataQueue = new EzySynchronizedQueue<EzyArray>();

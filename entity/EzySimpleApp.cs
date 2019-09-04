@@ -9,10 +9,10 @@ namespace com.tvd12.ezyfoxserver.client.entity
 {
 	public class EzySimpleApp : EzyEntity, EzyApp
 	{
-		protected readonly EzyClient client;
-		protected readonly EzyZone zone;
 		protected readonly int id;
 		protected readonly String name;
+        protected readonly EzyZone zone;
+        protected readonly EzyClient client;
 		protected readonly EzyAppDataHandlers dataHandlers;
 
 		public EzySimpleApp(EzyZone zone, int id, String name)
@@ -33,7 +33,7 @@ namespace com.tvd12.ezyfoxserver.client.entity
 
         public void send(String cmd)
         {
-            send(cmd, EzyEntityFactory.EMPTY_OJBECT);
+            send(cmd, EzyEntityFactory.EMPTY_OBJECT);
         }
 
 		public void send(String cmd, EzyData data)
