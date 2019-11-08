@@ -5,16 +5,16 @@ using com.tvd12.ezyfoxserver.client.factory;
 
 namespace com.tvd12.ezyfoxserver.client.request
 {
-	public class EzyAccessAppRequest : EzyRequest
+	public class EzyAppAccessRequest : EzyRequest
 	{
 		protected readonly String appName;
 		protected readonly EzyData data;
 
-		public EzyAccessAppRequest(String appName) : this(appName, null)
+		public EzyAppAccessRequest(String appName) : this(appName, null)
 		{	
 		}
 
-		public EzyAccessAppRequest(String appName, EzyData data)
+		public EzyAppAccessRequest(String appName, EzyData data)
 		{
 			this.appName = appName;
 			this.data = data;

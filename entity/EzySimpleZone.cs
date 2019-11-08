@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using com.tvd12.ezyfoxserver.client.manager;
 
 namespace com.tvd12.ezyfoxserver.client.entity
@@ -37,5 +38,15 @@ namespace com.tvd12.ezyfoxserver.client.entity
 		{
 			return appManager;
 		}
-	}
+
+        public override string ToString()
+        {
+            return new StringBuilder()
+                .Append("Zone(")
+                .Append("id: ").Append(id).Append(", ")
+                .Append("name: ").Append(name)
+                .Append(")")
+                .ToString();
+        }
+    }
 }

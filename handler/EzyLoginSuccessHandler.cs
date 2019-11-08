@@ -7,13 +7,12 @@ namespace com.tvd12.ezyfoxserver.client.handler
 	{
 		public override void handle(EzyArray data)
 		{
-			EzyArray joinedApps = data.get<EzyArray>(4);
-			EzyData responseData = data.get<EzyData>(5);
+			EzyData responseData = data.get<EzyData>(4);
 			EzyUser user = newUser(data);
 			EzyZone zone = newZone(data);
 			((EzyMeAware)client).setMe(user);
 			((EzyZoneAware)client).setZone(zone);
-            handleLoginSuccess(joinedApps, responseData);
+            handleLoginSuccess(responseData);
             logger.debug("user: " + user + " logged in successfully");
 		}
 
@@ -33,7 +32,7 @@ namespace com.tvd12.ezyfoxserver.client.handler
 			return zone;
 		}
 
-        protected virtual void handleLoginSuccess(EzyArray joinedApps, EzyData responseData)
+        protected virtual void handleLoginSuccess(EzyData responseData)
 		{
 		}
 	}

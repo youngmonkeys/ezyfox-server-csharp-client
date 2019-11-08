@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 
 namespace com.tvd12.ezyfoxserver.client.entity
 {
@@ -22,5 +23,15 @@ namespace com.tvd12.ezyfoxserver.client.entity
 		{
 			return name;
 		}
-	}
+
+        public override string ToString()
+        {
+            return new StringBuilder()
+                .Append("User(")
+                .Append("id: ").Append(id).Append(", ")
+                .Append("name: ").Append(name)
+                .Append(")")
+                .ToString();
+        }
+    }
 }

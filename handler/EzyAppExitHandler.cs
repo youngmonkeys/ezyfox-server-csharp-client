@@ -1,21 +1,23 @@
 ﻿using System;
 using com.tvd12.ezyfoxserver.client.entity;
 using com.tvd12.ezyfoxserver.client.manager;
-using com.tvd12.ezyfoxserver.client.logger;
 
 namespace com.tvd12.ezyfoxserver.client.handler
 {
-    public class EzyAccessAppHandler : EzyAbstractDataHandler
+    public class EzyAppExitHandler : EzyAbstractDataHandler
     {
 
         public override void handle(EzyArray data)
         {
             EzyZone zone = client.getZone();
             EzyAppManager appManager = zone.getAppManager();
-            EzyApp app = newApp(zone, data);
-            appManager.addApp(app);
-            postHandle(app, data);
-            logger.info("access app: " + app.getName() + " successfully");
+            int appId = data.get<int>(0);
+            int reasonId = data.get<int>(1);
+            EzyApp app = appManager.removeApp(appId);
+            if(app != null) {
+                postHandle(app, data);
+                logger.info("user exit app: " + app + ", reason: " + reasonId);
+            }
         }
 
         protected virtual void postHandle(EzyApp app, EzyArray data)

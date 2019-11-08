@@ -6,6 +6,8 @@ namespace com.tvd12.ezyfoxserver.client.manager
 	{
 		void addApp(EzyApp app);
 
+        EzyApp removeApp(int appId);
+
 		EzyApp getAppById(int appId);
 	}
 }

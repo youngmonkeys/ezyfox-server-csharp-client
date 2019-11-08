@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using com.tvd12.ezyfoxserver.client.builder;
 using com.tvd12.ezyfoxserver.client.constant;
 using com.tvd12.ezyfoxserver.client.factory;
@@ -73,5 +74,15 @@ namespace com.tvd12.ezyfoxserver.client.entity
 			EzyAppDataHandler handler = dataHandlers.getHandler(cmd);
 			return handler;
 		}
-	}
+
+        public override string ToString()
+        {
+            return new StringBuilder()
+                .Append("App(")
+                .Append("id: ").Append(id).Append(", ")
+                .Append("name: ").Append(name)
+                .Append(")")
+                .ToString();
+        }
+    }
 }

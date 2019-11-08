@@ -26,6 +26,17 @@ namespace com.tvd12.ezyfoxserver.client.manager
 			this.appsByName[app.getName()] = app;
 		}
 
+        public EzyApp removeApp(int appId) {
+            EzyApp app = null;
+            if(appsById.ContainsKey(appId)) {
+                app = appsById[appId];
+                appsById.Remove(appId);
+                appsByName.Remove(app.getName());
+                appList.Remove(app);
+            }
+            return app;
+        }
+
 		public EzyApp getApp()
 		{
 			if (appList.Count == 0)
