@@ -490,11 +490,11 @@ namespace com.tvd12.ezyfoxserver.client.codec
 		{
 			if (value <= MAX_POSITIVE_FIXINT)
 				return parsePositiveFix(value);
-			if (value < MAX_UINT8)
+			if (value <= MAX_UINT8)
 				return parseU8(value);
-			if (value < MAX_BIN16_SIZE)
+            if (value <= MAX_UINT16)
 				return parseU16(value);
-			if (value < MAX_BIN32_SIZE)
+            if (value <= MAX_UINT32)
 				return parseU32(value);
 			return parseU64(value);
 		}
