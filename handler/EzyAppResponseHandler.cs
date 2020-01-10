@@ -13,6 +13,11 @@ namespace com.tvd12.ezyfoxserver.client.handler
 			EzyData responseData = commandData.get<EzyData>(1, null);
 
 			EzyApp app = client.getAppById(appId);
+            if (app == null)
+            {
+                logger.info("receive message when has not joined app yet");
+                return;
+            }
 			EzyAppDataHandler dataHandler = app.getDataHandler(cmd);
 			if (dataHandler != null)
 				dataHandler.handle(app, responseData);
