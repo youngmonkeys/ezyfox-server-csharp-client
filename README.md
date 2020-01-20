@@ -5,6 +5,10 @@ csharp, unity client for ezyfox server
 
 csharp, unity client for ezyfox server
 
+# Install
+
+[https://tvd12.com](https://tvd12.com/using-ezyfox-server-csharp-client/ "https://tvd12.com")
+
 # Code Example
 
 **1. Import**
@@ -14,7 +18,7 @@ using com.tvd12.ezyfoxserver.client.io;
 using com.tvd12.ezyfoxserver.client.evt;
 using com.tvd12.ezyfoxserver.client.request;
 using com.tvd12.ezyfoxserver.client.config;
-using com.tvd12.ezyfoxserver.client.command;
+using com.tvd12.ezyfoxserver.client.setup;
 using com.tvd12.ezyfoxserver.client.handler;
 using com.tvd12.ezyfoxserver.client.constant;
 using com.tvd12.ezyfoxserver.client.entity;
