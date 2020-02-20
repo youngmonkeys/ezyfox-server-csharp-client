@@ -19,6 +19,8 @@ namespace com.tvd12.ezyfoxserver.client
 
         protected EzyUser me;
         protected EzyZone zone;
+        protected long sessionId;
+        protected String sessionToken;
         protected readonly String name;
         protected readonly EzySetup settingUp;
         protected readonly EzyClientConfig config;
@@ -58,7 +60,7 @@ namespace com.tvd12.ezyfoxserver.client
 
         protected EzySocketClient newSocketClient()
 		{
-			EzyTcpSocketClient client = new EzyTcpSocketClient();
+            EzyTcpSocketClient client = newTcpSocketClient();
             client.setPingSchedule(pingSchedule);
             client.setPingManager(pingManager);
             client.setHandlerManager(handlerManager);
@@ -66,6 +68,11 @@ namespace com.tvd12.ezyfoxserver.client
             client.setUnloggableCommands(unloggableCommands);
 			return client;
 		}
+
+        protected virtual EzyTcpSocketClient newTcpSocketClient()
+        {
+            return new EzyTcpSocketClient();
+        }
 
         public EzySetup setup() {
             return settingUp;
@@ -179,6 +186,18 @@ namespace com.tvd12.ezyfoxserver.client
             this.status = status;
 		}
 
+        public void setSessionId(long sessionId)
+        {
+            this.sessionId = sessionId;
+            this.socketClient.setSessionId(sessionId);
+        }
+
+        public void setSessionToken(String token)
+        {
+            this.sessionToken = token;
+            this.socketClient.setSessionToken(sessionToken);
+        }
+
 		public EzyApp getAppById(int appId)
 		{
             if(zone != null) {
@@ -204,10 +223,30 @@ namespace com.tvd12.ezyfoxserver.client
 			return handlerManager;
 		}
 
-        private void printSentData(EzyCommand cmd, EzyArray data)
+        protected void printSentData(EzyCommand cmd, EzyArray data)
         {
             if (!unloggableCommands.Contains(cmd))
                 logger.debug("send command: " + cmd + " and data: " + data);
+        }
+
+        public virtual void udpConnect(int port)
+        {
+            throw new InvalidOperationException("only support TCP, use EzyUTClient instead");
+        }
+
+        public virtual void udpConnect(String host, int port)
+        {
+            throw new InvalidOperationException("only support TCP, use EzyUTClient instead");
+        }
+            
+        public virtual void udpSend(EzyRequest request)
+        {
+            throw new InvalidOperationException("only support TCP, use EzyUTClient instead");
+        }
+
+        public virtual void udpSend(EzyCommand cmd, EzyArray data)
+        {
+            throw new InvalidOperationException("only support TCP, use EzyUTClient instead");
         }
 	}
 

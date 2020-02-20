@@ -9,16 +9,22 @@ namespace com.tvd12.ezyfoxserver.client.codec
 		protected bool encrypted;
 		protected bool compressed;
 		protected bool text;
+        protected bool rawBytes;
+        protected bool udpHandshake;
 
         public EzySimpleMessageHeader(bool bigSize,
                                       bool encrypted, 
                                       bool compressed, 
-                                      bool text)
+                                      bool text,
+                                      bool rawBytes,
+                                      bool udpHandshake)
         {
             this.bigSize = bigSize;
             this.encrypted = encrypted;
             this.compressed = compressed;
             this.text = text;
+            this.rawBytes = rawBytes;
+            this.udpHandshake = udpHandshake;
         }
 
 		public void setBigSize(bool bigSize)
@@ -41,6 +47,16 @@ namespace com.tvd12.ezyfoxserver.client.codec
 			this.text = text;
 		}
 
+        public void setRawBytes(bool rawBytes)
+        {
+            this.rawBytes = rawBytes;
+        }
+
+        public void setUdpHandshake(bool udpHandshake)
+        {
+            this.udpHandshake = udpHandshake;
+        }
+
 		public bool isBigSize()
 		{
 			return bigSize;
@@ -60,6 +76,16 @@ namespace com.tvd12.ezyfoxserver.client.codec
 		{
 			return text;
 		}
+
+        public bool isRawBytes() 
+        {
+            return rawBytes;
+        }
+
+        public bool isUdpHandshake()
+        {
+            return udpHandshake;
+        }
 
 		public String toString()
 		{

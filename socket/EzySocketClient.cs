@@ -13,13 +13,15 @@ using static com.tvd12.ezyfoxserver.client.constant.EzySocketStatuses;
 
 namespace com.tvd12.ezyfoxserver.client.socket
 {
-    public abstract class EzySocketClient : EzyLoggable , EzySocketDelegate
+    public abstract class EzySocketClient : EzyLoggable , EzyISocketClient, EzySocketDelegate
     {
         protected String host;
         protected int port;
         protected int reconnectCount;
         protected DateTime connectTime;
         protected int disconnectReason;
+        protected long sessionId;
+        protected String sessionToken;
         protected EzyReconnectConfig reconnectConfig;
         protected EzyHandlerManager handlerManager;
         protected ISet<Object> unloggableCommands;
@@ -172,7 +174,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
 
         protected abstract void closeSocket();
 
-        public void onDisconnected(int reason)
+        public virtual void onDisconnected(int reason)
         {
             pingSchedule.stop();
             packetQueue.clear();
@@ -268,12 +270,17 @@ namespace com.tvd12.ezyfoxserver.client.socket
         protected void processReceivedMessages0()
         {
             pingManager.setLostPingCount(0);
-            socketReader.popMessages(localMessageQueue);
+            popReadMessages();
             for (int i = 0; i < localMessageQueue.Count; ++i)
             {
                 processReceivedMessage(localMessageQueue[i]);
             }
             localMessageQueue.Clear();
+        }
+
+        protected virtual void popReadMessages()
+        {
+            socketReader.popMessages(localMessageQueue);
         }
 
         protected void processReceivedMessage(EzyArray message)
@@ -308,6 +315,16 @@ namespace com.tvd12.ezyfoxserver.client.socket
         public int getPort()
         {
             return this.port;
+        }
+
+        public void setSessionId(long sessionId)
+        {
+            this.sessionId = sessionId;
+        }
+
+        public void setSessionToken(String sessionToken)
+        {
+            this.sessionToken = sessionToken;
         }
 
         public void setPingManager(EzyPingManager pingManager) 

@@ -155,6 +155,13 @@ namespace com.tvd12.ezyfoxserver.client.io
 			put(bytes);
 		}
 
+        public void putLong(long value)
+        {
+            byte[] bytes = BitConverter.GetBytes(value);
+            EzyBytes.swapBytes(bytes);
+            put(bytes);
+        }
+
 		public void putShort(short value)
 		{
 			byte[] bytes = BitConverter.GetBytes(value);

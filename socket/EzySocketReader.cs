@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 using System.Collections.Generic;
 using com.tvd12.ezyfoxserver.client.util;
 using com.tvd12.ezyfoxserver.client.concurrent;
@@ -36,7 +35,6 @@ namespace com.tvd12.ezyfoxserver.client.socket
             byte[] readBytes = new byte[readBufferSize];
             while(true) 
             {
-                Thread.Sleep(1);
                 if (!active)
                     return;
                 int bytesToRead = readSocketData(readBytes);
@@ -49,6 +47,12 @@ namespace com.tvd12.ezyfoxserver.client.socket
 		}
 
         protected abstract int readSocketData(byte[] readBytes);
+
+        protected override void clear()
+        {
+            if (dataQueue != null)
+                dataQueue.clear();
+        }
 
         public void popMessages(IList<EzyArray> buffer)
         {

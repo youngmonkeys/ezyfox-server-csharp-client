@@ -13,6 +13,10 @@ namespace com.tvd12.ezyfoxserver.client.io
 			return Encoding.UTF8.GetString(bytes);
 		}
 
+        public static byte[] getBytes(String str)
+        {
+            return Encoding.ASCII.GetBytes(str);
+        }
 
 		public static byte[] getUtfBytes(String str)
 		{

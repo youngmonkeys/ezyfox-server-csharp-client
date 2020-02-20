@@ -8,7 +8,6 @@ namespace com.tvd12.ezyfoxserver.client.codec
 		private int size;
 		private byte[] content;
 		private EzyMessageHeader header;
-		private EzyMessageHeaderReader headerReader = new EzyMessageHeaderReader();
 
 		public EzyMessageReader()
 		{
@@ -62,9 +61,9 @@ namespace com.tvd12.ezyfoxserver.client.codec
             return new EzySimpleMessage(header, content, size);
 		}
 
-		private void readHeader(byte header)
+		private void readHeader(byte headerByte)
 		{
-			this.header = headerReader.read(header);
+            this.header = EzyMessageHeaderReader.read(headerByte);
 		}
 
 		protected int getSizeLength()

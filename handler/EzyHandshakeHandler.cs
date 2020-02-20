@@ -1,4 +1,5 @@
-﻿using com.tvd12.ezyfoxserver.client.entity;
+﻿using System;
+using com.tvd12.ezyfoxserver.client.entity;
 using com.tvd12.ezyfoxserver.client.request;
 using com.tvd12.ezyfoxserver.client.socket;
 
@@ -12,10 +13,17 @@ namespace com.tvd12.ezyfoxserver.client.handler
 
 		public override void handle(EzyArray data)
 		{
+            preHandle(data);
 			pingSchedule.start();
 			handleLogin(data);
 			postHandle(data);
 		}
+
+        protected void preHandle(EzyArray data)
+        {
+            this.client.setSessionId(data.get<long>(2));
+            this.client.setSessionToken(data.get<String>(1));
+    }
 
 		protected virtual void postHandle(EzyArray data)
 		{

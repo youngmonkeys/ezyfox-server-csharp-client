@@ -1,36 +1,55 @@
-﻿using System;
-
-namespace com.tvd12.ezyfoxserver.client.codec
+﻿namespace com.tvd12.ezyfoxserver.client.codec
 {
-	public class EzyMessageHeaderReader
+    public sealed class EzyMessageHeaderReader
 	{
-		protected bool readBigSize(byte header)
+        private EzyMessageHeaderReader() 
+        {
+        }
+
+        public static bool readBigSize(byte header)
 		{
 			return (header & 1 << 0) != 0;
 		}
 
-		protected bool readEncrypted(byte header)
+        public static bool readEncrypted(byte header)
 		{
 			return (header & (1 << 1)) != 0;
 		}
 
-		protected bool readCompressed(byte header)
+        public static bool readCompressed(byte header)
 		{
 			return (header & (1 << 2)) != 0;
 		}
 
-		protected bool readText(byte header)
+        public static bool readText(byte header)
 		{
 			return (header & (1 << 3)) != 0;
 		}
 
-		public EzyMessageHeader read(byte header)
+        public static bool readRawBytes(byte header)
+        {
+            return (header & (1 << 4)) != 0;
+        }
+
+        public static bool readUdpHandshake(byte header)
+        {
+            return (header & (1 << 5)) != 0;
+        }
+
+        public static bool readHasNext(byte header)
+        {
+            return (header & (1 << 7)) != 0;
+        }
+
+        public static EzyMessageHeader read(byte header)
 		{
             return new EzySimpleMessageHeader(
                 readBigSize(header),
                 readEncrypted(header),
                 readCompressed(header),
-                readText(header));
+                readText(header),
+                readRawBytes(header),
+                readUdpHandshake(header));
 		}
 	}
 }

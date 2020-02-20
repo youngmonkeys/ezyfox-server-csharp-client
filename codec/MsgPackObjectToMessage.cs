@@ -29,7 +29,7 @@ namespace com.tvd12.ezyfoxserver.client.codec
 
 		private EzyMessageHeader newHeader(byte[] content)
 		{
-            EzyMessageHeader header = new EzySimpleMessageHeader(isBigMessage(content), false, false, false);
+            EzyMessageHeader header = new EzySimpleMessageHeader(isBigMessage(content), false, false, false, false, false);
             return header;
 		}
 

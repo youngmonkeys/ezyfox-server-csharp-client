@@ -44,8 +44,13 @@ namespace com.tvd12.ezyfoxserver.client.socket
         {
             lock(adapterLock)
             {
+                clear();
                 active = false;
             }
+        }
+
+        protected virtual void clear() 
+        {
         }
 
         protected void setActive(bool active)

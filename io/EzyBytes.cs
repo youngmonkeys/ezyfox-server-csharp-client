@@ -124,8 +124,13 @@ namespace com.tvd12.ezyfoxserver.client.io
 
         public static byte[] copyBytes(byte[] source, int size) 
         {
+            return copyBytes(source, 0, size);
+        }
+
+        public static byte[] copyBytes(byte[] source, int offset, int size)
+        {
             byte[] bytes = new byte[size];
-            for (int i = 0; i < bytes.Length; ++i)
+            for (int i = offset; i < bytes.Length; ++i)
                 bytes[i] = source[i];
             return bytes;
         }
