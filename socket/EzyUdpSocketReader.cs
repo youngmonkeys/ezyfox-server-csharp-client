@@ -39,14 +39,20 @@ namespace com.tvd12.ezyfoxserver.client.socket
                     if (!active)
                         return;
                     byte[] binary = readSocketData();
+                    logger.info("udp received " + binary.Length + " bytes");
                     int bytesToRead = binary.Length;
                     if (bytesToRead <= 0)
                         return;
                     handleReceivedBytes(binary);
                 }
+                catch (SocketException e) {
+                    logger.warn("I/O error at socket-reader: " + e.Message);
+                    return;
+                }
                 catch (Exception e)
                 {
                     logger.warn("I/O error at socket-reader", e);
+                    return;
                 }
             }
         }

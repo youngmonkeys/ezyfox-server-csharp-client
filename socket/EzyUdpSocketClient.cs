@@ -46,7 +46,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
             EzySocketStatus status = socketStatuses.last();
             if (!isSocketConnectable(status))
             {
-                logger.warn("socket is connecting...");
+                logger.warn("udp socket is connecting...");
                 return;
             }
             serverAddress = new InetSocketAddress(host, port);
@@ -56,12 +56,18 @@ namespace com.tvd12.ezyfoxserver.client.socket
         public bool reconnect()
         {
             EzySocketStatus status = socketStatuses.last();
-            if (!isSocketReconnectable(status))
+            if (status != EzySocketStatus.CONNECT_FAILED)
             {
                 return false;
             }
+            logger.warn("udp socket is re-connecting...");
             connect0();
             return true;
+        }
+
+        public void setStatus(EzySocketStatus status)
+        {
+            socketStatuses.push(status);
         }
 
         protected void connect0()
@@ -79,7 +85,13 @@ namespace com.tvd12.ezyfoxserver.client.socket
                 startAdapters();
                 socketStatuses.push(EzySocketStatus.CONNECTING);
                 sendHandshakeRequest();
-                Thread newThread = new Thread(() => reconnect());
+                Thread newThread = new Thread(() => { 
+                    Thread.Sleep(3000);
+                    EzySocketStatus status = socketStatuses.last();
+                    if (status == EzySocketStatus.CONNECTING)
+                        socketStatuses.push(EzySocketStatus.CONNECT_FAILED);
+                    reconnect(); 
+                });
                 newThread.Name = "udp-reconnect";
                 newThread.Start();
             }
@@ -106,7 +118,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
             }
             catch (Exception e)
             {
-                logger.warn("send message: " + message + " error", e);
+                logger.warn("udp send message: " + message + " error", e);
             }
         }
 

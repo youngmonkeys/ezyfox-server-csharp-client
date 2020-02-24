@@ -23,7 +23,7 @@ namespace com.tvd12.ezyfoxserver.client.handler
         {
             this.client.setSessionId(data.get<long>(2));
             this.client.setSessionToken(data.get<String>(1));
-    }
+        }
 
 		protected virtual void postHandle(EzyArray data)
 		{

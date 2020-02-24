@@ -13,27 +13,51 @@ namespace com.tvd12.ezyfoxserver.client
 	public interface EzyClient
 	{
         EzySetup setup();
+
 		void connect(String host, int port);
+
 		bool reconnect();
+
         void send(EzyRequest request);
+
         void send(EzyCommand cmd, EzyArray data);
+
 		void disconnect(int reason);
+
 		void processEvents();
+
         void udpConnect(int port);
+
         void udpConnect(String host, int port);
+
         void udpSend(EzyRequest request);
+
         void udpSend(EzyCommand cmd, EzyArray data);
+
         String getName();
+
 		EzyClientConfig getConfig();
+
         EzyUser getMe();
+
 		EzyZone getZone();
+
 		EzyConnectionStatus getStatus();
+
 		void setStatus(EzyConnectionStatus status);
+
         void setSessionId(long sessionId);
+
         void setSessionToken(String token);
+
+        EzyISocketClient getSocket();
+
         EzyApp getAppById(int appId);
+
 		EzyPingManager getPingManager();
+
         EzyPingSchedule getPingSchedule();
+
 		EzyHandlerManager getHandlerManager();
 
 	}

@@ -198,6 +198,11 @@ namespace com.tvd12.ezyfoxserver.client
             this.socketClient.setSessionToken(sessionToken);
         }
 
+        public EzyISocketClient getSocket() 
+        {
+            return socketClient;    
+        }
+
 		public EzyApp getAppById(int appId)
 		{
             if(zone != null) {

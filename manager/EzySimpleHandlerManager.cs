@@ -43,6 +43,7 @@ namespace com.tvd12.ezyfoxserver.client.manager
             handlers.addHandler(EzyCommand.APP_ACCESS, new EzyAppAccessHandler());
 			handlers.addHandler(EzyCommand.APP_REQUEST, new EzyAppResponseHandler());
             handlers.addHandler(EzyCommand.APP_EXIT, new EzyAppExitHandler());
+            handlers.addHandler(EzyCommand.UDP_HANDSHAKE, new EzyUdpHandshakeHandler());
 			return handlers;
 		}
 

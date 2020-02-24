@@ -39,6 +39,11 @@ namespace com.tvd12.ezyfoxserver.client.entity
 			return appManager;
 		}
 
+        public EzyApp getApp()
+        {
+            return appManager.getApp();
+        }
+
         public override string ToString()
         {
             return new StringBuilder()

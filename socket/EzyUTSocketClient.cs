@@ -1,5 +1,6 @@
 ﻿using System;
 using com.tvd12.ezyfoxserver.client.entity;
+using com.tvd12.ezyfoxserver.client.constant;
 
 namespace com.tvd12.ezyfoxserver.client.socket
 {
@@ -27,6 +28,11 @@ namespace com.tvd12.ezyfoxserver.client.socket
         public void udpSendMessage(EzyArray message)
         {
             this.udpClient.sendMessage(message);
+        }
+
+        public void udpSetStatus(EzySocketStatus status)
+        {
+            this.udpClient.setStatus(status);
         }
 
         protected override void popReadMessages()

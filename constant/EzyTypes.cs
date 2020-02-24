@@ -4,7 +4,7 @@ using com.tvd12.ezyfoxserver.client.builder;
 
 namespace com.tvd12.ezyfoxserver.client.constant
 {
-	public class EzyTypes
+    public sealed class EzyTypes
 	{
 		public static readonly Type PRIMITVE_BOOLEAN = typeof(bool);
 		public static readonly Type PRIMITVE_BYTE = typeof(byte);
@@ -48,5 +48,8 @@ namespace com.tvd12.ezyfoxserver.client.constant
 		public static readonly Type EZY_OBJECT_TYPE = typeof(EzyObject);
 		public static readonly Type EZY_ARRAY_BUILDER_TYPE = typeof(EzyArrayBuilder);
 		public static readonly Type EZY_OBJECT_BUILDER_TYPE = typeof(EzyObjectBuilder);
+
+        private EzyTypes() {
+        }
 	}
 }

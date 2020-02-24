@@ -49,6 +49,30 @@ namespace com.tvd12.ezyfoxserver.client.entity
 			client.send(EzyCommand.APP_REQUEST, requestData);
 		}
 
+        public void udpSend(EzyRequest request)
+        {
+            String cmd = (String)request.getCommand();
+            EzyData data = request.serialize();
+            udpSend(cmd, data);
+        }
+
+        public void udpSend(String cmd)
+        {
+            udpSend(cmd, EzyEntityFactory.EMPTY_OBJECT);
+        }
+
+        public void udpSend(String cmd, EzyData data)
+        {
+            EzyArrayBuilder commandData = EzyEntityFactory.newArrayBuilder()
+                    .append(cmd)
+                    .append(data);
+            EzyArray requestData = EzyEntityFactory.newArrayBuilder()
+                    .append(id)
+                    .append(commandData.build())
+                    .build();
+            client.udpSend(EzyCommand.APP_REQUEST, requestData);
+        }
+
 		public int getId()
 		{
 			return id;

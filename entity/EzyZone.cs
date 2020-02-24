@@ -3,17 +3,17 @@ using com.tvd12.ezyfoxserver.client.manager;
 
 namespace com.tvd12.ezyfoxserver.client.entity
 {
-public interface EzyZone
-{
+    public interface EzyZone
+    {
+        int getId();
 
-    int getId();
+    	String getName();
 
-	String getName();
+    	EzyClient getClient();
 
-	EzyClient getClient();
+    	EzyAppManager getAppManager();
 
-	EzyAppManager getAppManager();
-
-}
+        EzyApp getApp();
+    }
 
 }
