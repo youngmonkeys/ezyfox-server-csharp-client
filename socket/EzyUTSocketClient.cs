@@ -41,10 +41,10 @@ namespace com.tvd12.ezyfoxserver.client.socket
             this.udpClient.popReadMessages(localMessageQueue);
         }
 
-        public override void onDisconnected(int reason)
+        protected override void clearComponents(int disconnectReason)
         {
-            base.onDisconnected(reason);
-            this.udpClient.disconnect(reason);
+            this.udpClient.disconnect(disconnectReason);
         }
+
     }
 }

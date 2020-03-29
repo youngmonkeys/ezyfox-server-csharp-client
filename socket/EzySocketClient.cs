@@ -170,6 +170,8 @@ namespace com.tvd12.ezyfoxserver.client.socket
                 adapter.stop();
         }
 
+        protected virtual void clearComponents(int disconnectReason) { }
+
         protected abstract void resetSocket();
 
         protected abstract void closeSocket();
@@ -182,6 +184,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
             socketEventQueue.clear();
             closeSocket();
             clearAdapters();
+            clearComponents(reason);
             socketStatuses.push(EzySocketStatus.DISCONNECTED);
         }
 
