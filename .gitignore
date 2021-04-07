@@ -1,6 +1,6 @@
 obj/
 bin/
 Properties/
-*.csproj
+#*.csproj
 *.meta
 Program.cs
