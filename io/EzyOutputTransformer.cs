@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using com.tvd12.ezyfoxserver.client.constant;
-using com.tvd12.ezyfoxserver.client.function;
 
 namespace com.tvd12.ezyfoxserver.client.io
 {

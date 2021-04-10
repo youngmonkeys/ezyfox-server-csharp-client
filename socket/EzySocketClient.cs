@@ -203,9 +203,9 @@ namespace com.tvd12.ezyfoxserver.client.socket
 
         public void processEventMessages()
         {
+            processReceivedMessages();
             processStatuses();
             processEvents();
-            processReceivedMessages();
         }
 
         protected void processStatuses()
@@ -238,12 +238,18 @@ namespace com.tvd12.ezyfoxserver.client.socket
         protected void processEvents()
         {
             socketEventQueue.popAll(localEventQueue);
-            for (int i = 0; i < localEventQueue.Count; ++i)
+            try
             {
-                EzyEvent evt = localEventQueue[i];
-                eventHandlers.handle(evt);
+                for (int i = 0; i < localEventQueue.Count; ++i)
+                {
+                    EzyEvent evt = localEventQueue[i];
+                    eventHandlers.handle(evt);
+                }
             }
-            localEventQueue.Clear();
+            finally
+            {
+                localEventQueue.Clear();
+            }
         }
 
         protected void processReceivedMessages()
@@ -274,11 +280,17 @@ namespace com.tvd12.ezyfoxserver.client.socket
         {
             pingManager.setLostPingCount(0);
             popReadMessages();
-            for (int i = 0; i < localMessageQueue.Count; ++i)
+            try
             {
-                processReceivedMessage(localMessageQueue[i]);
+                for (int i = 0; i < localMessageQueue.Count; ++i)
+                {
+                    processReceivedMessage(localMessageQueue[i]);
+                }
             }
-            localMessageQueue.Clear();
+            finally
+            {
+                localMessageQueue.Clear();
+            }
         }
 
         protected virtual void popReadMessages()

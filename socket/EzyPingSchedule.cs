@@ -59,7 +59,6 @@ namespace com.tvd12.ezyfoxserver.client.socket
 			}
 			else
 			{
-				
 				client.send(pingRequest);
 			}
 			if (lostPingCount > 1)

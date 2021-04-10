@@ -22,7 +22,7 @@ namespace com.tvd12.ezyfoxserver.client
 
         void send(EzyCommand cmd, EzyArray data);
 
-		void disconnect(int reason);
+		void disconnect(int reason = (int)EzyDisconnectReason.CLOSE);
 
 		void processEvents();
 
@@ -46,11 +46,21 @@ namespace com.tvd12.ezyfoxserver.client
 
 		void setStatus(EzyConnectionStatus status);
 
+        bool isConnected();
+
+        EzyConnectionStatus getUdpStatus();
+
+        void setUdpStatus(EzyConnectionStatus status);
+
+        bool isUdpConnected();
+
         void setSessionId(long sessionId);
 
         void setSessionToken(String token);
 
         EzyISocketClient getSocket();
+
+        EzyApp getApp();
 
         EzyApp getAppById(int appId);
 

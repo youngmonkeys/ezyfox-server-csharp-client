@@ -93,13 +93,12 @@ namespace com.tvd12.ezyfoxserver.client.io
 
 		public int getInt(int byteSize)
 		{
-			return EzyInts.bin2int(byteSize);
+			return EzyInts.bin2int(getBytes(byteSize));
 		}
 
 		public int getUInt(int byteSize)
 		{
-			byte[] bytes = getBytes(byteSize);
-			return EzyInts.bin2uint(bytes);
+			return EzyInts.bin2uint(getBytes(byteSize));
 		}
 
 		public long getLong()
@@ -109,7 +108,7 @@ namespace com.tvd12.ezyfoxserver.client.io
 
 		public long getLong(int byteSize)
 		{
-			return EzyLongs.bin2long(byteSize);
+			return EzyLongs.bin2long(getBytes(byteSize));
 		}
 
 		public long getULong(int byteSize)

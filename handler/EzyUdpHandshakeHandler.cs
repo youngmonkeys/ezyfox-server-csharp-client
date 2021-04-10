@@ -10,14 +10,17 @@ namespace com.tvd12.ezyfoxserver.client.handler
         public override void handle(EzyArray data)
         {
             int responseCode = data.get<int>(0);
+            EzyUTClient utClient = (EzyUTClient)client;
             EzyUTSocketClient socket = (EzyUTSocketClient)client.getSocket();
             if (responseCode == EzyStatusCodes.OK)
             {
+                utClient.setUdpStatus(EzyConnectionStatus.CONNECTED);
                 socket.udpSetStatus(EzySocketStatus.CONNECTED);
                 onAuthenticated(data);
             }
             else
             {
+                utClient.setUdpStatus(EzyConnectionStatus.FAILURE);
                 socket.udpSetStatus(EzySocketStatus.CONNECT_FAILED);
                 onAuthenticationError(data);
             }

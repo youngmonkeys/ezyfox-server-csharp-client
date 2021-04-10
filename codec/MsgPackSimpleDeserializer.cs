@@ -167,8 +167,11 @@ namespace com.tvd12.ezyfoxserver.client.codec
 		protected EzyObject parseMap(EzyByteBuffer buffer, int size)
 		{
 			EzyObjectBuilder builder = newObjectBuilder();
-			for (int i = 0; i < size; ++i)
-				builder.append(deserialize(buffer), deserialize(buffer));
+			for (int i = 0; i < size; ++i) {
+				Object key = deserialize(buffer);
+				Object value = deserialize(buffer);
+				builder.append(key, value);
+			}
 			return builder.build();
 		}
 

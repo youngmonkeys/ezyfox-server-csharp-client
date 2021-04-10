@@ -29,6 +29,7 @@ namespace com.tvd12.ezyfoxserver.client
         protected readonly EzyRequestSerializer requestSerializer;
 
         protected EzyConnectionStatus status;
+        protected EzyConnectionStatus udpStatus;
         protected readonly ISet<Object> unloggableCommands;
 
         protected readonly EzySocketClient socketClient;
@@ -40,7 +41,8 @@ namespace com.tvd12.ezyfoxserver.client
 			this.config = config;
             this.name = config.getClientName();
 			this.status = EzyConnectionStatus.NULL;
-			this.pingManager = new EzySimplePingManager();
+            this.status = EzyConnectionStatus.NULL;
+            this.pingManager = new EzySimplePingManager();
 			this.pingSchedule = new EzyPingSchedule(this);
             this.handlerManager = new EzySimpleHandlerManager(this);
             this.requestSerializer = new EzySimpleRequestSerializer();
@@ -186,6 +188,26 @@ namespace com.tvd12.ezyfoxserver.client
             this.status = status;
 		}
 
+        public bool isConnected()
+        {
+            return this.status == EzyConnectionStatus.CONNECTED;
+        }
+
+        public void setUdpStatus(EzyConnectionStatus status)
+        {
+            this.udpStatus = status;
+        }
+
+        public EzyConnectionStatus getUdpStatus()
+        {
+            return this.udpStatus;
+        }
+
+        public virtual bool isUdpConnected()
+        {
+            return udpStatus == EzyConnectionStatus.CONNECTED;
+        }
+
         public void setSessionId(long sessionId)
         {
             this.sessionId = sessionId;
@@ -201,6 +223,17 @@ namespace com.tvd12.ezyfoxserver.client
         public EzyISocketClient getSocket() 
         {
             return socketClient;    
+        }
+
+        public EzyApp getApp()
+        {
+            if (zone != null)
+            {
+                EzyAppManager appManager = zone.getAppManager();
+                EzyApp app = appManager.getApp();
+                return app;
+            }
+            return null;
         }
 
 		public EzyApp getAppById(int appId)
