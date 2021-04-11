@@ -8,19 +8,24 @@ namespace com.tvd12.ezyfoxserver.client.io
 		{
 		}
 
-		public static byte[] getBytes(int first, int value, int size)
+		public static byte[] getBytes(int first, byte value)
 		{
-			return getBytes(first, (long)value, size);
+			return new byte[] { (byte)first, value };
 		}
 
-		public static byte[] getBytes(int first, long value, int size)
+		public static byte[] getBytes(int first, int value)
 		{
-			return getBytes((byte)first, value, size);
+			return merge((byte)first, getBytes(value));
 		}
 
-		public static byte[] getBytes(byte first, long value, int size)
+		public static byte[] getBytes(int first, long value)
 		{
-			return merge(first, getBytes(value, size));
+			return merge((byte)first, getBytes(value));
+		}
+
+		public static byte[] getBytes(int first, short value)
+		{
+			return merge((byte)first, getBytes(value));
 		}
 
 		public static byte[] getBytes(byte first, double value)
@@ -49,17 +54,23 @@ namespace com.tvd12.ezyfoxserver.client.io
 
 		public static byte[] getBytes(long value)
 		{
-			return getBytes(value, 8);
+			byte[] bytes = BitConverter.GetBytes(value);
+			swapBytes(bytes);
+			return bytes;
 		}
 
 		public static byte[] getBytes(int value)
 		{
-			return getBytes(value, 4);
+			byte[] bytes = BitConverter.GetBytes(value);
+			swapBytes(bytes);
+			return bytes;
 		}
 
 		public static byte[] getBytes(short value)
 		{
-			return getBytes(value, 2);
+			byte[] bytes = BitConverter.GetBytes(value);
+			swapBytes(bytes);
+			return bytes;
 		}
 
 		public static byte[] merge(byte first, byte[] other)
@@ -88,23 +99,6 @@ namespace com.tvd12.ezyfoxserver.client.io
 			foreach (byte[] bytes in bytess)
 				size += bytes.Length;
 			return size;
-		}
-
-		public static byte[] getBytes(long value, int size)
-		{
-			return getBytes(value, size, true);
-		}
-
-		public static byte[] getBytes(long value, int size, bool swap)
-		{
-			byte[] bytes = new byte[size];
-			for (int i = 0; i < size; ++i)
-				bytes[i] = (byte)((value >> ((size - i - 1) * 8) & 0xff));
-			if (swap)
-			{
-				swapBytes(bytes);
-			}
-			return bytes;
 		}
 
 		public static void swapBytes(byte[] bytes)

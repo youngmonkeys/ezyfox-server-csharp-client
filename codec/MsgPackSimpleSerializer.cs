@@ -368,18 +368,18 @@ namespace com.tvd12.ezyfoxserver.client.codec
 		private byte[] parse8(int size)
 		{
 			return new byte[] {
-					cast(0xc4), cast(size)
-				};
+				cast(0xc4), cast(size)
+			};
 		}
 
 		private byte[] parse16(int size)
 		{
-			return EzyBytes.getBytes(0xc5, size, 2);
+			return EzyBytes.getBytes(0xc5, (short)size);
 		}
 
 		private byte[] parse32(int size)
 		{
-			return EzyBytes.getBytes(0xc6, size, 4);
+			return EzyBytes.getBytes(0xc6, size);
 		}
 	}
 
@@ -405,17 +405,17 @@ namespace com.tvd12.ezyfoxserver.client.codec
 
 		private byte[] parse8(int size)
 		{
-			return EzyBytes.getBytes(0xd9, size, 1);
+			return EzyBytes.getBytes(0xd9, (byte)size);
 		}
 
 		private byte[] parse16(int size)
 		{
-			return EzyBytes.getBytes(0xda, size, 2);
+			return EzyBytes.getBytes(0xda, (short)size);
 		}
 
 		private byte[] parse32(int size)
 		{
-			return EzyBytes.getBytes(0xdb, size, 4);
+			return EzyBytes.getBytes(0xdb, size);
 		}
 	}
 
@@ -439,12 +439,12 @@ namespace com.tvd12.ezyfoxserver.client.codec
 
 		private byte[] parse16(int size)
 		{
-			return EzyBytes.getBytes(0xdc, size, 2);
+			return EzyBytes.getBytes(0xdc, (short)size);
 		}
 
 		private byte[] parse32(int size)
 		{
-			return EzyBytes.getBytes(0xdd, size, 4);
+			return EzyBytes.getBytes(0xdd, size);
 		}
 	}
 
@@ -468,12 +468,12 @@ namespace com.tvd12.ezyfoxserver.client.codec
 
 		private byte[] parse16(int size)
 		{
-			return EzyBytes.getBytes(0xde, size, 2);
+			return EzyBytes.getBytes(0xde, (short)size);
 		}
 
 		private byte[] parse32(int size)
 		{
-			return EzyBytes.getBytes(0xdf, size, 4);
+			return EzyBytes.getBytes(0xdf, size);
 		}
 	}
 
@@ -506,22 +506,22 @@ namespace com.tvd12.ezyfoxserver.client.codec
 
 		private byte[] parseU8(long value)
 		{
-			return EzyBytes.getBytes(0xcc, value, 1);
+			return EzyBytes.getBytes(0xcc, (byte)value);
 		}
 
 		private byte[] parseU16(long value)
 		{
-			return EzyBytes.getBytes(0xcd, value, 2);
+			return EzyBytes.getBytes(0xcd, (short)value);
 		}
 
 		private byte[] parseU32(long value)
 		{
-			return EzyBytes.getBytes(0xce, value, 4);
+			return EzyBytes.getBytes(0xce, (int)value);
 		}
 
 		private byte[] parseU64(long value)
 		{
-			return EzyBytes.getBytes(0xcf, value, 8);
+			return EzyBytes.getBytes(0xcf, value);
 		}
 
 		private byte[] parseNegative(long value)
@@ -544,22 +544,22 @@ namespace com.tvd12.ezyfoxserver.client.codec
 
 		private byte[] parse8(long value)
 		{
-			return EzyBytes.getBytes(0xd0, value, 1);
+			return EzyBytes.getBytes(0xd0, (byte)value);
 		}
 
 		private byte[] parse16(long value)
 		{
-			return EzyBytes.getBytes(0xd1, value, 2);
+			return EzyBytes.getBytes(0xd1, (short)value);
 		}
 
 		private byte[] parse32(long value)
 		{
-			return EzyBytes.getBytes(0xd2, value, 4);
+			return EzyBytes.getBytes(0xd2, (int)value);
 		}
 
 		private byte[] parse64(long value)
 		{
-			return EzyBytes.getBytes(0xd3, value, 8);
+			return EzyBytes.getBytes(0xd3, value);
 		}
 	}
 
