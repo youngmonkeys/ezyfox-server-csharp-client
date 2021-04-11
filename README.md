@@ -5,62 +5,60 @@ csharp, unity client for ezyfox server
 
 csharp, unity client for ezyfox server
 
-# Install
-
-[https://tvd12.com](https://tvd12.com/using-ezyfox-server-csharp-client/ "https://tvd12.com")
+# Documentation
+[https://youngmonkeys.org/ezyfox-csharp-client-sdk/](https://youngmonkeys.org/ezyfox-csharp-client-sdk/)
 
 # Code Example
 
 **1. Import**
 
 ```csharp
-using com.tvd12.ezyfoxserver.client.io;
-using com.tvd12.ezyfoxserver.client.evt;
-using com.tvd12.ezyfoxserver.client.request;
 using com.tvd12.ezyfoxserver.client.config;
-using com.tvd12.ezyfoxserver.client.setup;
-using com.tvd12.ezyfoxserver.client.handler;
+using com.tvd12.ezyfoxserver.client;
 using com.tvd12.ezyfoxserver.client.constant;
 using com.tvd12.ezyfoxserver.client.entity;
 using com.tvd12.ezyfoxserver.client.factory;
+using com.tvd12.ezyfoxserver.client.handler;
+using com.tvd12.ezyfoxserver.client.evt;
+using com.tvd12.ezyfoxserver.client.request;
 ```
-
-
 
 **2. Create a TCP Client**
 
 ```csharp
-EzyClientConfig clientConfig = EzyClientConfig
-    .builder()
-    .clientName("first")
-    .zoneName("example")
+var config = EzyClientConfig.builder()
+    .clientName(ZONE_NAME)
     .build();
-EzyClients clients = EzyClients.getInstance();
-EzyClient client = clients.newDefaultClient(clientConfig);
+socketClient = new EzyUTClient(config);
+EzyClients.getInstance().addClient(socketClient);
 ```
 
 **3. Setup client**
 
 ```csharp
-EzySetup setup = client.get<EzySetup>();
 setup.addEventHandler(EzyEventType.CONNECTION_SUCCESS, new EzyConnectionSuccessHandler());
 setup.addEventHandler(EzyEventType.CONNECTION_FAILURE, new EzyConnectionFailureHandler());
-setup.addDataHandler(EzyCommand.HANDSHAKE, new ExHandshakeEventHandler());
-setup.addDataHandler(EzyCommand.LOGIN, new ExLoginSuccessHandler());
-setup.addDataHandler(EzyCommand.APP_ACCESS, new ExAccessAppHandler());
+setup.addEventHandler(EzyEventType.DISCONNECTION, new DisconnectionHandler());
+setup.addDataHandler(EzyCommand.HANDSHAKE, new HandshakeHandler());
+setup.addDataHandler(EzyCommand.LOGIN, new LoginSuccessHandler());
+setup.addDataHandler(EzyCommand.LOGIN_ERROR, new EzyLoginErrorHandler());
+setup.addDataHandler(EzyCommand.APP_ACCESS, new AppAccessHandler());
+setup.addDataHandler(EzyCommand.UDP_HANDSHAKE, new UdpHandshakeHandler());
 ```
 
 **4. Setup app**
 
 ```csharp
-EzyAppSetup appSetup = setup.setupApp("hello-world");
-appSetup.addDataHandler("broadcastMessage", new MessageResponseHandler());
+var appSetup = setup.setupApp(APP_NAME);
+appSetup.addDataHandler("reconnect", new ReconnectResponseHandler());
+appSetup.addDataHandler("getGameId", new GetGameIdResponseHandler());
+appSetup.addDataHandler("startGame", new StartGameResponseHandler());
 ```
 
 **5. Connect to server**
 
 ```csharp
-client.connect("localhost", 3005);
+socketClient.connect("127.0.0.1", 3005);
 ```
 
 **6. Handle socket's events on main thread**
@@ -83,7 +81,11 @@ while(true)
 {
     Thread.Sleep(3);
     clients.getClients(cachedClients);
-    foreach (EzyClient one in cachedClients)
-        one.processEvents();
+    foreach (EzyClient client in cachedClients)
+    {
+        client.processEvents();
+    }
 }
 ```
+# Used By
+1. [space-shooter](https://youngmonkeys.org/asset/space-shooter/)
