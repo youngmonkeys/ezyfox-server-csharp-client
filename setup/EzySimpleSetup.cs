@@ -10,11 +10,13 @@ namespace com.tvd12.ezyfoxserver.client.setup
     {
         protected readonly EzyHandlerManager handlerManager;
         protected readonly IDictionary<String, EzyAppSetup> appSetups;
+        protected readonly IDictionary<String, EzyPluginSetup> pluginSetups;
 
         public EzySimpleSetup(EzyHandlerManager handlerManager)
         {
             this.handlerManager = handlerManager;
             this.appSetups = new Dictionary<String, EzyAppSetup>();
+            this.pluginSetups = new Dictionary<String, EzyPluginSetup>();
         }
 
         public EzySetup addDataHandler(Object cmd, EzyDataHandler dataHandler)
@@ -43,6 +45,22 @@ namespace com.tvd12.ezyfoxserver.client.setup
                 appSetups[appName] = appSetup;
             }
             return appSetup;
+        }
+
+        public EzyPluginSetup setupPlugin(String pluginName)
+        {
+            EzyPluginSetup pluginSetup = null;
+            if (appSetups.ContainsKey(pluginName))
+            {
+                pluginSetup = pluginSetups[pluginName];
+            }
+            else
+            {
+                EzyPluginDataHandlers dataHandlers = handlerManager.getPluginDataHandlers(pluginName);
+                pluginSetup = new EzySimplePluginSetup(dataHandlers, this);
+                pluginSetups[pluginName] = pluginSetup;
+            }
+            return pluginSetup;
         }
     }
 }

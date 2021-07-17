@@ -14,7 +14,8 @@ namespace com.tvd12.ezyfoxserver.client.manager
         protected readonly EzyPingSchedule pingSchedule;
         protected readonly EzyEventHandlers eventHandlers;
         protected readonly EzyDataHandlers dataHandlers;
-        protected readonly IDictionary<String, EzyAppDataHandlers> appDataHandlerss;
+        protected readonly IDictionary<String, EzyAppDataHandlers> appDataHandlersByAppName;
+		protected readonly IDictionary<String, EzyPluginDataHandlers> pluginDataHandlersByPluginName;
 
 		public EzySimpleHandlerManager(EzyClient client)
 		{
@@ -22,7 +23,8 @@ namespace com.tvd12.ezyfoxserver.client.manager
             this.pingSchedule = client.getPingSchedule();
 			this.eventHandlers = newEventHandlers();
 			this.dataHandlers = newDataHandlers();
-			this.appDataHandlerss = new Dictionary<String, EzyAppDataHandlers>();
+			this.appDataHandlersByAppName = new Dictionary<String, EzyAppDataHandlers>();
+			this.pluginDataHandlersByPluginName = new Dictionary<String, EzyPluginDataHandlers>();
 		}
 
 		private EzyEventHandlers newEventHandlers()
@@ -43,7 +45,9 @@ namespace com.tvd12.ezyfoxserver.client.manager
             handlers.addHandler(EzyCommand.APP_ACCESS, new EzyAppAccessHandler());
 			handlers.addHandler(EzyCommand.APP_REQUEST, new EzyAppResponseHandler());
             handlers.addHandler(EzyCommand.APP_EXIT, new EzyAppExitHandler());
-            handlers.addHandler(EzyCommand.UDP_HANDSHAKE, new EzyUdpHandshakeHandler());
+			handlers.addHandler(EzyCommand.PLUGIN_INFO, new EzyPluginInfoHandler());
+			handlers.addHandler(EzyCommand.PLUGIN_REQUEST, new EzyPluginResponseHandler());
+			handlers.addHandler(EzyCommand.UDP_HANDSHAKE, new EzyUdpHandshakeHandler());
 			return handlers;
 		}
 
@@ -69,14 +73,29 @@ namespace com.tvd12.ezyfoxserver.client.manager
 		public EzyAppDataHandlers getAppDataHandlers(String appName)
 		{
 			EzyAppDataHandlers answer = null;
-			if (appDataHandlerss.ContainsKey(appName))
+			if (appDataHandlersByAppName.ContainsKey(appName))
 			{
-				answer = appDataHandlerss[appName];
+				answer = appDataHandlersByAppName[appName];
 			}
 			if (answer == null)
 			{
 				answer = new EzyAppDataHandlers();
-				appDataHandlerss[appName] = answer;
+				appDataHandlersByAppName[appName] = answer;
+			}
+			return answer;
+		}
+
+		public EzyPluginDataHandlers getPluginDataHandlers(String pluginName)
+		{
+			EzyPluginDataHandlers answer = null;
+			if (pluginDataHandlersByPluginName.ContainsKey(pluginName))
+			{
+				answer = pluginDataHandlersByPluginName[pluginName];
+			}
+			if (answer == null)
+			{
+				answer = new EzyPluginDataHandlers();
+				pluginDataHandlersByPluginName[pluginName] = answer;
 			}
 			return answer;
 		}

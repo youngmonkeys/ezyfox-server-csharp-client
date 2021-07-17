@@ -64,7 +64,11 @@ namespace com.tvd12.ezyfoxserver.client
 
         EzyApp getAppById(int appId);
 
-		EzyPingManager getPingManager();
+        EzyPlugin getPlugin();
+
+        EzyPlugin getPluginById(int pluginId);
+
+        EzyPingManager getPingManager();
 
         EzyPingSchedule getPingSchedule();
 

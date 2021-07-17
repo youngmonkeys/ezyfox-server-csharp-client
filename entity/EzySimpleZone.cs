@@ -10,6 +10,7 @@ namespace com.tvd12.ezyfoxserver.client.entity
 		protected readonly String name;
 		protected readonly EzyClient client;
 		protected readonly EzyAppManager appManager;
+		protected readonly EzyPluginManager pluginManager;
 
 		public EzySimpleZone(EzyClient client, int id, String name)
 		{
@@ -17,6 +18,7 @@ namespace com.tvd12.ezyfoxserver.client.entity
 			this.name = name;
 			this.client = client;
 			this.appManager = new EzySimpleAppManager(name);
+			this.pluginManager = new EzySimplePluginManager(name);
 		}
 
 		public int getId()
@@ -44,7 +46,17 @@ namespace com.tvd12.ezyfoxserver.client.entity
             return appManager.getApp();
         }
 
-        public override string ToString()
+		public EzyPluginManager getPluginManager()
+		{
+			return pluginManager;
+		}
+
+		public EzyPlugin getPlugin()
+		{
+			return pluginManager.getPlugin();
+		}
+
+		public override string ToString()
         {
             return new StringBuilder()
                 .Append("Zone(")
