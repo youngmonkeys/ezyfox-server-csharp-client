@@ -19,5 +19,7 @@ namespace com.tvd12.ezyfoxserver.client.manager
 		void addEventHandler(Object eventType, EzyEventHandler eventHandler);
 
 		EzyAppDataHandlers getAppDataHandlers(String appName);
+
+		EzyPluginDataHandlers getPluginDataHandlers(String pluginName);
 	}
 }

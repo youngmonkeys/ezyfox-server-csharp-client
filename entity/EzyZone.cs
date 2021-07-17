@@ -13,7 +13,11 @@ namespace com.tvd12.ezyfoxserver.client.entity
 
     	EzyAppManager getAppManager();
 
+        EzyPluginManager getPluginManager();
+
         EzyApp getApp();
+
+        EzyPlugin getPlugin();
     }
 
 }

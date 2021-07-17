@@ -12,6 +12,8 @@ namespace com.tvd12.ezyfoxserver.client.setup
 
 		EzyAppSetup setupApp(String appName);
 
+		EzyPluginSetup setupPlugin(String pluginName);
+
 	}
 
 }

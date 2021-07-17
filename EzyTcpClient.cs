@@ -246,7 +246,29 @@ namespace com.tvd12.ezyfoxserver.client
             return null;
 		}
 
-		public EzyPingManager getPingManager()
+        public EzyPlugin getPlugin()
+        {
+            if (zone != null)
+            {
+                EzyPluginManager pluginManager = zone.getPluginManager();
+                EzyPlugin plugin = pluginManager.getPlugin();
+                return plugin;
+            }
+            return null;
+        }
+
+        public EzyPlugin getPluginById(int pluginId)
+        {
+            if (zone != null)
+            {
+                EzyPluginManager pluginManager = zone.getPluginManager();
+                EzyPlugin plugin = pluginManager.getPluginById(pluginId);
+                return plugin;
+            }
+            return null;
+        }
+
+        public EzyPingManager getPingManager()
 		{
 			return pingManager;
 		}
