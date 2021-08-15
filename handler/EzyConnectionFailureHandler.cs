@@ -18,10 +18,15 @@ namespace com.tvd12.ezyfoxserver.client.handler
             client.setStatus(EzyConnectionStatus.FAILURE);
 			if (mustReconnect)
 				reconnecting = client.reconnect();
-			if (!reconnecting)
+			if (reconnecting)
 			{
-				control(evt);
+				onReconnecting(evt);
 			}
+			else
+            {
+				onConnectionFailed(evt);
+            }
+			postHandle(evt);
 		}
 
 		protected virtual bool shouldReconnect(EzyConnectionFailureEvent evt)
@@ -29,7 +34,15 @@ namespace com.tvd12.ezyfoxserver.client.handler
 			return true;
 		}
 
-		protected virtual void control(EzyConnectionFailureEvent evt)
+		protected virtual void onReconnecting(EzyConnectionFailureEvent evt)
+		{
+		}
+
+		protected virtual void onConnectionFailed(EzyConnectionFailureEvent evt)
+		{
+		}
+
+		protected virtual void postHandle(EzyConnectionFailureEvent evt)
 		{
 		}
 	}

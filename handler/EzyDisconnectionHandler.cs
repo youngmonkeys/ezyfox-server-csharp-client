@@ -24,14 +24,26 @@ public class EzyDisconnectionHandler : EzyAbstractEventHandler<EzyDisconnectionE
 			client.setUdpStatus(EzyConnectionStatus.DISCONNECTED);
 			if (mustReconnect)
 				reconnecting = client.reconnect();
-			if (!reconnecting)
+			if (reconnecting)
 			{
-				control(evt);
+				onReconnecting(evt);
 			}
+			else
+            {
+				onDisconnected(evt);
+            }
 			postHandle(evt);
 		}
 
         protected virtual void preHandle(EzyDisconnectionEvent evt)
+		{
+		}
+
+		protected virtual void onReconnecting(EzyDisconnectionEvent evt)
+		{
+		}
+
+		protected virtual void onDisconnected(EzyDisconnectionEvent evt)
 		{
 		}
 
@@ -45,10 +57,6 @@ public class EzyDisconnectionHandler : EzyAbstractEventHandler<EzyDisconnectionE
             if (reason == (int)EzyDisconnectReason.ANOTHER_SESSION_LOGIN)
                 return false;
 			return true;
-		}
-
-        protected virtual void control(EzyDisconnectionEvent evt)
-		{
 		}
 	}
 }
