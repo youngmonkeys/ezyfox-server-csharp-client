@@ -212,7 +212,7 @@ namespace com.tvd12.ezyfoxserver.client.codec
 
 		protected int parseNegativeFixInt(EzyByteBuffer buffer)
 		{
-			return buffer.get();
+			return (sbyte)buffer.get();
 		}
 
 		protected int parseUInt8(EzyByteBuffer buffer)
@@ -237,12 +237,12 @@ namespace com.tvd12.ezyfoxserver.client.codec
 
 		protected int parseInt8(EzyByteBuffer buffer)
 		{
-			return parseInt(buffer, 1);
+			return (sbyte)parseInt(buffer, 1);
 		}
 
 		protected int parseInt16(EzyByteBuffer buffer)
 		{
-			return parseInt(buffer, 2);
+			return (short)parseInt(buffer, 2);
 		}
 
 		protected int parseInt32(EzyByteBuffer buffer)
