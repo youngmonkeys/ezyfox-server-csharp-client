@@ -42,7 +42,7 @@ namespace com.tvd12.ezyfoxserver.client
             this.name = config.getClientName();
 			this.status = EzyConnectionStatus.NULL;
             this.status = EzyConnectionStatus.NULL;
-            this.pingManager = new EzySimplePingManager();
+            this.pingManager = new EzySimplePingManager(config.getPing());
 			this.pingSchedule = new EzyPingSchedule(this);
             this.handlerManager = new EzySimpleHandlerManager(this);
             this.requestSerializer = new EzySimpleRequestSerializer();

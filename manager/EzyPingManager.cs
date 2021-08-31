@@ -1,5 +1,4 @@
-﻿using System;
-namespace com.tvd12.ezyfoxserver.client.manager
+﻿namespace com.tvd12.ezyfoxserver.client.manager
 {
 	public interface EzyPingManager
 	{

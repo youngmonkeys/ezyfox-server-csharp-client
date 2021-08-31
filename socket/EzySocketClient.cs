@@ -176,7 +176,8 @@ namespace com.tvd12.ezyfoxserver.client.socket
 
         protected abstract void closeSocket();
 
-        public virtual void onDisconnected(int reason)
+        public virtual void
+            onDisconnected(int reason)
         {
             pingSchedule.stop();
             packetQueue.clear();
@@ -278,10 +279,13 @@ namespace com.tvd12.ezyfoxserver.client.socket
 
         protected void processReceivedMessages0()
         {
-            pingManager.setLostPingCount(0);
             popReadMessages();
             try
             {
+                if (localMessageQueue.Count > 0)
+                {
+                    pingManager.setLostPingCount(0);
+                }
                 for (int i = 0; i < localMessageQueue.Count; ++i)
                 {
                     processReceivedMessage(localMessageQueue[i]);
