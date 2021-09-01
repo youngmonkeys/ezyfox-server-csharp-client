@@ -1,4 +1,4 @@
-﻿using System;
+﻿using com.tvd12.ezyfoxserver.client.config;
 using com.tvd12.ezyfoxserver.client.concurrent;
 
 namespace com.tvd12.ezyfoxserver.client.manager
@@ -9,10 +9,10 @@ namespace com.tvd12.ezyfoxserver.client.manager
         protected int maxLostPingCount;
         protected readonly AtomicInteger lostPingCount;
 
-		public EzySimplePingManager()
+		public EzySimplePingManager(EzyPingConfig config)
 		{
-			this.pingPeriod = 5000;
-			this.maxLostPingCount = 5;
+			this.pingPeriod = config.getPingPeriod();
+			this.maxLostPingCount = config.getMaxLostPingCount();
 			this.lostPingCount = new AtomicInteger();
 		}
 

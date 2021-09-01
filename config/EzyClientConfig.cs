@@ -8,11 +8,13 @@ namespace com.tvd12.ezyfoxserver.client.config
         protected readonly String zoneName;
         protected readonly String clientName;
         protected readonly EzyReconnectConfig reconnect;
+		protected readonly EzyPingConfig ping;
 
 		protected EzyClientConfig(Builder builder)
 		{
 			this.zoneName = builder._zoneName;
             this.clientName = builder._clientName;
+			this.ping = builder._pingConfigBuilder.build();
 			this.reconnect = builder._reconnectConfigBuilder.build();
 		}
 
@@ -26,6 +28,11 @@ namespace com.tvd12.ezyfoxserver.client.config
             if (clientName == null)
                 return zoneName;
             return clientName;
+        }
+
+		public EzyPingConfig getPing()
+        {
+			return ping;
         }
 
 		public EzyReconnectConfig getReconnect()
@@ -42,10 +49,12 @@ namespace com.tvd12.ezyfoxserver.client.config
 		{
             public String _zoneName;
             public String _clientName;
-            public readonly EzyReconnectConfig.Builder _reconnectConfigBuilder;
+			public readonly EzyPingConfig.Builder _pingConfigBuilder;
+			public readonly EzyReconnectConfig.Builder _reconnectConfigBuilder;
 
 			public Builder()
 			{
+				this._pingConfigBuilder = new EzyPingConfig.Builder(this);
 				this._reconnectConfigBuilder = new EzyReconnectConfig.Builder(this);
 			}
 
@@ -60,6 +69,11 @@ namespace com.tvd12.ezyfoxserver.client.config
                 this._clientName = clientName;
                 return this;
             }
+
+			public EzyPingConfig.Builder pingConfigBuilder()
+			{
+				return _pingConfigBuilder;
+			}
 
 			public EzyReconnectConfig.Builder reconnectConfigBuilder()
 			{

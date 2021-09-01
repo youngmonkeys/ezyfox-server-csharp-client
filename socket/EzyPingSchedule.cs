@@ -54,8 +54,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
 			int maxLostPingCount = pingManager.getMaxLostPingCount();
 			if (lostPingCount >= maxLostPingCount)
 			{
-                EzyEvent evt = new EzyDisconnectionEvent((int)EzyDisconnectReason.SERVER_NOT_RESPONDING);
-                socketEventQueue.addEvent(evt);
+                client.getSocket().disconnect((int)EzyDisconnectReason.SERVER_NOT_RESPONDING);
 			}
 			else
 			{

@@ -1,5 +1,4 @@
-﻿using System;
-using com.tvd12.ezyfoxserver.client.builder;
+﻿using com.tvd12.ezyfoxserver.client.builder;
 
 namespace com.tvd12.ezyfoxserver.client.config
 {
