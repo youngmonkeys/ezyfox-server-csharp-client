@@ -21,7 +21,17 @@ namespace com.tvd12.ezyfoxserver.client.io
 
 		protected Object transformNonNullValue(Object value)
 		{
-			if (value is IEnumerable)
+			if (value is IDictionary)
+			{
+				IDictionary dictionary = (IDictionary)value;
+				EzyObject obj = EzyEntityFactory.newObject();
+				foreach (DictionaryEntry entry in dictionary)
+				{
+					obj.put(transform(entry.Key), transform(entry.Value));
+				}
+				return obj;
+			}
+			if (value is ICollection)
 			{
 				IEnumerable collection = (IEnumerable)value;
 				EzyArray array = EzyEntityFactory.newArray();
@@ -30,15 +40,6 @@ namespace com.tvd12.ezyfoxserver.client.io
 					array.add(transform(item));
 				}
 				return array;
-			}
-			if (value is IDictionary) {
-				IDictionary dictionary = (IDictionary)value;
-				EzyObject obj = EzyEntityFactory.newObject();
-				foreach (DictionaryEntry entry in dictionary)
-				{
-					obj.put(transform(entry.Key), transform(entry.Value));
-				}
-				return obj;
 			}
 			return value;
 		}
