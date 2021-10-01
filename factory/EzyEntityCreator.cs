@@ -10,6 +10,8 @@ namespace com.tvd12.ezyfoxserver.client.factory
 	public class EzyEntityBuilderCreator
 	{
 		protected readonly Dictionary<Type, Func<Object>> suppliers;
+		protected static readonly EzyInputTransformer INPUT_TRANSFORMER
+				= new EzyInputTransformer();
 		protected static readonly EzyOutputTransformer OUTPUT_TRANSFORMER
 				= new EzyOutputTransformer();
 
@@ -31,25 +33,25 @@ namespace com.tvd12.ezyfoxserver.client.factory
 
 		public EzyObject newObject()
 		{
-			EzyObject obj = new EzyObject(OUTPUT_TRANSFORMER);
+			EzyObject obj = new EzyObject(INPUT_TRANSFORMER, OUTPUT_TRANSFORMER);
 			return obj;
 		}
 
 		public EzyArray newArray()
 		{
-			EzyArray array = new EzyArray(OUTPUT_TRANSFORMER);
+			EzyArray array = new EzyArray(INPUT_TRANSFORMER, OUTPUT_TRANSFORMER);
 			return array;
 		}
 
 		public EzyObjectBuilder newObjectBuilder()
 		{
-			EzyObjectBuilder builder = new EzyObjectBuilder(OUTPUT_TRANSFORMER);
+			EzyObjectBuilder builder = new EzyObjectBuilder(INPUT_TRANSFORMER, OUTPUT_TRANSFORMER);
 			return builder;
 		}
 
 		public EzyArrayBuilder newArrayBuilder()
 		{
-			EzyArrayBuilder builder = new EzyArrayBuilder(OUTPUT_TRANSFORMER);
+			EzyArrayBuilder builder = new EzyArrayBuilder(INPUT_TRANSFORMER, OUTPUT_TRANSFORMER);
 			return builder;
 		}
 

@@ -13,6 +13,6 @@ namespace com.tvd12.ezyfoxserver.client.entity
 		V get<V>(Object key, V defValue);
 		ICollection<Object> keys();
 		ICollection<Object> values();
-		IDictionary<Object, Object> toDict();
+		IDictionary<K, V> toDict<K, V>();
 	}
 }
