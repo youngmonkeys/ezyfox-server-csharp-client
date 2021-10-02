@@ -2,16 +2,21 @@
 using System.Text;
 using System.Collections.Generic;
 using com.tvd12.ezyfoxserver.client.io;
+using com.tvd12.ezyfoxserver.client.util;
 
 namespace com.tvd12.ezyfoxserver.client.entity
 {
 	public class EzyObject : EzyRoObject
 	{
 		protected readonly Dictionary<Object, Object> dictionary;
+		protected readonly EzyInputTransformer inputTransformer;
 		protected readonly EzyOutputTransformer outputTransformer;
 
-		public EzyObject(EzyOutputTransformer outputTransformer)
+		public EzyObject(
+			EzyInputTransformer inputTransformer,
+			EzyOutputTransformer outputTransformer)
 		{
+			this.inputTransformer = inputTransformer;
 			this.outputTransformer = outputTransformer;
 			this.dictionary = new Dictionary<Object, Object>();
 		}
@@ -23,14 +28,16 @@ namespace com.tvd12.ezyfoxserver.client.entity
 
 		public void put(Object key, Object value)
 		{
-			dictionary[key] = value;
+			dictionary[inputTransformer.transform(key)]
+				= inputTransformer.transform(value);
 		}
 
 		public void putAll<K,V>(IDictionary<K, V> dict)
 		{
 			foreach (K key in dict.Keys)
 			{
-				dictionary[key] = dict[key];		
+				dictionary[inputTransformer.transform(key)]
+					= inputTransformer.transform(dict[key]);		
 			}
 		}
 
@@ -79,14 +86,16 @@ namespace com.tvd12.ezyfoxserver.client.entity
 			return dictionary.Values;
 		}
 
-		public IDictionary<Object, Object> toDict()
+		public IDictionary<K, V> toDict<K, V>()
 		{
-			return dictionary;	
+			EzyObjectToMap objectToMap = EzyObjectToMap.getInstance();
+			IDictionary<K, V> map = objectToMap.toMap<K, V>(this);
+			return map;
 		}
 
 		public object Clone()
 		{
-			var answer = new EzyObject(outputTransformer);
+			var answer = new EzyObject(inputTransformer, outputTransformer);
 			foreach (Object key in dictionary.Keys)
 			{
 				Object value = dictionary[key];
@@ -96,7 +105,7 @@ namespace com.tvd12.ezyfoxserver.client.entity
 				{
 					ckey = ((ICloneable)key).Clone();
 				}
-				if (value is ICloneable)
+				if (value != null && value is ICloneable)
 				{
 					cvalue = ((ICloneable)value).Clone();
 				}

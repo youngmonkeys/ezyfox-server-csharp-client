@@ -2,6 +2,7 @@
 using System.Text;
 using System.Collections.Generic;
 using com.tvd12.ezyfoxserver.client.io;
+using com.tvd12.ezyfoxserver.client.util;
 using com.tvd12.ezyfoxserver.client.builder;
 
 namespace com.tvd12.ezyfoxserver.client.entity
@@ -9,10 +10,14 @@ namespace com.tvd12.ezyfoxserver.client.entity
 	public class EzyArray : EzyRoArray
 	{
 		protected readonly List<Object> list;
+		protected readonly EzyInputTransformer inputTransformer;
 		protected readonly EzyOutputTransformer outputTransformer;
 
-		public EzyArray(EzyOutputTransformer outputTransformer)
+		public EzyArray(
+			EzyInputTransformer inputTransformer,
+			EzyOutputTransformer outputTransformer)
 		{
+			this.inputTransformer = inputTransformer;
 			this.outputTransformer = outputTransformer;
 			this.list = new List<Object>();
 		}
@@ -24,7 +29,7 @@ namespace com.tvd12.ezyfoxserver.client.entity
 
 		public void add(Object value)
 		{
-			list.Add(value);
+			list.Add(inputTransformer.transform(value));
 		}
 
 		public void add<T>(EzyBuilder<T> builder)
@@ -37,7 +42,7 @@ namespace com.tvd12.ezyfoxserver.client.entity
 		{
 			foreach (T value in values)
 			{
-				list.Add(value);
+				list.Add(inputTransformer.transform(value));
 			}
 		}
 
@@ -76,23 +81,22 @@ namespace com.tvd12.ezyfoxserver.client.entity
 
 		public List<T> toList<T>()
 		{
-			List<T> answer = new List<T>();
-			foreach (Object item in list)
-			{
-				answer.Add((T)item);
-			}
-			return answer;
+			EzyArrayToList arrayToList = EzyArrayToList.getInstance();
+			List<T> list = arrayToList.toList<T>(this);
+			return list;
 		}
 
 		public object Clone()
 		{
-			var answer = new EzyArray(outputTransformer);
+			var answer = new EzyArray(inputTransformer, outputTransformer);
 			foreach (Object item in list)
 			{
-				if (item is ICloneable)
+				Object citem = item;
+				if (item != null && item is ICloneable)
 				{
-					answer.add(((ICloneable)item).Clone());
+					citem = ((ICloneable)item).Clone();
 				}
+				answer.add(citem);
 			}
 			return answer;
 		}

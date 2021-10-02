@@ -8,10 +8,14 @@ namespace com.tvd12.ezyfoxserver.client.builder
 	public class EzyObjectBuilder : EzyBuilder<EzyObject>
 	{
 		protected EzyObject product;
+		protected EzyInputTransformer inputTransformer;
 		protected EzyOutputTransformer outputTransformer;
 
-		public EzyObjectBuilder(EzyOutputTransformer outputTransformer)
+		public EzyObjectBuilder(
+			EzyInputTransformer inputTransformer,
+			EzyOutputTransformer outputTransformer)
 		{
+			this.inputTransformer = inputTransformer;
 			this.outputTransformer = outputTransformer;
             this.product = newProduct();
 		}
@@ -35,7 +39,7 @@ namespace com.tvd12.ezyfoxserver.client.builder
 
 		protected EzyObject newProduct()
 		{
-			return new EzyObject(outputTransformer);
+			return new EzyObject(inputTransformer, outputTransformer);
 		}
 	}
 }

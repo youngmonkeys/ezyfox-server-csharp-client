@@ -8,6 +8,7 @@ namespace com.tvd12.ezyfoxserver.client.constant
 	{
 		public static readonly Type PRIMITVE_BOOLEAN = typeof(bool);
 		public static readonly Type PRIMITVE_BYTE = typeof(byte);
+		public static readonly Type PRIMITVE_SBYTE = typeof(sbyte);
 		public static readonly Type PRIMITVE_CHAR = typeof(char);
 		public static readonly Type PRIMITVE_FLOAT = typeof(float);
 		public static readonly Type PRIMITVE_DOUBLE = typeof(double);
@@ -18,6 +19,7 @@ namespace com.tvd12.ezyfoxserver.client.constant
 
 		public static readonly Type WRAPPER_BOOLEAN = typeof(Boolean);
 		public static readonly Type WRAPPER_BYTE = typeof(Byte);
+		public static readonly Type WRAPPER_SBYTE = typeof(SByte);
 		public static readonly Type WRAPPER_CHAR = typeof(Char);
 		public static readonly Type WRAPPER_DOUBLE = typeof(Double);
 		public static readonly Type WRAPPER_INT = typeof(Int32);
