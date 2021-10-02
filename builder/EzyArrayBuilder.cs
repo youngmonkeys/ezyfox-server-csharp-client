@@ -41,12 +41,6 @@ namespace com.tvd12.ezyfoxserver.client.builder
 			return this;
 		}
 
-		public EzyArrayBuilder append<T>(IList<T> values)
-        {
-			product.addAll<T>(values);
-			return this;
-		}
-
 		public EzyArrayBuilder appendAll<T>(IList<T> values)
 		{
 			product.addAll<T>(values);
