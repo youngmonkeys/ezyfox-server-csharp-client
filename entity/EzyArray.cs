@@ -91,10 +91,12 @@ namespace com.tvd12.ezyfoxserver.client.entity
 			var answer = new EzyArray(inputTransformer, outputTransformer);
 			foreach (Object item in list)
 			{
-				if (item is ICloneable)
+				Object citem = item;
+				if (item != null && item is ICloneable)
 				{
-					answer.add(((ICloneable)item).Clone());
+					citem = ((ICloneable)item).Clone();
 				}
+				answer.add(citem);
 			}
 			return answer;
 		}

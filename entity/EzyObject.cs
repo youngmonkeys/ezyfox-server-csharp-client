@@ -105,7 +105,7 @@ namespace com.tvd12.ezyfoxserver.client.entity
 				{
 					ckey = ((ICloneable)key).Clone();
 				}
-				if (value is ICloneable)
+				if (value != null && value is ICloneable)
 				{
 					cvalue = ((ICloneable)value).Clone();
 				}
