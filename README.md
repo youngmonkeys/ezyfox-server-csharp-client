@@ -6,6 +6,7 @@ csharp, unity client for ezyfox server
 csharp, unity client for ezyfox server
 
 # Documentation
+
 [https://youngmonkeys.org/ezyfox-csharp-client-sdk/](https://youngmonkeys.org/ezyfox-csharp-client-sdk/)
 
 # Code Example
@@ -87,5 +88,8 @@ while(true)
     }
 }
 ```
+
 # Used By
-1. [space-shooter](https://youngmonkeys.org/asset/space-shooter/)
+
+1. [hello-csharp](https://github.com/tvd12/ezyfox-server-example/tree/master/hello-csharp)
+2. [space-shooter](https://youngmonkeys.org/asset/space-shooter/)
