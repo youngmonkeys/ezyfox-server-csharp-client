@@ -7,7 +7,8 @@ namespace com.tvd12.ezyfoxserver.client.io
     {
         public T transform<T>(Object value)
         {
-            return (T)transformByType(value, typeof(T));
+            Object result = transformByType(value, typeof(T));
+            return (T)result;
         }
 
         public Object transformByType(Object value, Type outtype)
