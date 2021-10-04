@@ -76,6 +76,16 @@ namespace com.tvd12.ezyfoxserver.client.entity
 			return containsKey(key) ? get<V>(key) : defValue;
 		}
 
+		public Object getByType(Object key, Type outType)
+		{
+			var answer = dictionary[key];
+			if (outputTransformer == null)
+			{
+				return answer;
+			}
+			return outputTransformer.transformByType(answer, outType);
+		}
+
 		public ICollection<Object> keys()
 		{
 			return dictionary.Keys;
