@@ -35,7 +35,7 @@ namespace com.tvd12.ezyfoxserver.client.binding
                     rawValue = map.getByOutType(property.Name, outType);
                     if (rawValue == null)
                     {
-                        string keyString = char.ToUpper(property.Name[0]).ToString();
+                        string keyString = char.ToLower(property.Name[0]).ToString();
                         if (property.Name.Length > 1)
                         {
                             keyString += property.Name.Substring(1);

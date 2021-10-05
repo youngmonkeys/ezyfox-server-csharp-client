@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using com.tvd12.ezyfoxserver.client.entity;
+using com.tvd12.ezyfoxserver.client.factory;
 
 namespace com.tvd12.ezyfoxserver.client.binding
 {
@@ -181,6 +183,30 @@ namespace com.tvd12.ezyfoxserver.client.binding
                 IEzyWriter writer = writerByInType[inType];
                 return writer.write(input, this);
             }
+            if (typeof(IDictionary).IsAssignableFrom(inType)) {
+                EzyObject answer = EzyEntityFactory.newObject();
+                IDictionary dict = (IDictionary)(input);
+                Type keyType = inType.GetGenericArguments()[0];
+                Type valueType = inType.GetGenericArguments()[1];
+                foreach (DictionaryEntry entry in dict)
+                {
+                    answer.put(
+                        marshallByInType(entry.Key, keyType),
+                        marshallByInType(entry.Value, valueType));
+                }
+                return answer;
+            }
+            else if (typeof(IList).IsAssignableFrom(inType))
+            {
+                EzyArray answer = EzyEntityFactory.newArray();
+                IList list = (IList)(input);
+                Type valueType = inType.GetGenericArguments()[0];
+                foreach (Object value in list)
+                {
+                    answer.add(marshallByInType(value, valueType));
+                }
+                return answer;
+            }
             return input;
         }
     }
@@ -210,6 +236,41 @@ namespace com.tvd12.ezyfoxserver.client.binding
                 IEzyReader reader = readerByOutType[outType];
                 return reader.read(input, this);
             }
+            if (outType.IsGenericType)
+            {
+                if (typeof(IDictionary).IsAssignableFrom(outType) ||
+                    typeof(IDictionary<,>) == outType.GetGenericTypeDefinition())
+                {
+                    Type dictType = typeof(Dictionary<,>);
+                    Type constructed = dictType.MakeGenericType(outType.GetGenericArguments());
+                    IDictionary answer = (IDictionary)Activator.CreateInstance(constructed);
+                    EzyObject obj = (EzyObject)input;
+                    Type keyType = outType.GetGenericArguments()[0];
+                    Type valueType = outType.GetGenericArguments()[1];
+                    foreach (object key in obj.keys())
+                    {
+                        answer[unmarshallByOutType(key, keyType)] =
+                            unmarshallByOutType(obj.getByOutType(key, valueType), valueType);
+                    }
+                    return answer;
+                }
+                else if (typeof(IList).IsAssignableFrom(outType) ||
+                    typeof(IList<>) == outType.GetGenericTypeDefinition())
+                {
+                    Type listType = typeof(List<>);
+                    Type constructed = listType.MakeGenericType(outType.GetGenericArguments());
+                    IList answer = (IList)Activator.CreateInstance(constructed);
+                    EzyArray array = (EzyArray)input;
+                    Type valueType = outType.GetGenericArguments()[0];
+                    for (int i = 0; i < array.size(); ++i)
+                    {
+                        Object rawValue = array.getByOutType(i, valueType);
+                        Object value = unmarshallByOutType(rawValue, valueType);
+                        answer.Add(value);
+                    }
+                    return answer;
+                }
+            }
             return input;
         }
 
@@ -219,6 +280,16 @@ namespace com.tvd12.ezyfoxserver.client.binding
             for (int i = 0; i < array.size(); ++i)
             {
                 answer.Add(unmarshall<T>(array.get<object>(i)));
+            }
+            return answer;
+        }
+
+        public IDictionary<K, V> unmarshallDict<K, V>(EzyObject obj)
+        {
+            IDictionary<K, V> answer = new Dictionary<K, V>();
+            foreach (object key in obj.keys())
+            {
+                answer[unmarshall<K>(key)] = unmarshall<V>(obj.get<V>(key));
             }
             return answer;
         }
