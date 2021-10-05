@@ -58,17 +58,14 @@ namespace com.tvd12.ezyfoxserver.client.entity
 
 		public bool isNotNullValue(Object key)
 		{
-			return dictionary[key] != null;
+			return dictionary.ContainsKey(key) && dictionary[key] != null;
 		}
 
 		public V get<V>(Object key)
 		{
-			var answer = dictionary[key];
-			if (outputTransformer == null)
-			{
-				return (V)answer;
-			}
-			return outputTransformer.transform<V>(answer);
+			return dictionary.ContainsKey(key)
+				? outputTransformer.transform<V>(dictionary[key])
+				: default(V);
 		}
 
 		public V get<V>(Object key, V defValue)
@@ -76,14 +73,11 @@ namespace com.tvd12.ezyfoxserver.client.entity
 			return containsKey(key) ? get<V>(key) : defValue;
 		}
 
-		public Object getByType(Object key, Type outType)
+		public Object getByOutType(Object key, Type outType)
 		{
-			var answer = dictionary[key];
-			if (outputTransformer == null)
-			{
-				return answer;
-			}
-			return outputTransformer.transformByType(answer, outType);
+			return dictionary.ContainsKey(key)
+				? outputTransformer.transformByOutType(dictionary[key], outType)
+				: null;
 		}
 
 		public ICollection<Object> keys()

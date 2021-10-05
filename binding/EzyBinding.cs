@@ -4,6 +4,83 @@ using com.tvd12.ezyfoxserver.client.entity;
 
 namespace com.tvd12.ezyfoxserver.client.binding
 {
+    /// <summary>
+    /// Convert EzyArray or EzyObject to C# Object and
+    /// Convert C# Object to EzyArray or EzyObject
+    /// </summary>
+    /// <example>
+    /// <c>Example:</c>
+    /// <code>
+    /// public class BindingExample
+    /// {
+    ///     public void Run()
+    ///     {
+    ///         var binding = EzyBinding.builder()
+    ///             .addReflectionMapConverter<User>()
+    ///             .addReflectionArrayConverter<Room>()
+    ///             .build();
+    ///         var user = new User
+    ///         {
+    ///             Name = "Monkey",
+    ///             Age = 29,
+    ///             Friend = "Fox"
+    ///         };
+    /// 
+    ///         var map = binding.marshall<EzyObject>(user);
+    ///         Console.WriteLine("user to map: " + map);
+    /// 
+    ///         var mappedUser = binding.unmarshall<User>(map);
+    ///         Console.WriteLine("map to user: " + mappedUser);
+    /// 
+    ///         var room = new Room()
+    ///         {
+    ///             Id = 1,
+    ///             Name = "Lobby"
+    ///         };
+    /// 
+    ///         var array = binding.marshall<EzyArray>(room);
+    ///         Console.WriteLine("room to array: " + array);
+    /// 
+    ///         var mappedRoom = binding.unmarshall<Room>(array);
+    ///         Console.WriteLine("map to room: " + mappedRoom);
+    ///     }
+    /// }
+    /// 
+    /// public class User
+    /// {
+    ///     public string Name { get; set; }
+    ///     public int Age { get; set; }
+    ///     [EzyValue("f")]
+    ///     public String Friend { get; set; }
+    /// 
+    ///     public override string ToString()
+    ///     {
+    ///         return "User (\n" +
+    ///             "\tName: " + Name +
+    ///             "\n\tAge: " + Age +
+    ///             "\n\tFriend: " + Friend +
+    ///             "\n)";
+    ///     }
+    /// }
+    /// 
+    /// public class Room
+    /// {
+    ///     [EzyValue(0)]
+    ///     public long Id { get; set; }
+    /// 
+    ///     [EzyValue(1)]
+    ///     public String Name { get; set; }
+    /// 
+    ///     public override string ToString()
+    ///     {
+    ///         return "Room (\n" +
+    ///             "\tId: " + Id +
+    ///             "\n\tName: " + Name +
+    ///             "\n)";
+    ///     }
+    /// }/// 
+    /// </code>
+    /// </example>
     public class EzyBinding
     {
         private readonly Ezymarshaller marshaller;
@@ -66,6 +143,11 @@ namespace com.tvd12.ezyfoxserver.client.binding
         public EzyBindingBuilder addReflectionMapConverter<T>()
         {
             return addConverter(new EzyReflectionMapConverter<T>());
+        }
+
+        public EzyBindingBuilder addReflectionArrayConverter<T>()
+        {
+            return addConverter(new EzyReflectionArrayConverter<T>());
         }
 
         public EzyBinding build()

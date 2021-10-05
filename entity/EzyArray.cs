@@ -79,6 +79,17 @@ namespace com.tvd12.ezyfoxserver.client.entity
 			return t;
 		}
 
+		public Object getByOutType(int index, Type outType)
+        {
+			if (index >= list.Count)
+            {
+				return null;
+            }
+			var answer = list[index];
+			Object t = outputTransformer.transformByOutType(answer, outType);
+			return t;
+		}
+
 		public List<T> toList<T>()
 		{
 			EzyArrayToList arrayToList = EzyArrayToList.getInstance();

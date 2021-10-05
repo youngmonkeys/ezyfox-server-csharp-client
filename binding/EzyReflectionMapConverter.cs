@@ -16,39 +16,52 @@ namespace com.tvd12.ezyfoxserver.client.binding
 
         protected override T mapToObject(EzyObject map, EzyUnmarshaller unmarshaller)
         {
+            PropertyInfo[] properties = objectType.GetProperties();
+
             T obj = (T)Activator.CreateInstance(objectType);
 
-            foreach (object rawKey in map.keys())
+            foreach (PropertyInfo property in properties)
             {
-                string keyString = rawKey.ToString();
+                Type outType = property.PropertyType;
 
-                PropertyInfo targetProperty = objectType.GetProperty(keyString);
-                if (targetProperty == null)
+                object rawValue = null;
+                EzyValue anno = property.GetCustomAttribute<EzyValue>();
+                if (anno != null)
                 {
-                    var key = char.ToUpper(keyString[0]) + keyString.Substring(1);
-                    targetProperty = objectType.GetProperty(key);
+                    rawValue = map.getByOutType(anno.name, outType);
                 }
-
-                Type outType = targetProperty.PropertyType;
-                object rawValue = map.getByType(rawKey, outType);
+                else
+                {
+                    rawValue = map.getByOutType(property.Name, outType);
+                    if (rawValue == null)
+                    {
+                        string keyString = char.ToUpper(property.Name[0]).ToString();
+                        if (property.Name.Length > 1)
+                        {
+                            keyString += property.Name.Substring(1);
+                        }
+                        rawValue = map.getByOutType(keyString, outType);
+                    }
+                }
                 if (rawValue == null)
                 {
                     continue;
                 }
+
                 object value = unmarshaller.unmarshallByOutType(rawValue, outType);
-                if (targetProperty.PropertyType == value.GetType())
+                if (outType == value.GetType())
                 {
-                    targetProperty.SetValue(obj, value);
+                    property.SetValue(obj, value);
                 }
                 else
                 {
-                    MethodInfo parseMethod = targetProperty.PropertyType.GetMethod(
+                    MethodInfo parseMethod = property.PropertyType.GetMethod(
                         "TryParse",
                         BindingFlags.Public | BindingFlags.Static,
                         null,
                         new[] {
                             typeof(string),
-                            targetProperty.PropertyType.MakeByRefType()
+                            property.PropertyType.MakeByRefType()
                         },
                         null
                     );
@@ -59,7 +72,7 @@ namespace com.tvd12.ezyfoxserver.client.binding
                         bool success = (bool)parseMethod.Invoke(null, parameters);
                         if (success)
                         {
-                            targetProperty.SetValue(obj, parameters[1]);
+                            property.SetValue(obj, parameters[1]);
                         }
 
                     }
@@ -73,9 +86,18 @@ namespace com.tvd12.ezyfoxserver.client.binding
             EzyObject map = EzyEntityFactory.newObject();
             foreach (PropertyInfo property in objectType.GetProperties())
             {
-                string key = property.Name.Length <= 1
-                    ? char.ToLower(property.Name[0]).ToString()
-                    : char.ToLower(property.Name[0]) + property.Name.Substring(1);
+                string key = null;
+                EzyValue anno = property.GetCustomAttribute<EzyValue>();
+                if (anno != null)
+                {
+                    key = anno.name;
+                }
+                else
+                {
+                    key = property.Name.Length <= 1
+                        ? char.ToLower(property.Name[0]).ToString()
+                        : char.ToLower(property.Name[0]) + property.Name.Substring(1);
+                }
                 object rawValue = property.GetValue(obj);
                 object value = rawValue != null ? marshaller.marshall<object>(rawValue) : null;
                 map.put(key, value);
