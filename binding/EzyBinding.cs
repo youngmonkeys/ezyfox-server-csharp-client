@@ -121,6 +121,7 @@ namespace com.tvd12.ezyfoxserver.client.binding
         {
             this.writerByInType = new Dictionary<Type, IEzyWriter>();
             this.readerByOutType = new Dictionary<Type, IEzyReader>();
+            this.addConverter(new EzyDateTimeConverter());
         }
 
         public EzyBindingBuilder addReader(IEzyReader reader)
