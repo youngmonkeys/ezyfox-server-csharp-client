@@ -81,7 +81,7 @@ namespace com.tvd12.ezyfoxserver.client.binding
             return obj;
         }
 
-        protected override EzyObject objectToMap(T obj, Ezymarshaller marshaller)
+        protected override EzyObject objectToMap(T obj, EzyMarshaller marshaller)
         {
             EzyObject map = EzyEntityFactory.newObject();
             foreach (PropertyInfo property in objectType.GetProperties())

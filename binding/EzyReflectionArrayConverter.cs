@@ -70,7 +70,7 @@ namespace com.tvd12.ezyfoxserver.client.binding
             return obj;
         }
 
-        protected override EzyArray objectToArray(T obj, Ezymarshaller marshaller)
+        protected override EzyArray objectToArray(T obj, EzyMarshaller marshaller)
         {
             int count = 0;
             SortedDictionary<int, object> valueByIndex = new SortedDictionary<int, object>();

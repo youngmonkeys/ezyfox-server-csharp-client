@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using System.Collections;
 using System.Collections.Generic;
 using com.tvd12.ezyfoxserver.client.io;
 using com.tvd12.ezyfoxserver.client.util;
@@ -30,6 +31,15 @@ namespace com.tvd12.ezyfoxserver.client.entity
 		{
 			dictionary[inputTransformer.transform(key)]
 				= inputTransformer.transform(value);
+		}
+
+		public void putRawDict(IDictionary dict)
+		{
+			foreach (Object key in dict.Keys)
+			{
+				dictionary[inputTransformer.transform(key)]
+					= inputTransformer.transform(dict[key]);
+			}
 		}
 
 		public void putAll<K,V>(IDictionary<K, V> dict)
@@ -90,10 +100,10 @@ namespace com.tvd12.ezyfoxserver.client.entity
 			return dictionary.Values;
 		}
 
-		public IDictionary<K, V> toDict<K, V>()
+		public Dictionary<K, V> toDict<K, V>()
 		{
 			EzyObjectToMap objectToMap = EzyObjectToMap.getInstance();
-			IDictionary<K, V> map = objectToMap.toMap<K, V>(this);
+			Dictionary<K, V> map = objectToMap.toMap<K, V>(this);
 			return map;
 		}
 

@@ -23,6 +23,6 @@ namespace com.tvd12.ezyfoxserver.client.entity
 
 		ICollection<Object> values();
 
-		IDictionary<K, V> toDict<K, V>();
+		Dictionary<K, V> toDict<K, V>();
 	}
 }

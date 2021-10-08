@@ -85,14 +85,14 @@ namespace com.tvd12.ezyfoxserver.client.binding
     /// </example>
     public class EzyBinding
     {
-        private readonly Ezymarshaller marshaller;
+        private readonly EzyMarshaller marshaller;
         private readonly EzyUnmarshaller unmarshaller;
 
         public EzyBinding(
             IDictionary<Type, IEzyWriter> writerByInType,
             IDictionary<Type, IEzyReader> readerByOutType)
         {
-            this.marshaller = new Ezymarshaller(writerByInType);
+            this.marshaller = new EzyMarshaller(writerByInType);
             this.unmarshaller = new EzyUnmarshaller(readerByOutType);
         }
 
@@ -104,6 +104,16 @@ namespace com.tvd12.ezyfoxserver.client.binding
         public T marshall<T>(object input)
         {
             return marshaller.marshall<T>(input);
+        }
+
+        public List<object> marshallToList(object input)
+        {
+            return marshaller.marshall<EzyArray>(input).toList<object>();
+        }
+
+        public Dictionary<object, object> marshallToDict(object input)
+        {
+            return marshaller.marshall<EzyObject>(input).toDict<object, object>();
         }
 
         public T unmarshall<T>(object input)
@@ -153,17 +163,36 @@ namespace com.tvd12.ezyfoxserver.client.binding
             return addConverter(new EzyReflectionArrayConverter<T>());
         }
 
+        public EzyBindingBuilder addReflectionConverter<T>()
+        {
+            Type type = typeof(T);
+            object[] attributes = type.GetCustomAttributes(false);
+            foreach (object attr in attributes)
+            {
+                if (attr.GetType() == typeof(EzyObjectBinding))
+                {
+                    return addConverter(new EzyReflectionMapConverter<T>());
+                }
+                if (attr.GetType() == typeof(EzyArrayBinding))
+                {
+                    return addConverter(new EzyReflectionArrayConverter<T>());
+                }
+
+            }
+            return this;
+        }
+
         public EzyBinding build()
         {
             return new EzyBinding(writerByInType, readerByOutType);
         }
     }
 
-    public class Ezymarshaller
+    public class EzyMarshaller
     {
         private readonly IDictionary<Type, IEzyWriter> writerByInType;
 
-        public Ezymarshaller(IDictionary<Type, IEzyWriter> writerByInType)
+        public EzyMarshaller(IDictionary<Type, IEzyWriter> writerByInType)
         {
             this.writerByInType = writerByInType;
         }

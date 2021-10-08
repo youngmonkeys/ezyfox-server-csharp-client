@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using System.Collections;
 using System.Collections.Generic;
 using com.tvd12.ezyfoxserver.client.io;
 using com.tvd12.ezyfoxserver.client.util;
@@ -38,7 +39,15 @@ namespace com.tvd12.ezyfoxserver.client.entity
 			list.Add(t);
 		}
 
-		public void addAll<T>(ICollection<T> values)
+		public void addRawList(IList values)
+		{
+			foreach (Object value in values)
+			{
+				list.Add(inputTransformer.transform(value));
+			}
+		}
+
+		public void addAll<T>(IList<T> values)
 		{
 			foreach (T value in values)
 			{

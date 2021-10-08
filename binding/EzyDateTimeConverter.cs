@@ -1,27 +1,47 @@
 ﻿using System;
+using System.Globalization;
 
 namespace com.tvd12.ezyfoxserver.client.binding
 {
-    public class EzyDateTimeConverter : IEzyConverter
+    public class EzyDateTimeConverter : EzyDataConverter<DateTime>
     {
-        public object read(object input, EzyUnmarshaller unmarshaller)
+        protected override DateTime valueToData(
+            object value,
+            EzyUnmarshaller unmarshaller)
         {
-            return new DateTime(1970, 1, 1).AddMilliseconds((long)input);
+            if (value is Int64)
+            {
+                return new DateTime(1970, 1, 1).AddMilliseconds((long)value);
+            }
+            if (value is Int32)
+            {
+                return new DateTime(1970, 1, 1).AddMilliseconds((Int32)value);
+            }
+            if (value is string)
+            {
+                try
+                {
+                    return DateTime.ParseExact(
+                        (string)value,
+                        "yyyy-MM-dd'T'HH:mm:ss:fff",
+                        CultureInfo.InvariantCulture);
+                }
+                catch (Exception e)
+                {
+                    return DateTime.ParseExact(
+                        (string)value,
+                        "yyyy-MM-dd'T'HH:mm:ss.fff",
+                        CultureInfo.InvariantCulture);
+                }
+            }
+            return (DateTime)value;
         }
 
-        public object write(object input, Ezymarshaller marshaller)
+        protected override object dataToValue(
+            DateTime data,
+            EzyMarshaller marshaller)
         {
-            return ((DateTime)input).Millisecond;
-        }
-
-        public Type getInType()
-        {
-            return typeof(DateTime);
-        }
-
-        public Type getOutType()
-        {
-            return typeof(DateTime);
+            return data.Millisecond;
         }
     }
 }
