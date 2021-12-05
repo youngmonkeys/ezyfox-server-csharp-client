@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using System.Collections;
 using System.Collections.Generic;
 using com.tvd12.ezyfoxserver.client.io;
 using com.tvd12.ezyfoxserver.client.util;
@@ -32,6 +33,15 @@ namespace com.tvd12.ezyfoxserver.client.entity
 				= inputTransformer.transform(value);
 		}
 
+		public void putRawDict(IDictionary dict)
+		{
+			foreach (Object key in dict.Keys)
+			{
+				dictionary[inputTransformer.transform(key)]
+					= inputTransformer.transform(dict[key]);
+			}
+		}
+
 		public void putAll<K,V>(IDictionary<K, V> dict)
 		{
 			foreach (K key in dict.Keys)
@@ -58,22 +68,26 @@ namespace com.tvd12.ezyfoxserver.client.entity
 
 		public bool isNotNullValue(Object key)
 		{
-			return dictionary[key] != null;
+			return dictionary.ContainsKey(key) && dictionary[key] != null;
 		}
 
 		public V get<V>(Object key)
 		{
-			var answer = dictionary[key];
-			if (outputTransformer == null)
-			{
-				return (V)answer;
-			}
-			return outputTransformer.transform<V>(answer);
+			return dictionary.ContainsKey(key)
+				? outputTransformer.transform<V>(dictionary[key])
+				: default(V);
 		}
 
 		public V get<V>(Object key, V defValue)
 		{
 			return containsKey(key) ? get<V>(key) : defValue;
+		}
+
+		public Object getByOutType(Object key, Type outType)
+		{
+			return dictionary.ContainsKey(key)
+				? outputTransformer.transformByOutType(dictionary[key], outType)
+				: null;
 		}
 
 		public ICollection<Object> keys()
@@ -86,10 +100,10 @@ namespace com.tvd12.ezyfoxserver.client.entity
 			return dictionary.Values;
 		}
 
-		public IDictionary<K, V> toDict<K, V>()
+		public Dictionary<K, V> toDict<K, V>()
 		{
 			EzyObjectToMap objectToMap = EzyObjectToMap.getInstance();
-			IDictionary<K, V> map = objectToMap.toMap<K, V>(this);
+			Dictionary<K, V> map = objectToMap.toMap<K, V>(this);
 			return map;
 		}
 

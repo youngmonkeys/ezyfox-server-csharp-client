@@ -5,46 +5,50 @@ namespace com.tvd12.ezyfoxserver.client.io
 {
     public class EzyOutputTransformer
     {
-
         public T transform<T>(Object value)
+        {
+            Object result = transformByOutType(value, typeof(T));
+            return (T)result;
+        }
+
+        public Object transformByOutType(Object value, Type outtype)
         {
             if (value == null)
             {
-                return (T)value;
+                return value;
             }
             var intype = value.GetType();
-            var outtype = typeof(T);
 
             if (intype == EzyTypes.PRIMITVE_SBYTE)
             {
                 sbyte inValue = (sbyte)value;
                 if(outtype == EzyTypes.PRIMITVE_SBYTE)
                 {
-                    return (T)value;
+                    return value;
                 }
                 if(outtype == EzyTypes.PRIMITVE_BYTE)
                 {
-                    return (T)(Object)Convert.ToByte(inValue);
+                    return (Object)Convert.ToByte(inValue);
                 }
                 if (outtype == EzyTypes.PRIMITVE_DOUBLE)
                 {
-                    return (T)(Object)Convert.ToDouble(inValue);
+                    return (Object)Convert.ToDouble(inValue);
                 }
                 if (outtype == EzyTypes.PRIMITVE_FLOAT)
                 {
-                    return (T)(Object)Convert.ToSingle(inValue);
+                    return (Object)Convert.ToSingle(inValue);
                 }
                 if (outtype == EzyTypes.PRIMITVE_INT)
                 {
-                    return (T)(Object)Convert.ToInt32(inValue);
+                    return (Object)Convert.ToInt32(inValue);
                 }
                 if (outtype == EzyTypes.PRIMITVE_LONG)
                 {
-                    return (T)(Object)Convert.ToInt64(inValue);
+                    return (Object)Convert.ToInt64(inValue);
                 }
                 if (outtype == EzyTypes.PRIMITVE_SHORT)
                 {
-                    return (T)(Object)Convert.ToInt16(inValue);
+                    return (Object)Convert.ToInt16(inValue);
                 }
             }
             else if (intype == EzyTypes.PRIMITVE_BYTE)
@@ -52,31 +56,31 @@ namespace com.tvd12.ezyfoxserver.client.io
                 byte inValue = (byte)value;
                 if (outtype == EzyTypes.PRIMITVE_SBYTE)
                 {
-                    return (T)(Object)Convert.ToSByte(inValue);
+                    return (Object)Convert.ToSByte(inValue);
                 }
                 if (outtype == EzyTypes.PRIMITVE_BYTE)
                 {
-                    return (T)value;
+                    return value;
                 }
                 if (outtype == EzyTypes.PRIMITVE_DOUBLE)
                 {
-                    return (T)(Object)Convert.ToDouble(inValue);
+                    return (Object)Convert.ToDouble(inValue);
                 }
                 if (outtype == EzyTypes.PRIMITVE_FLOAT)
                 {
-                    return (T)(Object)Convert.ToSingle(inValue);
+                    return (Object)Convert.ToSingle(inValue);
                 }
                 if (outtype == EzyTypes.PRIMITVE_INT)
                 {
-                    return (T)(Object)Convert.ToInt32(inValue);
+                    return (Object)Convert.ToInt32(inValue);
                 }
                 if (outtype == EzyTypes.PRIMITVE_LONG)
                 {
-                    return (T)(Object)Convert.ToInt64(inValue);
+                    return (Object)Convert.ToInt64(inValue);
                 }
                 if (outtype == EzyTypes.PRIMITVE_SHORT)
                 {
-                    return (T)(Object)Convert.ToInt16(inValue);
+                    return (Object)Convert.ToInt16(inValue);
                 }
             }
             else if (intype == EzyTypes.PRIMITVE_DOUBLE)
@@ -84,31 +88,31 @@ namespace com.tvd12.ezyfoxserver.client.io
                 double inValue = (double)value;
                 if (outtype == EzyTypes.PRIMITVE_SBYTE)
                 {
-                    return (T)(Object)Convert.ToSByte(inValue);
+                    return (Object)Convert.ToSByte(inValue);
                 }
                 if (outtype == EzyTypes.PRIMITVE_BYTE)
                 {
-                    return (T)(Object)Convert.ToByte(inValue);
+                    return (Object)Convert.ToByte(inValue);
                 }
                 if (outtype == EzyTypes.PRIMITVE_DOUBLE)
                 {
-                    return (T)value;
+                    return value;
                 }
                 if (outtype == EzyTypes.PRIMITVE_FLOAT)
                 {
-                    return (T)(Object)Convert.ToSingle(inValue);
+                    return (Object)Convert.ToSingle(inValue);
                 }
                 if (outtype == EzyTypes.PRIMITVE_INT)
                 {
-                    return (T)(Object)Convert.ToInt32(inValue);
+                    return (Object)Convert.ToInt32(inValue);
                 }
                 if (outtype == EzyTypes.PRIMITVE_LONG)
                 {
-                    return (T)(Object)Convert.ToInt64(inValue);
+                    return (Object)Convert.ToInt64(inValue);
                 }
                 if (outtype == EzyTypes.PRIMITVE_SHORT)
                 {
-                    return (T)(Object)Convert.ToInt16(inValue);
+                    return (Object)Convert.ToInt16(inValue);
                 }
             }
             else if (intype == EzyTypes.PRIMITVE_FLOAT)
@@ -116,31 +120,31 @@ namespace com.tvd12.ezyfoxserver.client.io
                 float inValue = (float)value;
                 if (outtype == EzyTypes.PRIMITVE_SBYTE)
                 {
-                    return (T)(Object)Convert.ToSByte(inValue);
+                    return (Object)Convert.ToSByte(inValue);
                 }
                 if (outtype == EzyTypes.PRIMITVE_BYTE)
                 {
-                    return (T)(Object)Convert.ToByte(inValue);
+                    return (Object)Convert.ToByte(inValue);
                 }
                 if (outtype == EzyTypes.PRIMITVE_DOUBLE)
                 {
-                    return (T)(Object)Convert.ToDouble(inValue);
+                    return (Object)Convert.ToDouble(inValue);
                 }
                 if (outtype == EzyTypes.PRIMITVE_FLOAT)
                 {
-                    return (T)value;
+                    return value;
                 }
                 if (outtype == EzyTypes.PRIMITVE_INT)
                 {
-                    return (T)(Object)Convert.ToInt32(inValue);
+                    return (Object)Convert.ToInt32(inValue);
                 }
                 if (outtype == EzyTypes.PRIMITVE_LONG)
                 {
-                    return (T)(Object)Convert.ToInt64(inValue);
+                    return (Object)Convert.ToInt64(inValue);
                 }
                 if (outtype == EzyTypes.PRIMITVE_SHORT)
                 {
-                    return (T)(Object)Convert.ToInt16(inValue);
+                    return (Object)Convert.ToInt16(inValue);
                 }
             }
             else if (intype == EzyTypes.PRIMITVE_INT)
@@ -148,31 +152,31 @@ namespace com.tvd12.ezyfoxserver.client.io
                 int inValue = (int)value;
                 if (outtype == EzyTypes.PRIMITVE_SBYTE)
                 {
-                    return (T)(Object)Convert.ToSByte(inValue);
+                    return (Object)Convert.ToSByte(inValue);
                 }
                 if (outtype == EzyTypes.PRIMITVE_BYTE)
                 {
-                    return (T)(Object)Convert.ToByte(inValue);
+                    return (Object)Convert.ToByte(inValue);
                 }
                 if (outtype == EzyTypes.PRIMITVE_DOUBLE)
                 {
-                    return (T)(Object)Convert.ToDouble(inValue);
+                    return (Object)Convert.ToDouble(inValue);
                 }
                 if (outtype == EzyTypes.PRIMITVE_FLOAT)
                 {
-                    return (T)(Object)Convert.ToSingle(inValue);
+                    return (Object)Convert.ToSingle(inValue);
                 }
                 if (outtype == EzyTypes.PRIMITVE_INT)
                 {
-                    return (T)value;
+                    return value;
                 }
                 if (outtype == EzyTypes.PRIMITVE_LONG)
                 {
-                    return (T)(Object)Convert.ToInt64(inValue);
+                    return (Object)Convert.ToInt64(inValue);
                 }
                 if (outtype == EzyTypes.PRIMITVE_SHORT)
                 {
-                    return (T)(Object)Convert.ToInt16(inValue);
+                    return (Object)Convert.ToInt16(inValue);
                 }
             }
             else if (intype == EzyTypes.PRIMITVE_INT)
@@ -180,31 +184,31 @@ namespace com.tvd12.ezyfoxserver.client.io
                 int inValue = (int)value;
                 if (outtype == EzyTypes.PRIMITVE_SBYTE)
                 {
-                    return (T)(Object)Convert.ToSByte(inValue);
+                    return (Object)Convert.ToSByte(inValue);
                 }
                 if (outtype == EzyTypes.PRIMITVE_BYTE)
                 {
-                    return (T)(Object)Convert.ToByte(inValue);
+                    return (Object)Convert.ToByte(inValue);
                 }
                 if (outtype == EzyTypes.PRIMITVE_DOUBLE)
                 {
-                    return (T)(Object)Convert.ToDouble(inValue);
+                    return (Object)Convert.ToDouble(inValue);
                 }
                 if (outtype == EzyTypes.PRIMITVE_FLOAT)
                 {
-                    return (T)(Object)Convert.ToSingle(inValue);
+                    return (Object)Convert.ToSingle(inValue);
                 }
                 if (outtype == EzyTypes.PRIMITVE_INT)
                 {
-                    return (T)value;
+                    return value;
                 }
                 if (outtype == EzyTypes.PRIMITVE_LONG)
                 {
-                    return (T)(Object)Convert.ToInt64(inValue);
+                    return (Object)Convert.ToInt64(inValue);
                 }
                 if (outtype == EzyTypes.PRIMITVE_SHORT)
                 {
-                    return (T)(Object)Convert.ToInt16(inValue);
+                    return (Object)Convert.ToInt16(inValue);
                 }
             }
             else if (intype == EzyTypes.PRIMITVE_LONG)
@@ -212,31 +216,31 @@ namespace com.tvd12.ezyfoxserver.client.io
                 long inValue = (long)value;
                 if (outtype == EzyTypes.PRIMITVE_SBYTE)
                 {
-                    return (T)(Object)Convert.ToSByte(inValue);
+                    return (Object)Convert.ToSByte(inValue);
                 }
                 if (outtype == EzyTypes.PRIMITVE_BYTE)
                 {
-                    return (T)(Object)Convert.ToByte(inValue);
+                    return (Object)Convert.ToByte(inValue);
                 }
                 if (outtype == EzyTypes.PRIMITVE_DOUBLE)
                 {
-                    return (T)(Object)Convert.ToDouble(inValue);
+                    return (Object)Convert.ToDouble(inValue);
                 }
                 if (outtype == EzyTypes.PRIMITVE_FLOAT)
                 {
-                    return (T)(Object)Convert.ToSingle(inValue);
+                    return (Object)Convert.ToSingle(inValue);
                 }
                 if (outtype == EzyTypes.PRIMITVE_INT)
                 {
-                    return (T)(Object)Convert.ToInt32(inValue);
+                    return (Object)Convert.ToInt32(inValue);
                 }
                 if (outtype == EzyTypes.PRIMITVE_LONG)
                 {
-                    return (T)value;
+                    return value;
                 }
                 if (outtype == EzyTypes.PRIMITVE_SHORT)
                 {
-                    return (T)(Object)Convert.ToInt16(inValue);
+                    return (Object)Convert.ToInt16(inValue);
                 }
             }
             else if (intype == EzyTypes.PRIMITVE_SHORT)
@@ -244,35 +248,35 @@ namespace com.tvd12.ezyfoxserver.client.io
                 short inValue = (short)value;
                 if (outtype == EzyTypes.PRIMITVE_SBYTE)
                 {
-                    return (T)(Object)Convert.ToSByte(inValue);
+                    return (Object)Convert.ToSByte(inValue);
                 }
                 if (outtype == EzyTypes.PRIMITVE_BYTE)
                 {
-                    return (T)(Object)Convert.ToByte(inValue);
+                    return (Object)Convert.ToByte(inValue);
                 }
                 if (outtype == EzyTypes.PRIMITVE_DOUBLE)
                 {
-                    return (T)(Object)Convert.ToDouble(inValue);
+                    return (Object)Convert.ToDouble(inValue);
                 }
                 if (outtype == EzyTypes.PRIMITVE_FLOAT)
                 {
-                    return (T)(Object)Convert.ToDouble(inValue);
+                    return (Object)Convert.ToDouble(inValue);
                 }
                 if (outtype == EzyTypes.PRIMITVE_INT)
                 {
-                    return (T)(Object)Convert.ToInt32(inValue);
+                    return (Object)Convert.ToInt32(inValue);
                 }
                 if (outtype == EzyTypes.PRIMITVE_LONG)
                 {
-                    return (T)(Object)Convert.ToInt64(inValue);
+                    return (Object)Convert.ToInt64(inValue);
                 }
                 if (outtype == EzyTypes.PRIMITVE_SHORT)
                 {
-                    return (T)value;
+                    return value;
                 }
             }
 
-            return (T)value;
+            return value;
         }
     }
 }

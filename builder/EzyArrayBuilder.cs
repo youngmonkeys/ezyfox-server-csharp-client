@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using com.tvd12.ezyfoxserver.client.io;
 using com.tvd12.ezyfoxserver.client.entity;
@@ -38,6 +39,12 @@ namespace com.tvd12.ezyfoxserver.client.builder
 			{
 				product.add(v);
 			}
+			return this;
+		}
+
+		public EzyArrayBuilder appendRawList(IList values)
+		{
+			product.addRawList(values);
 			return this;
 		}
 

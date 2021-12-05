@@ -14,9 +14,9 @@ namespace com.tvd12.ezyfoxserver.client.util
 			return INSTANCE;
 		}
 
-		public IDictionary<K, V> toMap<K, V>(EzyObject obj)
+		public Dictionary<K, V> toMap<K, V>(EzyObject obj)
 		{
-			IDictionary<K, V> answer = new Dictionary<K, V>();
+			Dictionary<K, V> answer = new Dictionary<K, V>();
 			foreach (Object key in obj.keys())
 			{
 				Object value = obj.get<Object>(key);

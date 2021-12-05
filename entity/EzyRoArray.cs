@@ -13,6 +13,8 @@ namespace com.tvd12.ezyfoxserver.client.entity
 
 		T get<T>(int index, T defValue);
 
+		Object getByOutType(int index, Type outType);
+
 		List<T> toList<T>();
 	}
 }

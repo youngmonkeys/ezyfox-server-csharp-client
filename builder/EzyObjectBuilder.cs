@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using com.tvd12.ezyfoxserver.client.io;
 using com.tvd12.ezyfoxserver.client.entity;
@@ -23,6 +24,12 @@ namespace com.tvd12.ezyfoxserver.client.builder
 		public EzyObjectBuilder append(Object key, Object value)
 		{
 			product.put(key, value);
+			return this;
+		}
+
+		public EzyObjectBuilder appendRawDict(IDictionary dict)
+		{
+			product.putRawDict(dict);
 			return this;
 		}
 
