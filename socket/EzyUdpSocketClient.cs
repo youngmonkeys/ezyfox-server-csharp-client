@@ -10,6 +10,7 @@ using com.tvd12.ezyfoxserver.client.entity;
 using com.tvd12.ezyfoxserver.client.constant;
 using com.tvd12.ezyfoxserver.client.exception;
 using static com.tvd12.ezyfoxserver.client.constant.EzySocketStatuses;
+using com.tvd12.ezyfoxserver.client.statistics;
 
 namespace com.tvd12.ezyfoxserver.client.socket
 {
@@ -25,6 +26,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
         protected readonly EzyResponseApi responseApi;
         protected readonly EzyCodecFactory codecFactory;
         protected readonly EzyValueStack<EzySocketStatus> socketStatuses;
+        protected EzyStatistics networkStatistics;
 
         public EzyUdpSocketClient(EzyCodecFactory codecFactory) {
             this.codecFactory = codecFactory;
@@ -76,6 +78,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
             {
                 clearAdapters();
                 createAdapters();
+                addNetworkStatisticsAdapers();
                 updateAdapters();
                 closeSocket();
                 packetQueue.clear();
@@ -133,6 +136,17 @@ namespace com.tvd12.ezyfoxserver.client.socket
         {
             this.socketReader = new EzyUdpSocketReader();
             this.socketWriter = new EzyUdpSocketWriter();
+        }
+
+        public void setNetworkStatistics(EzyStatistics networkStatistics)
+        {
+            this.networkStatistics = networkStatistics;
+        }
+
+        protected void addNetworkStatisticsAdapers()
+        {
+            socketReader.setNetworkStatistics(networkStatistics);
+            socketWriter.setNetworkStatistics(networkStatistics);
         }
 
         protected void updateAdapters()

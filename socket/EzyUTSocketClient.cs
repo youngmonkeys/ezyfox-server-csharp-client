@@ -1,6 +1,7 @@
 ﻿using System;
 using com.tvd12.ezyfoxserver.client.entity;
 using com.tvd12.ezyfoxserver.client.constant;
+using com.tvd12.ezyfoxserver.client.statistics;
 
 namespace com.tvd12.ezyfoxserver.client.socket
 {
@@ -11,6 +12,13 @@ namespace com.tvd12.ezyfoxserver.client.socket
         public EzyUTSocketClient() : base()
         {
             this.udpClient = new EzyUdpSocketClient(codecFactory);
+        }
+
+        public override void setNetworkStatistics(EzyStatistics networkStatistics)
+        {
+            base.setNetworkStatistics(networkStatistics);
+
+            this.udpClient.setNetworkStatistics(networkStatistics);
         }
 
         public void udpConnect(int port)

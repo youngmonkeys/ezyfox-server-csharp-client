@@ -42,6 +42,9 @@ namespace com.tvd12.ezyfoxserver.client.socket
                     return;
                 byte[] binary = EzyBytes.copyBytes(readBytes, bytesToRead);
                 decoder.decode(binary, decodeBytesCallback);
+
+                networkStatistics.getSocketStats().getNetworkStats().addReadBytes(binary.Length);
+                networkStatistics.getSocketStats().getNetworkStats().addReadPackets(1);
             }
 			
 		}

@@ -44,14 +44,19 @@ namespace com.tvd12.ezyfoxserver.client.socket
                     if (bytesToRead <= 0)
                         return;
                     handleReceivedBytes(binary);
+
+                    networkStatistics.getSocketStats().getNetworkStats().addReadBytes(binary.Length);
+                    networkStatistics.getSocketStats().getNetworkStats().addReadPackets(1);
                 }
                 catch (SocketException e) {
                     logger.warn("I/O error at socket-reader: " + e.Message);
+                    networkStatistics.getSocketStats().getNetworkStats().addReadPackets(1);
                     return;
                 }
                 catch (Exception e)
                 {
                     logger.warn("I/O error at socket-reader", e);
+                    networkStatistics.getSocketStats().getNetworkStats().addReadPackets(1);
                     return;
                 }
             }

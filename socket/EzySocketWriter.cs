@@ -1,4 +1,6 @@
-﻿namespace com.tvd12.ezyfoxserver.client.socket
+﻿using com.tvd12.ezyfoxserver.client.entity;
+
+namespace com.tvd12.ezyfoxserver.client.socket
 {
     public abstract class EzySocketWriter : EzySocketAdapter
 	{
@@ -14,9 +16,13 @@
                 if (packet == null)
                     return;
                 int writtenBytes = writeToSocket(packet);
+                
                 packet.release();
                 if (writtenBytes <= 0)
                     return;
+
+                networkStatistics.getSocketStats().getNetworkStats().addWrittenPackets(1);
+                networkStatistics.getSocketStats().getNetworkStats().addWrittenBytes(writtenBytes);
             }
         }
 
