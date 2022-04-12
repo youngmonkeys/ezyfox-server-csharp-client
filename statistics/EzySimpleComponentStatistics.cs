@@ -16,7 +16,7 @@
 
         public EzySimpleComponentStatistics()
         {
-            networkStats = newNetworkStats();
+            this.networkStats = newNetworkStats();
         }
     }
 }

@@ -17,7 +17,6 @@ namespace com.tvd12.ezyfoxserver.client.socket
         public override void setNetworkStatistics(EzyStatistics networkStatistics)
         {
             base.setNetworkStatistics(networkStatistics);
-
             this.udpClient.setNetworkStatistics(networkStatistics);
         }
 

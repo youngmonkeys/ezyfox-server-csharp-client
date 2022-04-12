@@ -2,6 +2,5 @@
 {
     public interface EzyNetworkStats : EzyNetworkRoStats, EzyNetworkBytesStats, EzyNetworkPacketsStats
     {
-        
     }
 }
