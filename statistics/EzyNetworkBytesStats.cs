@@ -2,8 +2,8 @@
 {
     public interface EzyNetworkBytesStats : EzyNetworkRoBytesStats
     {
-        void addReadBytes(long var1);
+        void addReadBytes(long bytes);
 
-        void addWrittenBytes(long var1);
+        void addWrittenBytes(long bytes);
     }
 }
