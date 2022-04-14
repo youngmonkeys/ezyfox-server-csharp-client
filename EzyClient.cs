@@ -6,6 +6,7 @@ using com.tvd12.ezyfoxserver.client.manager;
 using com.tvd12.ezyfoxserver.client.config;
 using com.tvd12.ezyfoxserver.client.constant;
 using com.tvd12.ezyfoxserver.client.request;
+using com.tvd12.ezyfoxserver.client.statistics;
 
 namespace com.tvd12.ezyfoxserver.client
 {
@@ -74,5 +75,6 @@ namespace com.tvd12.ezyfoxserver.client
 
 		EzyHandlerManager getHandlerManager();
 
-	}
+        EzyStatistics getNetworkStatistics();
+    }
 }

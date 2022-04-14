@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Threading;
+
+using com.tvd12.ezyfoxserver.client.statistics;
 using com.tvd12.ezyfoxserver.client.util;
 namespace com.tvd12.ezyfoxserver.client.socket
 {
@@ -8,6 +10,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
         protected volatile bool active;
         protected volatile bool stopped;
         protected readonly Object adapterLock;
+        protected EzyStatistics networkStatistics;
 
         public EzySocketAdapter()
         {
@@ -83,6 +86,11 @@ namespace com.tvd12.ezyfoxserver.client.socket
             {
                 return stopped;
             }
+        }
+
+        public void setNetworkStatistics(EzyStatistics networkStatistics)
+        {
+            this.networkStatistics = networkStatistics;
         }
     }
 }

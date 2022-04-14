@@ -9,6 +9,7 @@ using com.tvd12.ezyfoxserver.client.manager;
 using com.tvd12.ezyfoxserver.client.request;
 using com.tvd12.ezyfoxserver.client.socket;
 using static com.tvd12.ezyfoxserver.client.constant.EzyConnectionStatuses;
+using com.tvd12.ezyfoxserver.client.statistics;
 
 namespace com.tvd12.ezyfoxserver.client
 {
@@ -26,6 +27,7 @@ namespace com.tvd12.ezyfoxserver.client
         protected readonly EzyClientConfig config;
         protected readonly EzyPingManager pingManager;
         protected readonly EzyHandlerManager handlerManager;
+        protected readonly EzyStatistics networkStatistics;
         protected readonly EzyRequestSerializer requestSerializer;
 
         protected EzyConnectionStatus status;
@@ -45,6 +47,7 @@ namespace com.tvd12.ezyfoxserver.client
             this.pingManager = new EzySimplePingManager(config.getPing());
 			this.pingSchedule = new EzyPingSchedule(this);
             this.handlerManager = new EzySimpleHandlerManager(this);
+            this.networkStatistics = new EzySimpleStatistics();
             this.requestSerializer = new EzySimpleRequestSerializer();
             this.settingUp = new EzySimpleSetup(handlerManager);
             this.unloggableCommands = newUnloggableCommands();
@@ -65,6 +68,7 @@ namespace com.tvd12.ezyfoxserver.client
             EzyTcpSocketClient client = newTcpSocketClient();
             client.setPingSchedule(pingSchedule);
             client.setPingManager(pingManager);
+            client.setNetworkStatistics(networkStatistics);
             client.setHandlerManager(handlerManager);
             client.setReconnectConfig(config.getReconnect());
             client.setUnloggableCommands(unloggableCommands);
@@ -308,6 +312,11 @@ namespace com.tvd12.ezyfoxserver.client
         {
             throw new InvalidOperationException("only support TCP, use EzyUTClient instead");
         }
-	}
+
+        public EzyStatistics getNetworkStatistics()
+        {
+            return networkStatistics;
+        }
+    }
 
 }
