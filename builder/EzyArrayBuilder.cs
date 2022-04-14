@@ -63,6 +63,5 @@ namespace com.tvd12.ezyfoxserver.client.builder
 		{
 			return new EzyArray(inputTransformer, outputTransformer);
 		}
-
 	}
 }

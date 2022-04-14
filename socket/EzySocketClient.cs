@@ -176,8 +176,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
 
         protected abstract void closeSocket();
 
-        public virtual void
-            onDisconnected(int reason)
+        public virtual void onDisconnected(int reason)
         {
             pingSchedule.stop();
             packetQueue.clear();

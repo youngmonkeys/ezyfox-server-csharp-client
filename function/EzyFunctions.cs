@@ -7,6 +7,4 @@ namespace com.tvd12.ezyfoxserver.client.function
 	public delegate Object EzyToObject<I>(I input);
 
 	public delegate O EzyParser<I,O>(I input);
-
-
 }
