@@ -13,22 +13,17 @@ namespace com.tvd12.ezyfoxserver.client.socket
 {
     public abstract class EzySocketReader : EzySocketAdapter
 	{
-        protected EzyQueue<EzyArray> dataQueue;
         protected EzySocketDataDecoder decoder;
         protected readonly int readBufferSize;
+        protected readonly EzyQueue<EzyArray> dataQueue;
         protected readonly EzyCallback<EzyMessage> decodeBytesCallback;
 
         public EzySocketReader()
 		{
+            this.dataQueue = new EzySynchronizedQueue<EzyArray>();
             this.readBufferSize = EzySocketConstants.MAX_READ_BUFFER_SIZE;
             this.decodeBytesCallback = message => onMesssageReceived(message);
 		}
-
-        protected override void run()
-        {
-            this.dataQueue = new EzySynchronizedQueue<EzyArray>();
-            base.run();
-        }
 
         protected override void update()
 		{

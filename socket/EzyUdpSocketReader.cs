@@ -12,22 +12,17 @@ namespace com.tvd12.ezyfoxserver.client.socket
 {
     public class EzyUdpSocketReader : EzySocketAdapter
     {
-        protected readonly int readBufferSize;
-        protected EzyQueue<EzyArray> dataQueue;
         protected EzySocketDataDecoder decoder;
         protected UdpClient datagramChannel;
         protected IPEndPoint serverEndPoint;
+        protected readonly int readBufferSize;
+        protected readonly EzyQueue<EzyArray> dataQueue;
 
         public EzyUdpSocketReader() : base()
         {
-            this.readBufferSize = EzySocketConstants.MAX_READ_BUFFER_SIZE;
-        }
-
-        protected override void run()
-        {
             this.dataQueue = new EzySynchronizedQueue<EzyArray>();
             this.serverEndPoint = new IPEndPoint(IPAddress.Any, 0);
-            base.run();
+            this.readBufferSize = EzySocketConstants.MAX_READ_BUFFER_SIZE;
         }
 
         protected override void update()
