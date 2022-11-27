@@ -4,8 +4,10 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="reflection\" />
+    <None Remove="support\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="binding\" />
+    <Folder Include="support\" />
   </ItemGroup>
 </Project>

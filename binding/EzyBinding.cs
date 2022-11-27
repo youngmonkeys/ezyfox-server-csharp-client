@@ -120,6 +120,11 @@ namespace com.tvd12.ezyfoxserver.client.binding
         {
             return unmarshaller.unmarshall<T>(input);
         }
+
+        public object unmarshall(object input, Type outType)
+        {
+            return unmarshaller.unmarshallByOutType(input, outType);
+        }
     }
 
     public class EzyBindingBuilder
