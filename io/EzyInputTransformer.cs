@@ -31,6 +31,10 @@ namespace com.tvd12.ezyfoxserver.client.io
 				}
 				return obj;
 			}
+			if (value is byte[])
+			{
+				return value;
+			}
 			if (value is ICollection)
 			{
 				IEnumerable collection = (IEnumerable)value;
