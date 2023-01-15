@@ -11,13 +11,8 @@ namespace com.tvd12.ezyfoxserver.client.unity
 		{
 			private EzySocketProxy socketProxy;
 			private EzyAppProxy appProxy;
-
-			protected override void setupLogger(EzyLoggerLevel loggerLevel)
-			{
-				EzyLoggerFactory.setLoggerLevel(loggerLevel);
-				EzyLoggerFactory.setLoggerSupply(type => new UnityLogger(type));
-				logger = EzyLoggerFactory.getLogger<EzyDefaultSocketManager>();
-			}
+			
+			private readonly EzyLogger logger = EzyUnityLoggerManager.getInstance().getLogger(typeof(EzyDefaultSocketManager));
 
 			protected override void setupSocketProxy()
 			{

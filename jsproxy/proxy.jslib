@@ -1,4 +1,4 @@
-var EzyPlugin = {
+var EzyFoxServerClientPlugin = {
     $ezy: {
         client: null,
         setup: null,
@@ -10,7 +10,7 @@ var EzyPlugin = {
         handlersByCommand: {}
     },
 
-    initWebsocketProxy: function (zoneName, appName) {
+    init: function (zoneName, appName) {
         ezy.zoneName = UTF8ToString(zoneName);
         ezy.appName = UTF8ToString(appName);
 
@@ -82,5 +82,5 @@ var EzyPlugin = {
     },
 };
 
-autoAddDeps(EzyPlugin, '$ezy');
-mergeInto(LibraryManager.library, EzyPlugin);
+autoAddDeps(EzyFoxServerClientPlugin, '$ezy');
+mergeInto(LibraryManager.library, EzyFoxServerClientPlugin);

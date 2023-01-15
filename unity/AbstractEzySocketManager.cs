@@ -8,10 +8,11 @@ namespace com.tvd12.ezyfoxserver.client.unity
 {
 	public abstract class AbstractEzySocketManager
 	{
-		protected readonly SocketConfigVariable socketConfig = (SocketConfigVariable)Resources.Load("SocketConfig");
-		protected EzyLogger logger;
+		protected readonly SocketConfigVariable socketConfig = (SocketConfigVariable)Resources.Load("EzySocketConfig");
 		protected EzyAppProxyDataHandler<Object> appAccessedHandler;
 		protected EzySocketProxyDataHandler<Object> loginSuccessHandler;
+		
+		private readonly EzyLogger logger = EzyUnityLoggerManager.getInstance().getLogger(typeof(AbstractEzySocketManager));
 
 		protected AbstractEzySocketManager()
 		{
@@ -20,15 +21,11 @@ namespace com.tvd12.ezyfoxserver.client.unity
 
 		void init()
 		{
-			Debug.Log("Initializing EzySocketManager");
-			// Enable EzyLogger
-			setupLogger(socketConfig.Value.LoggerLevel);
-
+			logger.debug("Initializing EzySocketManager");
+			
 			// Set up socket proxy and app proxy
 			setupSocketProxy();
 		}
-
-		protected abstract void setupLogger(EzyLoggerLevel loggerLevel);
 
 		protected abstract void setupSocketProxy();
 

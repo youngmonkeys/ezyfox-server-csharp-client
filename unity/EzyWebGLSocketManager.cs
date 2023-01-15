@@ -18,6 +18,8 @@ namespace com.tvd12.ezyfoxserver.client.unity
 
 			private readonly IDictionary<String, IDictionary<Object, AppProxyDataHandler>>
 				appHandlersByCommand = new Dictionary<String, IDictionary<Object, AppProxyDataHandler>>();
+			
+			private readonly EzyLogger logger = EzyUnityLoggerManager.getInstance().getLogger(typeof(EzyWebGLSocketManager));
 
 			private EzySocketProxy socketProxy;
 			private EzyAppProxy appProxy;
@@ -26,7 +28,7 @@ namespace com.tvd12.ezyfoxserver.client.unity
 			private static extern void addCommand(String command, HandleDelegate callback);
 
 			[DllImport("__Internal")]
-			private static extern void initWebsocketProxy(String zoneName, String appName);
+			private static extern void init(String zoneName, String appName);
 
 			[DllImport("__Internal")]
 			private static extern void clientConnect(String host, String username, String password, NoArgDelegate callback);
@@ -37,23 +39,17 @@ namespace com.tvd12.ezyfoxserver.client.unity
 			[DllImport("__Internal")]
 			private static extern void sendCommandData(String command, String dataJson);
 
-			protected override void setupLogger(EzyLoggerLevel loggerLevel)
-			{
-				EzyLoggerFactory.setLoggerLevel(loggerLevel);
-				EzyLoggerFactory.setLoggerSupply(type => new UnityLogger(type));
-				logger = EzyLoggerFactory.getLogger<EzyWebGLSocketManager>();
-			}
-
 			protected override void setupSocketProxy()
 			{
 				logger.debug("Setting up socket proxy");
-				initWebsocketProxy(socketConfig.Value.ZoneName, socketConfig.Value.AppName);
+				init(socketConfig.Value.ZoneName, socketConfig.Value.AppName);
 			}
 
 			public override void login(
 				String host,
 				String username,
-				String password)
+				String password
+			)
 			{
 				clientConnect(host, username, password, staticAppAccessedCallback);
 			}
