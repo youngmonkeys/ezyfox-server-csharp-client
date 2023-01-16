@@ -157,10 +157,14 @@ namespace com.tvd12.ezyfoxserver.client.support
                     .zoneName(zoneName)
                     .build();
                 EzyClients clients = EzyClients.getInstance();
-                this.client = transportType == EzyTransportType.UDP
-                    ? new EzyUTClient(clientConfig)
-                    : new EzyTcpClient(clientConfig);
-                clients.addClient(client);
+                this.client = clients.getClient(zoneName);
+                if (client == null)
+                {
+                    this.client = transportType == EzyTransportType.UDP
+                        ? new EzyUTClient(clientConfig)
+                        : new EzyTcpClient(clientConfig);
+                    clients.addClient(client);
+                }
                 DisconnectionHandler disconnectionHandler = new DisconnectionHandler(this);
                 client.setup()
                     .addEventHandler(EzyEventType.DISCONNECTION, disconnectionHandler)
