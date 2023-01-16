@@ -5,7 +5,7 @@ using com.tvd12.ezyfoxserver.client.concurrent;
 
 namespace com.tvd12.ezyfoxserver.client.support
 {
-    public class SocketProxyManager
+    public class EzySocketProxyManager
     {
         private EzyBinding binding;
         private String defaultZoneName;
@@ -13,14 +13,14 @@ namespace com.tvd12.ezyfoxserver.client.support
         private readonly AtomicBoolean inited = new AtomicBoolean();
         private readonly IDictionary<String, EzySocketProxy> socketProxyByZoneName;
 
-        private static readonly SocketProxyManager INSTANCE = new SocketProxyManager();
+        private static readonly EzySocketProxyManager INSTANCE = new EzySocketProxyManager();
 
-        private SocketProxyManager()
+        private EzySocketProxyManager()
         {
             socketProxyByZoneName = new Dictionary<String, EzySocketProxy>();
         }
 
-        public static SocketProxyManager getInstance()
+        public static EzySocketProxyManager getInstance()
         {
             return INSTANCE;
         }
