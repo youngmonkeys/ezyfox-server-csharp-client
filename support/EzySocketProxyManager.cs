@@ -38,6 +38,11 @@ namespace com.tvd12.ezyfoxserver.client.support
             }
         }
 
+        public bool hasInited()
+        {
+            return inited.get();
+        }
+
         public void setDefaultZoneName(String defaultZoneName)
         {
             this.defaultZoneName = defaultZoneName;
