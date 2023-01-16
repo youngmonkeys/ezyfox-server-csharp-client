@@ -165,9 +165,8 @@ namespace com.tvd12.ezyfoxserver.client.support
                         : new EzyTcpClient(clientConfig);
                     clients.addClient(client);
                 }
-                DisconnectionHandler disconnectionHandler = new DisconnectionHandler(this);
                 client.setup()
-                    .addEventHandler(EzyEventType.DISCONNECTION, disconnectionHandler)
+                    .addEventHandler(EzyEventType.DISCONNECTION, new DisconnectionHandler(this))
                     .addEventHandler(EzyEventType.LOST_PING, new PingLostHandler(this))
                     .addDataHandler(EzyCommand.HANDSHAKE, new HandshakeEventHandler(this))
                     .addDataHandler(EzyCommand.LOGIN, new LoginSuccessHandler(this))

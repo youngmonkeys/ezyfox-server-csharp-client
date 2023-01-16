@@ -76,5 +76,7 @@ namespace com.tvd12.ezyfoxserver.client
 		EzyHandlerManager getHandlerManager();
 
         EzyStatistics getNetworkStatistics();
+
+        EzyTransportType getTransportType();
     }
 }

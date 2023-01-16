@@ -317,6 +317,11 @@ namespace com.tvd12.ezyfoxserver.client
         {
             return networkStatistics;
         }
+
+        public virtual EzyTransportType getTransportType()
+        {
+            return EzyTransportType.TCP;
+        }
     }
 
 }
