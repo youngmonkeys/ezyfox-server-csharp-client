@@ -44,5 +44,10 @@ namespace com.tvd12.ezyfoxserver.client
                 printSentData(cmd, data);
             }
         }
+
+        public override EzyTransportType getTransportType()
+        {
+            return EzyTransportType.UDP;
+        }
     }
 }

@@ -15,7 +15,9 @@ namespace com.tvd12.ezyfoxserver.client
 	{
         EzySetup setup();
 
-		void connect(String host, int port);
+        void connect(String url);
+
+        void connect(String host, int port);
 
 		bool reconnect();
 
@@ -76,5 +78,7 @@ namespace com.tvd12.ezyfoxserver.client
 		EzyHandlerManager getHandlerManager();
 
         EzyStatistics getNetworkStatistics();
+
+        EzyTransportType getTransportType();
     }
 }

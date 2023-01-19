@@ -84,6 +84,19 @@ namespace com.tvd12.ezyfoxserver.client
             return settingUp;
         }
 
+        public void connect(String url)
+        {
+            String host = url;
+            int port = 3005;
+            int lastIndex = url.IndexOf(":");
+            if (lastIndex > 0)
+            {
+                host = url.Substring(0, lastIndex);
+                port = Int32.Parse(url.Substring(lastIndex + 1));
+            }
+            connect(host, port);
+        }
+
 		public void connect(String host, int port)
 		{
 			try
@@ -316,6 +329,11 @@ namespace com.tvd12.ezyfoxserver.client
         public EzyStatistics getNetworkStatistics()
         {
             return networkStatistics;
+        }
+
+        public virtual EzyTransportType getTransportType()
+        {
+            return EzyTransportType.TCP;
         }
     }
 
