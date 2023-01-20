@@ -26,7 +26,7 @@ namespace com.tvd12.ezyfoxserver.client.binding
                         "yyyy-MM-dd'T'HH:mm:ss:fff",
                         CultureInfo.InvariantCulture);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     return DateTime.ParseExact(
                         (string)value,

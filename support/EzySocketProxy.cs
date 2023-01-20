@@ -29,6 +29,7 @@ namespace com.tvd12.ezyfoxserver.client.support
         private readonly String zoneName;
         private readonly EzyBinding binding;
         private readonly AtomicBoolean inited;
+        private readonly EzyAppFactory appFactory;
         private readonly IDictionary<String, EzyAppProxy> appProxyByName;
         private readonly IDictionary<Object, DataHandler> loginSuccessHandlers;
         private readonly IDictionary<Object, DataHandler> loginErrorHandlers;
@@ -37,10 +38,21 @@ namespace com.tvd12.ezyfoxserver.client.support
         private readonly IDictionary<Object, EventHandler> reconnectingHandlers;
         private readonly IDictionary<Object, EventHandler> pingLostHandlers;
 
-        public EzySocketProxy(String zoneName, EzyBinding binding)
+        public EzySocketProxy(
+            String zoneName,
+            EzyBinding binding
+        ): this(zoneName, binding, null)
+        {}
+
+        public EzySocketProxy(
+            String zoneName,
+            EzyBinding binding,
+            EzyAppFactory appFactory
+        )
         {
             this.zoneName = zoneName;
             this.binding = binding;
+            this.appFactory = appFactory;
             this.inited = new AtomicBoolean();
             this.transportType = EzyTransportType.TCP;
             this.appProxyByName = new Dictionary<String, EzyAppProxy>();
@@ -385,6 +397,15 @@ namespace com.tvd12.ezyfoxserver.client.support
             public AppAccessHandler(EzySocketProxy parent)
             {
                 this.parent = parent;
+            }
+
+            protected override EzyApp newApp(EzyZone zone, EzyArray data)
+            {
+                int appId = data.get<int>(0);
+                String appName = data.get<String>(1);
+                return parent.appFactory == null
+                    ? new EzySimpleApp(zone, appId, appName)
+                    : parent.appFactory.newApp(zone, appId, appName);
             }
 
             protected override void postHandle(EzyApp app, EzyArray appData)
