@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using com.tvd12.ezyfoxserver.client.binding;
 using com.tvd12.ezyfoxserver.client.concurrent;
+using com.tvd12.ezyfoxserver.client.factory;
 
 namespace com.tvd12.ezyfoxserver.client.support
 {
     public class EzySocketProxyManager
     {
         private EzyBinding binding;
+        private EzyAppFactory appFactory;
         private String defaultZoneName;
         private EzySocketProxy defaultSocketProxy;
         private readonly AtomicBoolean inited = new AtomicBoolean();
@@ -43,6 +45,11 @@ namespace com.tvd12.ezyfoxserver.client.support
             return inited.get();
         }
 
+        public void setAppFactory(EzyAppFactory appFactory)
+        {
+            this.appFactory = appFactory;
+        }
+
         public void setDefaultZoneName(String defaultZoneName)
         {
             this.defaultZoneName = defaultZoneName;
@@ -68,7 +75,8 @@ namespace com.tvd12.ezyfoxserver.client.support
                 {
                     EzySocketProxy socketProxy = new EzySocketProxy(
                         zoneName,
-                        binding
+                        binding,
+                        appFactory
                     );
                     socketProxyByZoneName[zoneName] = socketProxy;
                     if (defaultSocketProxy == null)
