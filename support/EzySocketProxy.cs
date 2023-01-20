@@ -40,12 +40,6 @@ namespace com.tvd12.ezyfoxserver.client.support
 
         public EzySocketProxy(
             String zoneName,
-            EzyBinding binding
-        ): this(zoneName, binding, null)
-        {}
-
-        public EzySocketProxy(
-            String zoneName,
             EzyBinding binding,
             EzyAppFactory appFactory
         )
