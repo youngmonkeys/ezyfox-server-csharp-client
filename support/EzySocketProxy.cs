@@ -171,6 +171,10 @@ namespace com.tvd12.ezyfoxserver.client.support
                         : new EzyTcpClient(clientConfig);
                     clients.addClient(client);
                 }
+                else
+                {
+                    this.transportType = client.getTransportType();
+                }
                 client.setup()
                     .addEventHandler(EzyEventType.DISCONNECTION, new DisconnectionHandler(this))
                     .addEventHandler(EzyEventType.LOST_PING, new PingLostHandler(this))
