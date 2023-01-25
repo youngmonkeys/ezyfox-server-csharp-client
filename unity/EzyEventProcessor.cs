@@ -2,9 +2,12 @@
 
 namespace com.tvd12.ezyfoxserver.client.unity
 {
-	public class EzyDefaultSocketEventProcessor : MonoBehaviour
+	public class EzyEventProcessor : MonoBehaviour
 	{
-		private static EzyDefaultSocketEventProcessor INSTANCE;
+		private static EzyEventProcessor INSTANCE;
+		
+		[SerializeField]
+		private EzySocketConfigVariable socketConfig;
 
 		private void Awake()
 		{
@@ -23,8 +26,12 @@ namespace com.tvd12.ezyfoxserver.client.unity
 		void Update()
 		{
 			// Main thread pulls data from socket
-			EzySingletonSocketManager.getInstance()
+#if UNITY_WEBGL && !UNITY_EDITOR
+#else
+			EzyClients.getInstance()
+				.getClient(socketConfig.Value.ZoneName)
 				.processEvents();
+#endif
 		}
 	}
 }

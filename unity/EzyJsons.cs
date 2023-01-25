@@ -8,9 +8,9 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Object = System.Object;
 
-namespace com.tvd12.ezyfoxserver.client.unity
+namespace com.tvd12.ezyfoxserver.client.util
 {
-	public static class EzyJsonUtils
+	public static class EzyJsons
 	{
 		public static String serialize(Object obj)
 		{

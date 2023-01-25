@@ -3,6 +3,7 @@
 	public enum EzyTransportType
 	{
 		TCP = 1,
-		UDP = 2
+		UDP = 2,
+		WS = 3
 	}
 }

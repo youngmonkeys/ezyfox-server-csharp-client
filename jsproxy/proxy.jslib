@@ -7,79 +7,113 @@ var EzyFoxServerClientPlugin = {
         accessAppHandler: null,
         zoneName: null,
         appName: null,
-        handlersByCommand: {}
-    },
+        eventHandlerCallback: null,
+        dataHandlerCallback: null,
+        toUTF8: function (s) {
+            var sLength = lengthBytesUTF8(s) + 1;
+            var sPtr = _malloc(sLength);
+            stringToUTF8(s, sPtr, sLength);
+            return sPtr;
+        },
+        map: {
+            'init': function (clientName, jsonConfig, callback) {
+                var config = JSON.parse(jsonConfig);
+                config.getClientName = function () {
+                    return this.clientName;
+                }
+                var clients = EzyClients.getInstance();
+                ezy.client = clients.newClient(config);
+                ezy.setup = ezy.client.setup;
 
-    init: function (zoneName, appName) {
-        ezy.zoneName = UTF8ToString(zoneName);
-        ezy.appName = UTF8ToString(appName);
+                for (var ezyEventType in EzyEventType) {
+                    if (EzyEventType.hasOwnProperty(ezyEventType)) {
+                        var eventHandler = {"ezyEventType": ezyEventType, "clientName": clientName};
+                        eventHandler.handle = function (event) {
+                            var jsonData = event ? JSON.stringify(event) : "{}";
+                            console.log(this.clientName);
+                            console.log(this.ezyEventType);
+                            console.log(jsonData);
+                            dynCall_viii(
+                                ezy.eventHandlerCallback,
+                                ezy.toUTF8(this.clientName),
+                                ezy.toUTF8(this.ezyEventType),
+                                ezy.toUTF8(jsonData)
+                            );
+                        }
+                        ezy.setup.addEventHandler(ezyEventType, eventHandler);
+                    }
+                }
 
-        ezy.handshakeHandler = new EzyHandshakeHandler();
+                for (var commandId in EzyCommands) {
+                    if (EzyCommands.hasOwnProperty(commandId)) {
+                        var dataHandler = {"cmd": EzyCommands[commandId], "clientName": clientName};
+                        dataHandler.handle = function (data) {
+                            var jsonData = data ? JSON.stringify(data) : "{}";
+                            console.log(this.clientName);
+                            console.log(this.cmd);
+                            console.log(jsonData);
+                            dynCall_viii(
+                                ezy.dataHandlerCallback,
+                                ezy.toUTF8(this.clientName),
+                                this.cmd.id,
+                                ezy.toUTF8(jsonData)
+                            );
+                        }
+                        ezy.setup.addDataHandler(EzyCommands[commandId], dataHandler);
+                    }
+                }
 
-        var userLoginHandler = new EzyLoginSuccessHandler();
-        userLoginHandler.handleLoginSuccess = () => {
-            var appAccessRequest = [ezy.appName, []];
-            ezy.client.send(EzyCommand.APP_ACCESS, appAccessRequest);
+                dynCall_vii(callback, ezy.toUTF8(clientName), ezy.toUTF8(jsonConfig));
+            },
+            'connect': function (clientName, jsonData, callback) {
+                var data = JSON.parse(jsonData);
+                ezy.client.connect(data.url);
+            },
+            'reconnect': function (clientName, callback) {
+                console.log('reconnect: clientName = ' + clientName);
+                ezy.client.reconnect();
+            },
+            'disconnect': function (clientName, jsonData, callback) {
+                console.log('disconnect: clientName = ' + clientName + ', jsonData = ' + jsonData);
+                var data = JSON.parse(jsonData);
+                ezy.client.disconnect(data.reason);
+            },
+            'send': function (clientName, jsonData, callback) {
+                var data = JSON.parse(jsonData);
+                var cmd = EzyCommands[data.cmdId];
+                var sendData = data.data;
+                EzyClients.getInstance()
+                    .getClient(clientName)
+                    .send(cmd, sendData);
+            },
         }
-
-        ezy.accessAppHandler = new EzyAppAccessHandler();
-
-        var disconnectionHandler = new EzyDisconnectionHandler();
-        disconnectionHandler.preHandle = function (event) {
-        }
-
-        var config = new EzyClientConfig;
-        config.zoneName = ezy.zoneName;
-        var clients = EzyClients.getInstance();
-        ezy.client = clients.newDefaultClient(config);
-        ezy.setup = ezy.client.setup;
-        ezy.setup.addEventHandler(EzyEventType.DISCONNECTION, disconnectionHandler);
-        ezy.setup.addDataHandler(EzyCommand.HANDSHAKE, ezy.handshakeHandler);
-        ezy.setup.addDataHandler(EzyCommand.LOGIN, userLoginHandler);
-        ezy.setup.addDataHandler(EzyCommand.APP_ACCESS, ezy.accessAppHandler);
-        ezy.setupApp = ezy.setup.setupApp(ezy.appName);
     },
 
-    clientConnect: function (host, username, password, onAppAccessedCallbackPtr) {
-        var usernameString = UTF8ToString(username);
-        var passwordString = UTF8ToString(password);
-        var hostString = UTF8ToString(host);
-        ezy.handshakeHandler.getLoginRequest = function (context) {
-            return [ezy.zoneName, usernameString, passwordString, []];
-        }
-        ezy.accessAppHandler.postHandle = (app, data) => {
-            dynCall_v(onAppAccessedCallbackPtr);
-        }
-        ezy.client.connect("ws://" + hostString + ":2208/ws");
+    setEventHandlerCallback: function (callback) {
+        ezy.eventHandlerCallback = callback;
+    },
+    
+    setDataHandlerCallback: function (callback) {
+        ezy.dataHandlerCallback = callback;
     },
 
-    addCommand: function (command, callbackPtr) {
-        var commandString = UTF8ToString(command);
-        var lenCommand = lengthBytesUTF8(commandString) + 1;
-        var ptrCommand = _malloc(lenCommand);
-        stringToUTF8(commandString, ptrCommand, lenCommand);
-
-        var handler = (app, data) => {
-            var dataJson = JSON.stringify(data);
-            var len = lengthBytesUTF8(dataJson) + 1;
-            var ptr = _malloc(len);
-            stringToUTF8(dataJson, ptr, len);
-            dynCall_vii(callbackPtr, ptrCommand, ptr);
-        }
-        ezy.setupApp.addDataHandler(commandString, handler);
+    run4: function (clientName, functionName, jsonData, callback) {
+        var clientNameString = UTF8ToString(clientName);
+        var functionNameString = UTF8ToString(functionName);
+        var jsonDataString = UTF8ToString(jsonData);
+        console.log(
+            'run4(clientName=' + clientNameString + ', functionName=' +
+            functionNameString + ', jsonData=' + jsonDataString + ')'
+        );
+        ezy.map[functionNameString](clientNameString, jsonDataString, callback);
     },
 
-    sendCommand: function (command) {
-        var commandString = UTF8ToString(command);
-        ezy.client.getApp().send(commandString, {});
-    },
-
-    sendCommandData: function (command, dataJson) {
-        var commandString = UTF8ToString(command);
-        var dataJsonString = UTF8ToString(dataJson);
-        var data = JSON.parse(dataJsonString);
-        ezy.client.getApp().send(commandString, data);
-    },
+    run3: function (clientName, functionName, callback) {
+        var clientNameString = UTF8ToString(clientName);
+        var functionNameString = UTF8ToString(functionName);
+        console.log('run3(clientName=' + clientNameString + ', functionName=' + functionNameString + ')');
+        ezy.map[functionNameString](clientNameString, callback);
+    }
 };
 
 autoAddDeps(EzyFoxServerClientPlugin, '$ezy');

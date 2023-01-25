@@ -1,12 +1,17 @@
 ﻿using com.tvd12.ezyfoxserver.client.builder;
+using Newtonsoft.Json;
 
 namespace com.tvd12.ezyfoxserver.client.config
 {
 	public class EzyReconnectConfig
 	{
-
+		[JsonProperty]
 		private readonly bool enable;
+		
+		[JsonProperty]
 		private readonly int maxReconnectCount;
+		
+		[JsonProperty]
 		private readonly int reconnectPeriod;
 
 		protected EzyReconnectConfig(Builder builder)

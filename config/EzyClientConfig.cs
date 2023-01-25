@@ -1,13 +1,21 @@
 ﻿using System;
 using com.tvd12.ezyfoxserver.client.builder;
+using Newtonsoft.Json;
 
 namespace com.tvd12.ezyfoxserver.client.config
 {
 	public class EzyClientConfig
 	{
-        protected readonly String zoneName;
-        protected readonly String clientName;
+		[JsonProperty]
+		protected readonly String zoneName;
+		
+		[JsonProperty]
+		protected readonly String clientName;
+		
+		[JsonProperty]
         protected readonly EzyReconnectConfig reconnect;
+        
+		[JsonProperty]
 		protected readonly EzyPingConfig ping;
 
 		protected EzyClientConfig(Builder builder)
