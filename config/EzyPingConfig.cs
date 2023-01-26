@@ -1,14 +1,11 @@
 ﻿using com.tvd12.ezyfoxserver.client.builder;
-using Newtonsoft.Json;
 
 namespace com.tvd12.ezyfoxserver.client.config
 {
     public class EzyPingConfig
     {
-		[JsonProperty]
+
         private readonly int pingPeriod;
-        
-		[JsonProperty]
         private readonly int maxLostPingCount;
 
         public EzyPingConfig(Builder builder)

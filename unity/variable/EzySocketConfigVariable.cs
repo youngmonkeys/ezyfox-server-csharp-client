@@ -1,4 +1,5 @@
 using System;
+using com.tvd12.ezyfoxserver.client.constant;
 using UnityEngine;
 
 namespace com.tvd12.ezyfoxserver.client.unity
@@ -24,11 +25,15 @@ namespace com.tvd12.ezyfoxserver.client.unity
 			[SerializeField]
 			private int udpPort;
 
+			[SerializeField]
+			private bool udpUsage;
+
 			public string ZoneName => zoneName;
 			public string AppName => appName;
 			public string WebSocketUrl => webSocketUrl;
 			public string TcpUrl => tcpUrl;
 			public int UdpPort => udpPort;
+			public bool UdpUsage => udpUsage;
 		}
 	}
 }

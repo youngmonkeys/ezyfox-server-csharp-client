@@ -8,12 +8,16 @@ namespace com.tvd12.ezyfoxserver.client.unity
 	{
 		[SerializeField]
 		private EzyLoggerLevel loggerLevel = EzyLoggerLevel.INFO;
+
+		[SerializeField]
+		private bool jsDebug;
 		
 		private static bool INITIALIZED = false;
 		
 		private void Awake()
 		{
 			EzyLoggerFactory.setLoggerLevel(loggerLevel);
+			EzyWSClient.setJsDebug(jsDebug);
 		}
 
 		public static EzyLogger getLogger(Type type)

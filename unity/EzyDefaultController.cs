@@ -36,7 +36,7 @@ namespace com.tvd12.ezyfoxserver.client.unity
 					.zoneName(socketConfigVariable.Value.ZoneName)
 					.build();
 				EzyClientFactory.getInstance()
-					.getOrCreateClient(config);
+					.getOrCreateClient(config, socketConfigVariable.Value.UdpUsage);
 			}
 			appProxy = socketProxy.getAppProxy(socketConfigVariable.Value.AppName, true);
 		}

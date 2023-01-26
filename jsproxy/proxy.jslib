@@ -30,9 +30,9 @@ var EzyFoxServerClientPlugin = {
                         var eventHandler = {"ezyEventType": ezyEventType, "clientName": clientName};
                         eventHandler.handle = function (event) {
                             var jsonData = event ? JSON.stringify(event) : "{}";
-                            console.log(this.clientName);
-                            console.log(this.ezyEventType);
-                            console.log(jsonData);
+                            EzyLogger.console(this.clientName);
+                            EzyLogger.console(this.ezyEventType);
+                            EzyLogger.console(jsonData);
                             dynCall_viii(
                                 ezy.eventHandlerCallback,
                                 ezy.toUTF8(this.clientName),
@@ -49,9 +49,9 @@ var EzyFoxServerClientPlugin = {
                         var dataHandler = {"cmd": EzyCommands[commandId], "clientName": clientName};
                         dataHandler.handle = function (data) {
                             var jsonData = data ? JSON.stringify(data) : "{}";
-                            console.log(this.clientName);
-                            console.log(this.cmd);
-                            console.log(jsonData);
+                            EzyLogger.console(this.clientName);
+                            EzyLogger.console(this.cmd);
+                            EzyLogger.console(jsonData);
                             dynCall_viii(
                                 ezy.dataHandlerCallback,
                                 ezy.toUTF8(this.clientName),
@@ -70,11 +70,11 @@ var EzyFoxServerClientPlugin = {
                 ezy.client.connect(data.url);
             },
             'reconnect': function (clientName, callback) {
-                console.log('reconnect: clientName = ' + clientName);
+                EzyLogger.console('reconnect: clientName = ' + clientName);
                 ezy.client.reconnect();
             },
             'disconnect': function (clientName, jsonData, callback) {
-                console.log('disconnect: clientName = ' + clientName + ', jsonData = ' + jsonData);
+                EzyLogger.console('disconnect: clientName = ' + clientName + ', jsonData = ' + jsonData);
                 var data = JSON.parse(jsonData);
                 ezy.client.disconnect(data.reason);
             },
@@ -96,12 +96,16 @@ var EzyFoxServerClientPlugin = {
     setDataHandlerCallback: function (callback) {
         ezy.dataHandlerCallback = callback;
     },
+    
+    setDebug: function (value) {
+        EzyLogger.debug = value;
+    },
 
     run4: function (clientName, functionName, jsonData, callback) {
         var clientNameString = UTF8ToString(clientName);
         var functionNameString = UTF8ToString(functionName);
         var jsonDataString = UTF8ToString(jsonData);
-        console.log(
+        EzyLogger.console(
             'run4(clientName=' + clientNameString + ', functionName=' +
             functionNameString + ', jsonData=' + jsonDataString + ')'
         );
@@ -111,7 +115,7 @@ var EzyFoxServerClientPlugin = {
     run3: function (clientName, functionName, callback) {
         var clientNameString = UTF8ToString(clientName);
         var functionNameString = UTF8ToString(functionName);
-        console.log('run3(clientName=' + clientNameString + ', functionName=' + functionNameString + ')');
+        EzyLogger.console('run3(clientName=' + clientNameString + ', functionName=' + functionNameString + ')');
         ezy.map[functionNameString](clientNameString, callback);
     }
 };

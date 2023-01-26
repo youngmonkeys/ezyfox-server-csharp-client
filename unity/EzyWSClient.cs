@@ -12,6 +12,7 @@ using com.tvd12.ezyfoxserver.client.setup;
 using com.tvd12.ezyfoxserver.client.socket;
 using com.tvd12.ezyfoxserver.client.statistics;
 using com.tvd12.ezyfoxserver.client.util;
+using Extensions.ezyfox_server_csharp_client.unity;
 using Newtonsoft.Json;
 
 namespace com.tvd12.ezyfoxserver.client.unity
@@ -19,6 +20,7 @@ namespace com.tvd12.ezyfoxserver.client.unity
 	public class EzyWSClient : EzyClient, EzyMeAware, EzyZoneAware
 	{
 		private static readonly EzyLogger LOGGER = EzyLoggerFactory.getLogger(typeof(EzyWSClient));
+		private static bool jsDebug = false;
 
 		private EzyUser me;
 		private EzyZone zone;
@@ -42,11 +44,17 @@ namespace com.tvd12.ezyfoxserver.client.unity
 			this.settingUp = new EzySimpleSetup(handlerManager);
 		}
 
+		public static void setJsDebug(bool value)
+		{
+			jsDebug = value;
+		}
+
 		public void init()
 		{
-			String configJson = JsonConvert.SerializeObject(config);
+			String configJson = JsonConvert.SerializeObject(config, new EzyClientConfigJsonConverter());
 			EzyWSProxy.setEventHandlerCallback(eventHandlerCallback);
 			EzyWSProxy.setDataHandlerCallback(dataHandlerCallback);
+			EzyWSProxy.setDebug(jsDebug);
 			EzyWSProxy.run4(config.getClientName(), "init", configJson, initCallback);
 		}
 
@@ -74,15 +82,7 @@ namespace com.tvd12.ezyfoxserver.client.unity
 		{
 			LOGGER.debug("dataHandlerCallback: clientName = " + clientName + ", commandId = " + commandId + ", jsonData = " + jsonData);
 			var ezyData = EzyJsons.deserialize(jsonData);
-			LOGGER.debug("den day roi 1");
-			LOGGER.debug(ezyData.ToString());
 			var command = (EzyCommand)commandId;
-			LOGGER.debug("den day roi 2 " + command);
-			LOGGER.debug(EzyClients.getInstance()
-				             .getClient(clientName)
-				             .getHandlerManager()
-				             .getDataHandler(command) +
-			             "");
 			EzyClients.getInstance()
 				.getClient(clientName)
 				.getHandlerManager()
@@ -308,7 +308,7 @@ namespace com.tvd12.ezyfoxserver.client.unity
 
 		public EzyTransportType getTransportType()
 		{
-			return EzyTransportType.WS;
+			return EzyTransportType.TCP;
 		}
 
 		public void setMe(EzyUser me)

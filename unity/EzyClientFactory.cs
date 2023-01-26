@@ -15,7 +15,7 @@ namespace com.tvd12.ezyfoxserver.client.unity
 			return INSTANCE;
 		}
 
-		public EzyClient getOrCreateClient(EzyClientConfig config)
+		public EzyClient getOrCreateClient(EzyClientConfig config, bool udpUsage)
 		{
 			var ezyClients = EzyClients.getInstance();
 			var ezyClient = ezyClients.getClient(config.getZoneName());
@@ -29,9 +29,16 @@ namespace com.tvd12.ezyfoxserver.client.unity
 			ezyWsClient.init();
 			return ezyWsClient;
 #else
-			EzyClient ezyUtcClient = new EzyUTClient(config);
-			ezyClients.addClient(ezyUtcClient);
-			return ezyUtcClient;
+			if (udpUsage)
+			{
+				ezyClient = new EzyUTClient(config);
+			}
+			else
+			{
+				ezyClient = new EzyTcpClient(config);
+			}
+			ezyClients.addClient(ezyClient);
+			return ezyClient;
 #endif
 		}
 	}
