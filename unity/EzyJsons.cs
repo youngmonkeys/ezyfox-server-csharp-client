@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Object = System.Object;
 
-namespace com.tvd12.ezyfoxserver.client.util
+namespace com.tvd12.ezyfoxserver.client.unity
 {
 	public static class EzyJsons
 	{
