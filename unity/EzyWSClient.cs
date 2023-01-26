@@ -19,7 +19,7 @@ namespace com.tvd12.ezyfoxserver.client.unity
 {
 	public class EzyWSClient : EzyClient, EzyMeAware, EzyZoneAware
 	{
-		private static readonly EzyLogger LOGGER = EzyLoggerFactory.getLogger(typeof(EzyWSClient));
+		private static readonly EzyLogger LOGGER = EzyUnityLoggerFactory.getLogger(typeof(EzyWSClient));
 		private static bool jsDebug = false;
 
 		private EzyUser me;
