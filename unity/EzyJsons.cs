@@ -17,9 +17,13 @@ namespace com.tvd12.ezyfoxserver.client.util
 			switch (obj)
 			{
 				case EzyObject ezyObject:
-					return JsonConvert.SerializeObject(ezyObject.toDict<string, object>());
+					return JsonConvert.SerializeObject(
+						ezyObject.toDict<string, object>()
+					);
 				case EzyArray ezyArray:
-					return JsonConvert.SerializeObject(ezyArray.toList<object>());
+					return JsonConvert.SerializeObject(
+						ezyArray.toList<object>()
+					);
 				default:
 					return JsonConvert.SerializeObject(obj);
 			}	
@@ -39,7 +43,9 @@ namespace com.tvd12.ezyfoxserver.client.util
 						.appendRawDict(dict)
 						.build();
 				default:
-					throw new Exception($"Failed to deserialize json to EzyData");
+					throw new Exception(
+						$"Failed to deserialize json to EzyData"
+					);
 			}
 		}
 
@@ -47,17 +53,21 @@ namespace com.tvd12.ezyfoxserver.client.util
 		{
 			switch (jElement)
 			{
-				case JObject jObject: // jObject becomes Dictionary<string, object>
-					return ((IEnumerable<KeyValuePair<string, JToken>>)jObject).ToDictionary(
-						j => j.Key,
-						j => parseJElement(j.Value)
-					);
+				// jObject becomes Dictionary<string, object>
+				case JObject jObject:
+					return ((IEnumerable<KeyValuePair<string, JToken>>)jObject)
+						.ToDictionary(
+							j => j.Key,
+							j => parseJElement(j.Value)
+						);
 				case JArray jArray: // jArray becomes List<object>
 					return jArray.Select(parseJElement).ToList();
 				case JValue jValue: // jValue just becomes the value
 					return jValue.Value;
 				default:
-					throw new Exception($"Unsupported type: {jElement.GetType()}");
+					throw new Exception(
+						$"Unsupported type: {jElement.GetType()}"
+					);
 			}
 		}
 	}

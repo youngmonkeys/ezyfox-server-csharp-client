@@ -24,7 +24,9 @@ namespace com.tvd12.ezyfoxserver.client.unity
 		{
 			if (!INITIALIZED)
 			{
-				EzyLoggerFactory.setLoggerSupply(type => new EzyUnityLogger(type));
+				EzyLoggerFactory.setLoggerSupply(
+					type => new EzyUnityLogger(type)
+				);
 				INITIALIZED = true;
 			}
 			return EzyLoggerFactory.getLogger(type);

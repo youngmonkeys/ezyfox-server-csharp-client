@@ -15,7 +15,10 @@ namespace com.tvd12.ezyfoxserver.client.unity
 			return INSTANCE;
 		}
 
-		public EzyClient getOrCreateClient(EzyClientConfig config, bool udpUsage)
+		public EzyClient getOrCreateClient(
+			EzyClientConfig config,
+			bool udpUsage
+		)
 		{
 			var ezyClients = EzyClients.getInstance();
 			var ezyClient = ezyClients.getClient(config.getZoneName());

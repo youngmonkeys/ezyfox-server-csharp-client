@@ -19,9 +19,6 @@ namespace com.tvd12.ezyfoxserver.client.unity
 {
 	public class EzyWSClient : EzyClient, EzyMeAware, EzyZoneAware
 	{
-		private static readonly EzyLogger LOGGER = EzyUnityLoggerFactory.getLogger(typeof(EzyWSClient));
-		private static bool jsDebug = false;
-
 		private EzyUser me;
 		private EzyZone zone;
 		private long sessionId;
@@ -33,6 +30,10 @@ namespace com.tvd12.ezyfoxserver.client.unity
 		private readonly EzyHandlerManager handlerManager;
 		private readonly EzyPingManager pingManager;
 		private readonly EzyPingSchedule pingSchedule;
+
+		private static bool jsDebug = false;
+		private static readonly EzyLogger LOGGER =
+			EzyUnityLoggerFactory.getLogger(typeof(EzyWSClient));
 
 		public EzyWSClient(EzyClientConfig config)
 		{
@@ -51,25 +52,48 @@ namespace com.tvd12.ezyfoxserver.client.unity
 
 		public void init()
 		{
-			String configJson = JsonConvert.SerializeObject(config, new EzyClientConfigJsonConverter());
+			String configJson = JsonConvert.SerializeObject(
+				config,
+				new EzyClientConfigJsonConverter()
+			);
 			EzyWSProxy.setEventHandlerCallback(eventHandlerCallback);
 			EzyWSProxy.setDataHandlerCallback(dataHandlerCallback);
 			EzyWSProxy.setDebug(jsDebug);
-			EzyWSProxy.run4(config.getClientName(), "init", configJson, initCallback);
+			EzyWSProxy.run4(
+				config.getClientName(),
+				"init",
+				configJson,
+				initCallback
+			);
 		}
 
 		[MonoPInvokeCallback(typeof(EzyDelegates.Delegate2))]
 		public static void initCallback(String clientName, String jsonData)
 		{
-			LOGGER.debug("initCallback: clientName = " + clientName + ", jsonData = " + jsonData);
+			LOGGER.debug(
+				"initCallback: clientName = " +
+				clientName + ", jsonData = " + jsonData
+			);
 		}
 
 		[MonoPInvokeCallback(typeof(EzyDelegates.EventHandlerDelegate))]
-		public static void eventHandlerCallback(String clientName, String eventType, String jsonData)
+		public static void eventHandlerCallback(
+			String clientName,
+			String eventType,
+			String jsonData
+		)
 		{
-			LOGGER.debug("eventHandlerCallback: clientName = " + clientName + ", eventType = " + eventType + ", jsonData = " + jsonData);
-			var eventJsDataDeserializer = EzyEventWSDataDeserializer.getInstance();
-			var ezyEvent = eventJsDataDeserializer.deserializeEvent(eventType, jsonData);
+			LOGGER.debug(
+				"eventHandlerCallback: clientName = " +
+				clientName + ", eventType = " + eventType +
+				", jsonData = " + jsonData
+			);
+			var eventJsDataDeserializer = EzyEventWSDataDeserializer
+				.getInstance();
+			var ezyEvent = eventJsDataDeserializer.deserializeEvent(
+				eventType,
+				jsonData
+			);
 			EzyClients.getInstance()
 				.getClient(clientName)
 				.getHandlerManager()
@@ -78,9 +102,17 @@ namespace com.tvd12.ezyfoxserver.client.unity
 		}
 
 		[MonoPInvokeCallback(typeof(EzyDelegates.EventHandlerDelegate))]
-		public static void dataHandlerCallback(String clientName, int commandId, String jsonData)
+		public static void dataHandlerCallback(
+			String clientName,
+			int commandId,
+			String jsonData
+		)
 		{
-			LOGGER.debug("dataHandlerCallback: clientName = " + clientName + ", commandId = " + commandId + ", jsonData = " + jsonData);
+			LOGGER.debug(
+				"dataHandlerCallback: clientName = " +
+				clientName + ", commandId = " +
+				commandId + ", jsonData = " + jsonData
+			);
 			var ezyData = EzyJsons.deserialize(jsonData);
 			var command = (EzyCommand)commandId;
 			EzyClients.getInstance()
@@ -110,14 +142,24 @@ namespace com.tvd12.ezyfoxserver.client.unity
 
 		public bool reconnect()
 		{
-			EzyWSProxy.run3(config.getClientName(), "reconnect", reconnectCallback);
+			EzyWSProxy.run3(
+				config.getClientName(),
+				"reconnect",
+				reconnectCallback
+			);
 			return true;
 		}
 
 		[MonoPInvokeCallback(typeof(EzyDelegates.Delegate2))]
-		public static void reconnectCallback(String clientName, String jsonData)
+		public static void reconnectCallback(
+			String clientName,
+			String jsonData
+		)
 		{
-			LOGGER.debug("reconnectCallback: clientName = " + clientName + ", jsonData = " + jsonData);
+			LOGGER.debug(
+				"reconnectCallback: clientName = " +
+				clientName + ", jsonData = " + jsonData
+			);
 		}
 
 		public void send(EzyRequest request)
@@ -135,13 +177,21 @@ namespace com.tvd12.ezyfoxserver.client.unity
 				.append("data", data)
 				.build();
 			String jsonData = EzyJsons.serialize(obj);
-			EzyWSProxy.run4(config.getClientName(), "send", jsonData, sendCallback);
+			EzyWSProxy.run4(
+				config.getClientName(),
+				"send",
+				jsonData,
+				sendCallback
+			);
 		}
 
 		[MonoPInvokeCallback(typeof(EzyDelegates.Delegate2))]
 		public static void sendCallback(String clientName, String jsonData)
 		{
-			LOGGER.debug("sendCallback: clientName = " + clientName + ", jsonData = " + jsonData);
+			LOGGER.debug(
+				"sendCallback: clientName = " +
+				clientName + ", jsonData = " + jsonData
+			);
 		}
 
 		public void disconnect(int reason)
@@ -150,7 +200,12 @@ namespace com.tvd12.ezyfoxserver.client.unity
 				.append("reason", reason)
 				.build();
 			String jsonData = EzyJsons.serialize(obj);
-			EzyWSProxy.run4(config.getClientName(), "disconnect", jsonData, null);
+			EzyWSProxy.run4(
+				config.getClientName(),
+				"disconnect",
+				jsonData,
+				null
+			);
 		}
 		
 		public void processEvents()

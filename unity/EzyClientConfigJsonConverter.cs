@@ -2,17 +2,28 @@ using System;
 using com.tvd12.ezyfoxserver.client.config;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+
 namespace Extensions.ezyfox_server_csharp_client.unity
 {
 	public class EzyClientConfigJsonConverter : JsonConverter<EzyClientConfig>
 	{
-		public override void WriteJson(JsonWriter writer, EzyClientConfig clientConfig, JsonSerializer serializer)
+		public override void WriteJson(
+			JsonWriter writer,
+			EzyClientConfig clientConfig,
+			JsonSerializer serializer
+		)
 		{
 			JObject reconnectConfigJson = new JObject();
 			EzyReconnectConfig reconnectConfig = clientConfig?.getReconnect();
 			reconnectConfigJson.Add("enable", reconnectConfig?.isEnable());
-			reconnectConfigJson.Add("maxReconnectCount", reconnectConfig?.getMaxReconnectCount());
-			reconnectConfigJson.Add("reconnectPeriod", reconnectConfig?.getReconnectPeriod());
+			reconnectConfigJson.Add(
+				"maxReconnectCount",
+				reconnectConfig?.getMaxReconnectCount()
+			);
+			reconnectConfigJson.Add(
+				"reconnectPeriod",
+				reconnectConfig?.getReconnectPeriod()
+			);
 
 			JObject pingJson = new JObject();
 			EzyPingConfig pingConfig = clientConfig?.getPing();
@@ -28,10 +39,18 @@ namespace Extensions.ezyfox_server_csharp_client.unity
 			clientConfigJson.WriteTo(writer);
 		}
 
-		public override EzyClientConfig? ReadJson(JsonReader reader, Type objectType, EzyClientConfig? existingValue, bool hasExistingValue,
-		                                          JsonSerializer serializer)
+		public override EzyClientConfig? ReadJson(
+			JsonReader reader,
+			Type objectType,
+			EzyClientConfig? existingValue,
+			bool hasExistingValue,
+			JsonSerializer serializer
+		)
 		{
-			throw new NotImplementedException("Unnecessary because CanRead is false. The type will skip the converter.");
+			throw new NotImplementedException(
+				"Unnecessary because CanRead is false. " +
+                "The type will skip the converter."
+			);
 		}
 
 		public override bool CanRead => false;
