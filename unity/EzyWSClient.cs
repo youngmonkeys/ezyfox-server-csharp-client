@@ -115,11 +115,18 @@ namespace com.tvd12.ezyfoxserver.client.unity
 			);
 			var ezyData = EzyJsons.deserialize(jsonData);
 			var command = (EzyCommand)commandId;
-			EzyClients.getInstance()
+			var dataHandler = EzyClients.getInstance()
 				.getClient(clientName)
 				.getHandlerManager()
-				.getDataHandler(command)
-				.handle((EzyArray)ezyData);
+				.getDataHandler(command);
+			if (dataHandler == null)
+			{
+				LOGGER.warn("has no handler for command: " + command);
+			}
+			else
+			{
+				dataHandler.handle((EzyArray)ezyData);
+			}
 		}
 
 		public EzySetup setup()
