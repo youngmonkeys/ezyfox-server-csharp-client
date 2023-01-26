@@ -17,7 +17,8 @@ namespace com.tvd12.ezyfoxserver.client.unity
 		
 		private readonly List<Tuple<String, Object>> handlers = new();
 		
-		protected static readonly EzyLogger LOGGER = EzyUnityLoggerFactory.getLogger<EzyDefaultController>();
+		protected static readonly EzyLogger LOGGER = EzyUnityLoggerFactory
+			.getLogger<EzyDefaultController>();
 
 		protected void Start()
 		{
@@ -27,7 +28,9 @@ namespace com.tvd12.ezyfoxserver.client.unity
 			{
 				socketProxyManager.init();
 			}
-			socketProxy = socketProxyManager.getSocketProxy(socketConfigVariable.Value.ZoneName);
+			socketProxy = socketProxyManager.getSocketProxy(
+				socketConfigVariable.Value.ZoneName
+			);
 			if (socketProxy.getClient() == null)
 			{
 				LOGGER.debug("Creating ezyClient");
@@ -35,10 +38,17 @@ namespace com.tvd12.ezyfoxserver.client.unity
 					.clientName(socketConfigVariable.Value.ZoneName)
 					.zoneName(socketConfigVariable.Value.ZoneName)
 					.build();
-				EzyClientFactory.getInstance()
-					.getOrCreateClient(config, socketConfigVariable.Value.UdpUsage);
+				EzyClientFactory
+					.getInstance()
+					.getOrCreateClient(
+						config,
+						socketConfigVariable.Value.UdpUsage
+					);
 			}
-			appProxy = socketProxy.getAppProxy(socketConfigVariable.Value.AppName, true);
+			appProxy = socketProxy.getAppProxy(
+				socketConfigVariable.Value.AppName,
+				true
+			);
 		}
 
 		protected void on<T>(String cmd, EzyAppProxyDataHandler<T> handler)

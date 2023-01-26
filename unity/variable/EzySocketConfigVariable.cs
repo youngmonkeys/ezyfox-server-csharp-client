@@ -5,7 +5,9 @@ using UnityEngine;
 namespace com.tvd12.ezyfoxserver.client.unity
 {
 	[CreateAssetMenu]
-	public class EzySocketConfigVariable : EzyScriptableVariable<EzySocketConfigVariable.EzySocketConfigModel>
+	public class EzySocketConfigVariable : EzyScriptableVariable<
+		EzySocketConfigVariable.EzySocketConfigModel
+	>
 	{
 		[Serializable]
 		public class EzySocketConfigModel
