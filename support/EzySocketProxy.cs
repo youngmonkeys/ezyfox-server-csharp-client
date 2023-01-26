@@ -16,6 +16,7 @@ namespace com.tvd12.ezyfoxserver.client.support
     {
         private String host = "127.0.0.1";
         private int tcpPort = 3005;
+        private String url = null;
         private int udpPort = 2611;
         private EzyTransportType transportType;
         private String loginUsername;
@@ -24,6 +25,7 @@ namespace com.tvd12.ezyfoxserver.client.support
         private IDictionary<String, Object> loginData;
         private Type loginResponseDataType;
         private Type loginErrorDataType;
+        private Type udpHandshakeDataType;
         private Type appAccessedDataType;
         private EzyClient client;
         private readonly String zoneName;
@@ -33,6 +35,7 @@ namespace com.tvd12.ezyfoxserver.client.support
         private readonly IDictionary<String, EzyAppProxy> appProxyByName;
         private readonly IDictionary<Object, DataHandler> loginSuccessHandlers;
         private readonly IDictionary<Object, DataHandler> loginErrorHandlers;
+        private readonly IDictionary<Object, DataHandler> udpHandshakeHandlers;
         private readonly IDictionary<Object, AppProxyDataHandler> appAccessedHandlers;
         private readonly IDictionary<Object, EventHandler> disconnectedHandlers;
         private readonly IDictionary<Object, EventHandler> reconnectingHandlers;
@@ -52,6 +55,7 @@ namespace com.tvd12.ezyfoxserver.client.support
             this.appProxyByName = new Dictionary<String, EzyAppProxy>();
             this.loginSuccessHandlers = new Dictionary<Object, DataHandler>();
             this.loginErrorHandlers = new Dictionary<Object, DataHandler>();
+            this.udpHandshakeHandlers = new Dictionary<Object, DataHandler>();
             this.appAccessedHandlers = new Dictionary<Object, AppProxyDataHandler>();
             this.disconnectedHandlers = new Dictionary<Object, EventHandler>();
             this.reconnectingHandlers = new Dictionary<Object, EventHandler>();
@@ -67,6 +71,12 @@ namespace com.tvd12.ezyfoxserver.client.support
         public EzySocketProxy setTcpPort(int tcpPort)
         {
             this.tcpPort = tcpPort;
+            return this;
+        }
+        
+        public EzySocketProxy setUrl(String url)
+        {
+            this.url = url;
             return this;
         }
 
@@ -150,7 +160,14 @@ namespace com.tvd12.ezyfoxserver.client.support
         public void connect()
         {
             this.init();
-            this.client.connect(host, tcpPort);
+            if (url != null)
+            {
+                this.client.connect(url);
+            }
+            else
+            {
+                this.client.connect(host, tcpPort);
+            }
         }
 
         private void init()
@@ -227,6 +244,17 @@ namespace com.tvd12.ezyfoxserver.client.support
             loginErrorHandlers[handler] = dataHandler;
             return handler;
         }
+        
+        public Object onUdpHandshake<T>(EzySocketProxyDataHandler<T> handler)
+        {
+            DataHandler dataHandler = data => 
+            {
+                handler.Invoke(this, (T) data);
+            };
+            udpHandshakeDataType = typeof(T);
+            udpHandshakeHandlers[handler] = dataHandler;
+            return handler;
+        }
 
         public Object onAppAccessed<T>(EzyAppProxyDataHandler<T> handler)
         {
@@ -279,6 +307,7 @@ namespace com.tvd12.ezyfoxserver.client.support
         {
             loginSuccessHandlers.Remove(handler);
             loginErrorHandlers.Remove(handler);
+            udpHandshakeHandlers.Remove(handler);
             appAccessedHandlers.Remove(handler);
             disconnectedHandlers.Remove(handler);
             reconnectingHandlers.Remove(handler);
@@ -371,7 +400,6 @@ namespace com.tvd12.ezyfoxserver.client.support
 
         public class UdpHandshakeHandler : EzyUdpHandshakeHandler
         {
-
             private readonly EzySocketProxy parent;
 
             public UdpHandshakeHandler(EzySocketProxy parent)
@@ -381,7 +409,18 @@ namespace com.tvd12.ezyfoxserver.client.support
 
             protected override void onAuthenticated(EzyArray data)
             {
-                if (parent.defaultAppName != null)
+                if (parent.udpHandshakeHandlers.Count > 0)
+                {
+                    Object objData = parent.binding.unmarshall(
+                        data,
+                        parent.udpHandshakeDataType
+                    );
+                    foreach (var handler in parent.udpHandshakeHandlers.Values)
+                    {
+                        handler.Invoke(objData);
+                    }
+                }
+                else if (parent.defaultAppName != null)
                 {
                     client.send(new EzyAppAccessRequest(parent.defaultAppName));
                 }
