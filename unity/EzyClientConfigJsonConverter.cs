@@ -3,7 +3,7 @@ using com.tvd12.ezyfoxserver.client.config;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Extensions.ezyfox_server_csharp_client.unity
+namespace com.tvd12.ezyfoxserver.client.unity
 {
 	public class EzyClientConfigJsonConverter : JsonConverter<EzyClientConfig>
 	{

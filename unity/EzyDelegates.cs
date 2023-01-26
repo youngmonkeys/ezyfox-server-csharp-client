@@ -1,4 +1,5 @@
 using System;
+
 namespace com.tvd12.ezyfoxserver.client.unity
 {
 	public class EzyDelegates

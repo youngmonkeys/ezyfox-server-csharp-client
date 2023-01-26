@@ -11,8 +11,6 @@ using com.tvd12.ezyfoxserver.client.request;
 using com.tvd12.ezyfoxserver.client.setup;
 using com.tvd12.ezyfoxserver.client.socket;
 using com.tvd12.ezyfoxserver.client.statistics;
-using com.tvd12.ezyfoxserver.client.util;
-using Extensions.ezyfox_server_csharp_client.unity;
 using Newtonsoft.Json;
 
 namespace com.tvd12.ezyfoxserver.client.unity

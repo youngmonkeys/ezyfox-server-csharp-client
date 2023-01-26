@@ -1,5 +1,4 @@
 using System;
-using com.tvd12.ezyfoxserver.client.constant;
 using UnityEngine;
 
 namespace com.tvd12.ezyfoxserver.client.unity
