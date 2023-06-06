@@ -8,12 +8,19 @@ namespace com.tvd12.ezyfoxserver.client.unity
 	{
 #if UNITY_EDITOR && !UNITY_WEBGL
 		[Multiline]
-		public string DeveloperDescription = "";
+		[field: SerializeField]
+		private string developerDescription = "";
 #endif
 
-		[field: SerializeField] public T Value { get; set; }
+		[field: SerializeField]
+		public T Value { get; set; }
 
-		public void setValue(EzyScriptableVariable<T> variable)
+		private void OnEnable()
+		{
+			hideFlags = HideFlags.DontUnloadUnusedAsset;
+		}
+
+		public void SetValue(EzyScriptableVariable<T> variable)
 		{
 			Value = variable.Value;
 		}

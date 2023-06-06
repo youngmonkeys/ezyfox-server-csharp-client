@@ -20,9 +20,9 @@ namespace com.tvd12.ezyfoxserver.client.unity
 		protected static readonly EzyLogger LOGGER = EzyUnityLoggerFactory
 			.getLogger<EzyDefaultController>();
 
-		protected void Start()
+		protected void OnEnable()
 		{
-			LOGGER.debug("Start");
+			LOGGER.debug("OnEnable");
 			var socketProxyManager = EzySocketProxyManager.getInstance();
 			if (!socketProxyManager.hasInited())
 			{
@@ -51,7 +51,7 @@ namespace com.tvd12.ezyfoxserver.client.unity
 			);
 		}
 
-		protected void on<T>(String cmd, EzyAppProxyDataHandler<T> handler)
+		protected void AddHandler<T>(String cmd, EzyAppProxyDataHandler<T> handler)
 		{
 			handlers.Add(
 				new Tuple<String, Object>(cmd, appProxy.on(cmd, handler))
