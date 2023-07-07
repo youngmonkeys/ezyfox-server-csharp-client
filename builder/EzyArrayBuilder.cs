@@ -27,7 +27,13 @@ namespace com.tvd12.ezyfoxserver.client.builder
 			return this;
 		}
 
-		public EzyArrayBuilder append<T>(EzyBuilder<T> builder)
+        public EzyArrayBuilder append(byte[] value)
+        {
+            product.add(value);
+            return this;
+        }
+
+        public EzyArrayBuilder append<T>(EzyBuilder<T> builder)
 		{
 			product.add(builder);
 			return this;

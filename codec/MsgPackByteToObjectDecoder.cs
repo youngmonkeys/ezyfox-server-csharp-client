@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using com.tvd12.ezyfoxserver.client.io;
+using com.tvd12.ezyfoxserver.client.security;
 using static com.tvd12.ezyfoxserver.client.codec.EzyDecodeState;
 
 namespace com.tvd12.ezyfoxserver.client.codec
@@ -8,21 +9,30 @@ namespace com.tvd12.ezyfoxserver.client.codec
 	public class MsgPackByteToObjectDecoder : EzyByteToObjectDecoder
 	{
 
-		protected Handlers handlers;
-		protected EzyMessageDeserializer deserializer;
+		protected readonly Handlers handlers;
+        protected readonly EzyAesCrypt cryptor;
+        protected readonly EzyMessageDeserializer deserializer;
 
 		public MsgPackByteToObjectDecoder(
-				EzyMessageDeserializer deserializer, int maxSize)
+			EzyMessageDeserializer deserializer,
+			int maxSize
+		)
 		{
 			this.deserializer = deserializer;
-			this.handlers = Handlers.builder()
+			this.cryptor = EzyAesCrypt.getDefault();
+            this.handlers = Handlers.builder()
 					.setMaxSize(maxSize)
 					.build();
 		}
 
-		public Object decode(EzyMessage message)
+		public Object decode(EzyMessage message, byte[] decryptionKey)
 		{
-			return deserializer.deserialize<Object>(message.getContent());
+            byte[] encryptedContent = message.getContent();
+            if (message.getHeader().isEncrypted())
+            {
+                encryptedContent = this.decryptMessageContent(encryptedContent, decryptionKey);
+            }
+            return deserializer.deserialize<Object>(encryptedContent);
 		}
 
 		public void decode(EzyByteBuffer bytes, Queue<EzyMessage> queue)
@@ -30,7 +40,16 @@ namespace com.tvd12.ezyfoxserver.client.codec
 			handlers.handle(bytes, queue);
 		}
 
-	}
+        protected byte[] decryptMessageContent(byte[] content, byte[] decryptionKey)
+        {
+			if (decryptionKey == null)
+			{
+				return content;
+			}
+			return cryptor.decrypt(content, decryptionKey);
+        }
+
+    }
 
 	public abstract class AbstractHandler : EzyDecodeHandler
 	{

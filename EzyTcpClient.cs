@@ -21,6 +21,9 @@ namespace com.tvd12.ezyfoxserver.client
         protected EzyUser me;
         protected EzyZone zone;
         protected long sessionId;
+        protected byte[] publicKey;
+        protected byte[] privateKey;
+        protected byte[] sessionKey;
         protected String sessionToken;
         protected readonly String name;
         protected readonly EzySetup settingUp;
@@ -127,8 +130,10 @@ namespace com.tvd12.ezyfoxserver.client
             }
             preconnect();
 			bool success = socketClient.reconnect();
-			if (success)
-				setStatus(EzyConnectionStatus.RECONNECTING);
+            if (success)
+            {
+                setStatus(EzyConnectionStatus.RECONNECTING);
+            }
 			return success;
 		}
 
@@ -143,24 +148,58 @@ namespace com.tvd12.ezyfoxserver.client
             socketClient.disconnect(reason);
 		}
 
-		public void send(EzyRequest request)
+        public void close()
+        {
+            disconnect((int) EzyDisconnectReason.CLOSE);
+        }
+
+        public void send(EzyRequest request)
+        {
+            send(request, false);
+        }
+
+
+        public void send(EzyRequest request, bool encrypted)
 		{
             Object cmd = request.getCommand();
             EzyData data = request.serialize();
-            send((EzyCommand)cmd, (EzyArray)data);
+            send((EzyCommand)cmd, (EzyArray)data, encrypted);
 		}
 
         public void send(EzyCommand cmd, EzyArray data)
 		{
-            EzyArray array = requestSerializer.serialize(cmd, data);
-            if(socketClient != null) 
+            send(cmd, data, false);
+
+        }
+
+        public void send(EzyCommand cmd, EzyArray data, bool encrypted)
+        {
+            bool shouldEncrypted = encrypted;
+            if (encrypted && sessionKey == null)
             {
-                socketClient.sendMessage(array);
+                if (config.isEnableDebug())
+                {
+                    shouldEncrypted = false;
+                }
+                else
+                {
+                    throw new ArgumentException(
+                        "can not send command: " + cmd + " " +
+                            "you must enable SSL or enable debug mode by configuration " +
+                            "when you create the client"
+                    );
+                }
+
+            }
+            EzyArray array = requestSerializer.serialize(cmd, data);
+            if (socketClient != null)
+            {
+                socketClient.sendMessage(array, shouldEncrypted);
                 printSentData(cmd, data);
             }
-		}
+        }
 
-		public void processEvents()
+        public void processEvents()
 		{
             socketClient.processEventMessages();
 		}
@@ -175,7 +214,17 @@ namespace com.tvd12.ezyfoxserver.client
 			return config;
 		}
 
-		public EzyZone getZone()
+        public bool isEnableSSL()
+        {
+            return config.isEnableSSL();
+        }
+
+        public bool isEnableDebug()
+        {
+            return config.isEnableDebug();
+        }
+
+        public EzyZone getZone()
 		{
 			return zone;
 		}
@@ -236,6 +285,38 @@ namespace com.tvd12.ezyfoxserver.client
             this.sessionToken = token;
             this.socketClient.setSessionToken(sessionToken);
         }
+
+        public void setSessionKey(byte[] sessionKey)
+        {
+            this.sessionKey = sessionKey;
+            this.socketClient.setSessionKey(sessionKey);
+        }
+
+        public byte[] getSessionKey()
+        {
+            return sessionKey;
+        }
+
+        public void setPublicKey(byte[] publicKey)
+        {
+            this.publicKey = publicKey;
+        }
+
+        public byte[] getPublicKey()
+        {
+            return publicKey;
+        }
+
+        public void setPrivateKey(byte[] privateKey)
+        {
+            this.privateKey = privateKey;
+        }
+
+        public byte[] getPrivateKey()
+        {
+            return privateKey;
+        }
+
 
         public EzyISocketClient getSocket() 
         {
@@ -321,7 +402,17 @@ namespace com.tvd12.ezyfoxserver.client
             throw new InvalidOperationException("only support TCP, use EzyUTClient instead");
         }
 
+        public virtual void udpSend(EzyRequest request, bool encrypted)
+        {
+            throw new InvalidOperationException("only support TCP, use EzyUTClient instead");
+        }
+
         public virtual void udpSend(EzyCommand cmd, EzyArray data)
+        {
+            throw new InvalidOperationException("only support TCP, use EzyUTClient instead");
+        }
+
+        public virtual void udpSend(EzyCommand cmd, EzyArray data, bool encrypted)
         {
             throw new InvalidOperationException("only support TCP, use EzyUTClient instead");
         }

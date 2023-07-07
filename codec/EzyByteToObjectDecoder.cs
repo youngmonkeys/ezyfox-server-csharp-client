@@ -7,7 +7,7 @@ namespace com.tvd12.ezyfoxserver.client.codec
 
 	public interface EzyByteToObjectDecoder
 	{
-		Object decode(EzyMessage message);
+		Object decode(EzyMessage message, byte[] decryptionKey);
 
 		void decode(EzyByteBuffer bytes, Queue<EzyMessage> queue);
 	}

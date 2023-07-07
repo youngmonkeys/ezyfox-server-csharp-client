@@ -8,7 +8,10 @@ namespace com.tvd12.ezyfoxserver.client.socket
 	{
 		EzyArray getData();
 
-		EzyTransportType getTransportType();
+		bool isEncrypted();
 
+		byte[] getEncryptionKey();
+
+        EzyTransportType getTransportType();
 	}
 }

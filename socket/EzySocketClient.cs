@@ -24,6 +24,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
         protected int disconnectReason;
         protected long sessionId;
         protected String sessionToken;
+        protected byte[] sessionKey;
         protected EzyReconnectConfig reconnectConfig;
         protected EzyHandlerManager handlerManager;
         protected ISet<Object> unloggableCommands;
@@ -211,10 +212,11 @@ namespace com.tvd12.ezyfoxserver.client.socket
             onDisconnected(disconnectReason = reason);
         }
 
-        public void sendMessage(EzyArray message)
+        public void sendMessage(EzyArray message, bool encrypted)
         {
-            EzyPackage pack = new EzySimplePackage(message);
-            responseApi.response(pack);
+            responseApi.response(
+                new EzySimplePackage(message, encrypted, sessionKey)
+            );
         }
 
         public void processEventMessages()
@@ -359,6 +361,12 @@ namespace com.tvd12.ezyfoxserver.client.socket
         public void setSessionToken(String sessionToken)
         {
             this.sessionToken = sessionToken;
+        }
+
+        public void setSessionKey(byte[] sessionKey)
+        {
+            this.sessionKey = sessionKey;
+            this.socketReader.setSessionKey(sessionKey);
         }
 
         public void setPingManager(EzyPingManager pingManager) 

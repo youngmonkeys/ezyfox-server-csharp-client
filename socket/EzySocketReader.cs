@@ -13,6 +13,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
 {
     public abstract class EzySocketReader : EzySocketAdapter
 	{
+        protected byte[] sessionKey;
         protected EzySocketDataDecoder decoder;
         protected readonly int readBufferSize;
         protected readonly EzyQueue<EzyArray> dataQueue;
@@ -59,8 +60,13 @@ namespace com.tvd12.ezyfoxserver.client.socket
 
         private void onMesssageReceived(EzyMessage message)
         {
-            Object data = decoder.decode(message);
+            Object data = decoder.decode(message, sessionKey);
             dataQueue.add((EzyArray)data);
+        }
+
+        public void setSessionKey(byte[] sessionKey)
+        {
+            this.sessionKey = sessionKey;
         }
 
         public void setDecoder(EzySocketDataDecoder decoder)

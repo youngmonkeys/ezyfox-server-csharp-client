@@ -7,6 +7,8 @@ namespace com.tvd12.ezyfoxserver.client.config
 	{
         protected readonly String zoneName;
         protected readonly String clientName;
+        protected readonly bool enableSSL;
+        protected readonly bool enableDebug;
         protected readonly EzyReconnectConfig reconnect;
 		protected readonly EzyPingConfig ping;
 
@@ -14,6 +16,8 @@ namespace com.tvd12.ezyfoxserver.client.config
 		{
 			this.zoneName = builder._zoneName;
             this.clientName = builder._clientName;
+			this.enableSSL = builder._enableSSL;
+			this.enableDebug = builder._enableDebug;
 			this.ping = builder._pingConfigBuilder.build();
 			this.reconnect = builder._reconnectConfigBuilder.build();
 		}
@@ -29,6 +33,16 @@ namespace com.tvd12.ezyfoxserver.client.config
                 return zoneName;
             return clientName;
         }
+
+		public bool isEnableSSL()
+		{
+			return enableSSL;
+		}
+
+		public bool isEnableDebug()
+		{
+			return enableDebug;
+		}
 
 		public EzyPingConfig getPing()
         {
@@ -49,7 +63,9 @@ namespace com.tvd12.ezyfoxserver.client.config
 		{
             public String _zoneName;
             public String _clientName;
-			public readonly EzyPingConfig.Builder _pingConfigBuilder;
+            public bool _enableSSL;
+            public bool _enableDebug;
+            public readonly EzyPingConfig.Builder _pingConfigBuilder;
 			public readonly EzyReconnectConfig.Builder _reconnectConfigBuilder;
 
 			public Builder()
@@ -70,7 +86,29 @@ namespace com.tvd12.ezyfoxserver.client.config
                 return this;
             }
 
-			public EzyPingConfig.Builder pingConfigBuilder()
+            public Builder enableSSL()
+            {
+                return enableSSL(true);
+            }
+
+            public Builder enableSSL(bool enableSSL)
+            {
+                this._enableSSL = enableSSL;
+                return this;
+            }
+
+            public Builder enableDebug()
+            {
+                return enableDebug(true);
+            }
+
+            public Builder enableDebug(bool enableDebug)
+            {
+                this._enableDebug = enableDebug;
+                return this;
+            }
+
+            public EzyPingConfig.Builder pingConfigBuilder()
 			{
 				return _pingConfigBuilder;
 			}
