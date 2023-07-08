@@ -12,6 +12,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
 {
     public class EzyUdpSocketReader : EzySocketAdapter
     {
+        protected byte[] sessionKey;
         protected EzySocketDataDecoder decoder;
         protected UdpClient datagramChannel;
         protected IPEndPoint serverEndPoint;
@@ -84,7 +85,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
         {
             try
             {
-                Object data = decoder.decode(message);
+                Object data = decoder.decode(message, sessionKey);
                 dataQueue.add((EzyArray)data);
                 Console.WriteLine("udp received: " + data);
             }
@@ -92,6 +93,11 @@ namespace com.tvd12.ezyfoxserver.client.socket
             {
                 logger.warn("decode error at socket-reader", e);
             }
+        }
+
+        public void setSessionKey(byte[] sessionKey)
+        {
+            this.sessionKey = sessionKey;
         }
 
         public void setDecoder(EzySocketDataDecoder decoder)

@@ -14,10 +14,18 @@ namespace com.tvd12.ezyfoxserver.client.socket
 
 		public byte[] encode(Object data)
 		{
-			byte[] bytes = encoder.encode(data);
-			return bytes;
+			return encoder.encode(data);
 		}
 
-	}
+        public byte[] toMessageContent(Object data)
+		{
+			return encoder.toMessageContent(data);
+		}
+
+        public byte[] encryptMessageContent(byte[] messageContent, byte[] encryptionKey)
+		{
+			return encoder.encryptMessageContent(messageContent, encryptionKey);
+		}
+    }
 
 }

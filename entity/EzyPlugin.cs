@@ -16,16 +16,28 @@ namespace com.tvd12.ezyfoxserver.client.entity
 
         void send(EzyRequest request);
 
+        void send(EzyRequest request, bool encrypted);
+
         void send(String cmd);
+
+        void send(String cmd, bool encrypted);
 
         void send(String cmd, EzyData data);
 
+        void send(String cmd, EzyData data, bool encrypted);
+
         void udpSend(EzyRequest request);
+
+        void udpSend(EzyRequest request, bool encrypted);
 
         void udpSend(String cmd);
 
+        void udpSend(String cmd, bool encrypted);
+
         void udpSend(String cmd, EzyData data);
 
-		EzyPluginDataHandler getDataHandler(Object cmd);
+        void udpSend(String cmd, EzyData data, bool encrypted);
+
+        EzyPluginDataHandler getDataHandler(Object cmd);
 	}
 }

@@ -14,7 +14,20 @@ namespace com.tvd12.ezyfoxserver.client.socket
 
 		public void response(EzyPackage pack)
 		{
-			Object bytes = encodeData(pack.getData());
+			Object bytes;
+			EzyArray data = pack.getData();
+			if (pack.isEncrypted())
+			{
+				bytes = encryptMessageContent(
+					dataToMessageContent(data),
+					pack.getEncryptionKey()
+				);
+			}
+			else
+			{
+				bytes = encodeData(data);
+			}
+
 			EzyPacket packet = createPacket(bytes, pack);
 			packetQueue.add(packet);
 		}
@@ -28,5 +41,12 @@ namespace com.tvd12.ezyfoxserver.client.socket
 		}
 
 		protected abstract Object encodeData(EzyArray data);
-	}
+
+		protected abstract byte[] dataToMessageContent(EzyArray data);
+
+		protected abstract byte[] encryptMessageContent(
+			byte[] messageContent,
+			byte[] encryptionKey
+		);
+    }
 }

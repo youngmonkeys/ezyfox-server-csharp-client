@@ -29,12 +29,13 @@ namespace com.tvd12.ezyfoxserver.client.socket
         {
             this.udpClient.setSessionId(sessionId);
             this.udpClient.setSessionToken(sessionToken);
+            this.udpClient.setSessionKey(sessionKey);
             this.udpClient.connectTo(host, port);
         }
 
-        public void udpSendMessage(EzyArray message)
+        public void udpSendMessage(EzyArray message, bool encrypted)
         {
-            this.udpClient.sendMessage(message);
+            this.udpClient.sendMessage(message, encrypted);
         }
 
         public void udpSetStatus(EzySocketStatus status)

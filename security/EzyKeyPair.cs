@@ -1,25 +1,24 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 
 namespace com.tvd12.ezyfoxserver.client.security
 {
 	public class EzyKeyPair
 	{
-		private readonly String privateKey;
-		private readonly String publicKey;
+		private readonly byte[] privateKey;
+		private readonly byte[] publicKey;
 
-		public EzyKeyPair(String privateKey, String publicKey)
+		public EzyKeyPair(byte[] privateKey, byte[] publicKey)
 		{
 			this.privateKey = privateKey;
 			this.publicKey = publicKey;
 		}
 
-		public String getPrivateKey()
+		public byte[] getPrivateKey()
 		{
 			return privateKey;
 		}
 
-		public String getPublicKey()
+		public byte[] getPublicKey()
 		{
 			return publicKey;
 		}
@@ -29,9 +28,9 @@ namespace com.tvd12.ezyfoxserver.client.security
 			return new StringBuilder()
 				.Append("(")
 					.Append("public key: ")
-						.Append(publicKey)
+						.Append(Encoding.UTF8.GetString(publicKey))
 					.Append("private key: ")
-						.Append(privateKey)
+						.Append(Encoding.UTF8.GetString(privateKey))
 				.Append(")")
 				.ToString();
 		}

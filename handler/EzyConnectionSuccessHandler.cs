@@ -2,6 +2,7 @@
 using com.tvd12.ezyfoxserver.client.constant;
 using com.tvd12.ezyfoxserver.client.evt;
 using com.tvd12.ezyfoxserver.client.request;
+using com.tvd12.ezyfoxserver.client.security;
 
 namespace com.tvd12.ezyfoxserver.client.handler
 {
@@ -26,36 +27,40 @@ namespace com.tvd12.ezyfoxserver.client.handler
 
 		protected EzyRequest newHandshakeRequest()
 		{
-			EzyHandshakeRequest request = new EzyHandshakeRequest(
+			return new EzyHandshakeRequest(
 				   getClientId(),
-				   getClientKey(),
+                   generateClientKey(),
 				   "CSHARP",
 				   "1.0.0",
-				   isEnableEncryption(),
+				   client.isEnableSSL(),
 				   getStoredToken()
 		   );
-			return request;
 		}
 
-		protected virtual String getClientId()
-		{
-			Guid guid = Guid.NewGuid();
-			String id = guid.ToString();
-			return id;
-		}
+        protected virtual String getClientId()
+        {
+            Guid guid = Guid.NewGuid();
+            String id = guid.ToString();
+            return id;
+        }
 
-		protected virtual String getClientKey()
-		{
-			String key = "";
-			return key;
-		}
+        protected byte[] generateClientKey()
+        {
+            if (!client.isEnableSSL())
+            {
+                return null;
+            }
+            EzyKeyPair keyPair = EzyKeyPairGentor.builder()
+                .build()
+                .generate();
+            byte[] publicKey = keyPair.getPublicKey();
+            byte[] privateKey = keyPair.getPrivateKey();
+            client.setPublicKey(publicKey);
+            client.setPrivateKey(privateKey);
+            return publicKey;
+        }
 
-		protected virtual bool isEnableEncryption()
-		{
-			return false;
-		}
-
-		protected virtual String getStoredToken()
+        protected virtual String getStoredToken()
 		{
 			return "";
 		}

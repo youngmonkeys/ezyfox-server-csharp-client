@@ -21,9 +21,9 @@ namespace com.tvd12.ezyfoxserver.client.socket
 			this.decoder = (EzyByteToObjectDecoder)decoder;
 		}
 
-		public Object decode(EzyMessage message)
+		public Object decode(EzyMessage message, byte[] decryptionKey)
 		{
-			Object answer = decoder.decode(message);
+			Object answer = decoder.decode(message, decryptionKey);
 			return answer;
 		}
 

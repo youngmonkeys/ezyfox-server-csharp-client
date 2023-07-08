@@ -25,19 +25,36 @@ namespace com.tvd12.ezyfoxserver.client.entity
 			this.dataHandlers = client.getHandlerManager().getAppDataHandlers(name);
 		}
 
-		public void send(EzyRequest request)
+        public void send(EzyRequest request)
+		{
+			send(request, false);
+		}
+
+
+        public void send(EzyRequest request, bool encrypted)
 		{
 			String cmd = (String)request.getCommand();
 			EzyData data = request.serialize();
-			send(cmd, data);
+			send(cmd, data, encrypted);
 		}
 
         public void send(String cmd)
+		{
+			send(cmd, false);
+		}
+
+        public void send(String cmd, bool encrypted)
         {
-            send(cmd, EzyEntityFactory.EMPTY_OBJECT);
+            send(cmd, EzyEntityFactory.EMPTY_OBJECT, encrypted);
         }
 
-		public void send(String cmd, EzyData data)
+        public void send(String cmd, EzyData data)
+		{
+			send(cmd, data, false);
+		}
+
+
+        public void send(String cmd, EzyData data, bool encrypted)
 		{
 			EzyArrayBuilder commandData = EzyEntityFactory.newArrayBuilder()
 					.append(cmd)
@@ -46,22 +63,37 @@ namespace com.tvd12.ezyfoxserver.client.entity
 					.append(id)
                     .append(commandData.build())
 					.build();
-			client.send(EzyCommand.APP_REQUEST, requestData);
+			client.send(EzyCommand.APP_REQUEST, requestData, encrypted);
 		}
 
         public void udpSend(EzyRequest request)
+		{
+			udpSend(request, false);
+		}
+
+        public void udpSend(EzyRequest request, bool encryted)
         {
             String cmd = (String)request.getCommand();
             EzyData data = request.serialize();
-            udpSend(cmd, data);
+            udpSend(cmd, data, encryted);
         }
 
         public void udpSend(String cmd)
+		{
+			udpSend(cmd, false);
+		}
+
+        public void udpSend(String cmd, bool encryted)
         {
             udpSend(cmd, EzyEntityFactory.EMPTY_OBJECT);
         }
 
         public void udpSend(String cmd, EzyData data)
+		{
+			udpSend(cmd, data, false);
+		}
+
+        public void udpSend(String cmd, EzyData data, bool encryted)
         {
             EzyArrayBuilder commandData = EzyEntityFactory.newArrayBuilder()
                     .append(cmd)
@@ -70,7 +102,7 @@ namespace com.tvd12.ezyfoxserver.client.entity
                     .append(id)
                     .append(commandData.build())
                     .build();
-            client.udpSend(EzyCommand.APP_REQUEST, requestData);
+            client.udpSend(EzyCommand.APP_REQUEST, requestData, encryted);
         }
 
 		public int getId()
