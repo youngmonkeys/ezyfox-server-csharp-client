@@ -40,8 +40,7 @@ namespace com.tvd12.ezyfoxserver.client.handler
         protected virtual String getClientId()
         {
             Guid guid = Guid.NewGuid();
-            String id = guid.ToString();
-            return id;
+            return guid.ToString();
         }
 
         protected byte[] generateClientKey()
