@@ -27,32 +27,62 @@ namespace com.tvd12.ezyfoxserver.client.support
 
         public void send(EzyRequest request)
         {
-            app.send(request);
+            send(request, false);
+        }
+
+        public void send(EzyRequest request, bool encrypted)
+        {
+            app.send(request, encrypted);
         }
 
         public void send(String cmd)
         {
-            app.send(cmd);
+            send(cmd, false);
+        }
+
+        public void send(String cmd, bool encrypted)
+        {
+            app.send(cmd, encrypted);
         }
 
         public void send(String cmd, Object data)
         {
-            app.send(cmd, binding.marshall<EzyData>(data));
+            send(cmd, data, false);
+        }
+
+        public void send(String cmd, Object data, bool encrypted)
+        {
+            app.send(cmd, binding.marshall<EzyData>(data), encrypted);
         }
 
         public void udpSend(EzyRequest request)
         {
-            app.udpSend(request);
+            udpSend(request, false);
+        }
+
+        public void udpSend(EzyRequest request, bool encrypted)
+        {
+            app.udpSend(request, encrypted);
         }
 
         public void udpSend(String cmd)
         {
-            app.udpSend(cmd);
+            udpSend(cmd, false);
+        }
+
+        public void udpSend(String cmd, bool encrypted)
+        {
+            app.udpSend(cmd, encrypted);
         }
 
         public void udpSend(String cmd, Object data)
         {
-            app.udpSend(cmd, binding.marshall<EzyData>(data));
+            udpSend(cmd, data, false);
+        }
+
+        public void udpSend(String cmd, Object data, bool encrypted)
+        {
+            app.udpSend(cmd, binding.marshall<EzyData>(data), encrypted);
         }
 
         public Object on<T>(String cmd, EzyAppProxyDataHandler<T> handler)
