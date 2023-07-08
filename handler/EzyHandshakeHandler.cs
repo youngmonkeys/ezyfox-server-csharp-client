@@ -69,8 +69,7 @@ namespace com.tvd12.ezyfoxserver.client.handler
 
 		protected void handleLogin(EzyArray data)
 		{
-			EzyRequest loginRequest = getLoginRequest();
-			client.send(loginRequest);
+			client.send(getLoginRequest(), client.isEnableSSL());
 		}
 
 		protected abstract EzyRequest getLoginRequest();
