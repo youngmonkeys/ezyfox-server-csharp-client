@@ -384,7 +384,9 @@ namespace com.tvd12.ezyfoxserver.client
         protected void printSentData(EzyCommand cmd, EzyArray data)
         {
             if (!unloggableCommands.Contains(cmd))
+            {
                 logger.debug("send command: " + cmd + " and data: " + data);
+            }
         }
 
         public virtual void udpConnect(int port)
