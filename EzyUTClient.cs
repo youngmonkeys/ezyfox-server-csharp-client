@@ -28,20 +28,11 @@ namespace com.tvd12.ezyfoxserver.client
             ((EzyUTSocketClient)socketClient).udpConnect(host, port);
         }
 
-        public override void udpSend(EzyRequest request)
-        {
-            udpSend(request, false);
-        }
-
         public override void udpSend(EzyRequest request, bool encrypted)
         {
             Object cmd = request.getCommand();
             EzyData data = request.serialize();
             udpSend((EzyCommand)cmd, (EzyArray)data, encrypted);
-        }
-
-        public override void udpSend(EzyCommand cmd, EzyArray data) {
-            udpSend(cmd, data, false);
         }
 
         public override void udpSend(EzyCommand cmd, EzyArray data, bool encrypted)

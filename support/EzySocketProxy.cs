@@ -203,42 +203,22 @@ namespace com.tvd12.ezyfoxserver.client.support
             }
         }
 
-        public void send(EzyRequest request)
-        {
-            send(request, false);
-        }
-
-        public void send(EzyRequest request, bool encrypted)
+        public void send(EzyRequest request, bool encrypted = false)
         {
             client.send(request, encrypted);
         }
 
-        public void send(EzyCommand cmd, Object data)
-        {
-            send(cmd, data, false);
-        }
-
-        public void send(EzyCommand cmd, Object data, bool encrypted)
+        public void send(EzyCommand cmd, Object data, bool encrypted = false)
         {
             client.send(cmd, binding.marshall<EzyArray>(data), encrypted);
         }
 
-        public void udpSend(EzyRequest request)
-        {
-            udpSend(request, false);
-        }
-
-        public void udpSend(EzyRequest request, bool encrypted)
+        public void udpSend(EzyRequest request, bool encrypted = false)
         {
             client.udpSend(request, encrypted);
         }
 
-        public void udpSend(EzyCommand cmd, EzyArray data)
-        {
-            udpSend(cmd, data, false);
-        }
-
-        public void udpSend(EzyCommand cmd, EzyArray data, bool encrypted)
+        public void udpSend(EzyCommand cmd, EzyArray data, bool encrypted = false)
         {
             client.udpSend(cmd, binding.marshall<EzyArray>(data), encrypted);
         }

@@ -25,62 +25,32 @@ namespace com.tvd12.ezyfoxserver.client.support
                 new Dictionary<String, IDictionary<Object, AppProxyDataHandler>>();
         }
 
-        public void send(EzyRequest request)
-        {
-            send(request, false);
-        }
-
-        public void send(EzyRequest request, bool encrypted)
+        public void send(EzyRequest request, bool encrypted = false)
         {
             app.send(request, encrypted);
         }
 
-        public void send(String cmd)
-        {
-            send(cmd, false);
-        }
-
-        public void send(String cmd, bool encrypted)
+        public void send(String cmd, bool encrypted = false)
         {
             app.send(cmd, encrypted);
         }
 
-        public void send(String cmd, Object data)
-        {
-            send(cmd, data, false);
-        }
-
-        public void send(String cmd, Object data, bool encrypted)
+        public void send(String cmd, Object data, bool encrypted = false)
         {
             app.send(cmd, binding.marshall<EzyData>(data), encrypted);
         }
 
-        public void udpSend(EzyRequest request)
-        {
-            udpSend(request, false);
-        }
-
-        public void udpSend(EzyRequest request, bool encrypted)
+        public void udpSend(EzyRequest request, bool encrypted = false)
         {
             app.udpSend(request, encrypted);
         }
 
-        public void udpSend(String cmd)
-        {
-            udpSend(cmd, false);
-        }
-
-        public void udpSend(String cmd, bool encrypted)
+        public void udpSend(String cmd, bool encrypted = false)
         {
             app.udpSend(cmd, encrypted);
         }
 
-        public void udpSend(String cmd, Object data)
-        {
-            udpSend(cmd, data, false);
-        }
-
-        public void udpSend(String cmd, Object data, bool encrypted)
+        public void udpSend(String cmd, Object data, bool encrypted = false)
         {
             app.udpSend(cmd, binding.marshall<EzyData>(data), encrypted);
         }

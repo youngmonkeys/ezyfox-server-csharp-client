@@ -153,24 +153,12 @@ namespace com.tvd12.ezyfoxserver.client
             disconnect((int) EzyDisconnectReason.CLOSE);
         }
 
-        public void send(EzyRequest request)
-        {
-            send(request, false);
-        }
-
-
         public void send(EzyRequest request, bool encrypted)
 		{
             Object cmd = request.getCommand();
             EzyData data = request.serialize();
             send((EzyCommand)cmd, (EzyArray)data, encrypted);
 		}
-
-        public void send(EzyCommand cmd, EzyArray data)
-		{
-            send(cmd, data, false);
-
-        }
 
         public void send(EzyCommand cmd, EzyArray data, bool encrypted)
         {
@@ -399,17 +387,7 @@ namespace com.tvd12.ezyfoxserver.client
             throw new InvalidOperationException("only support TCP, use EzyUTClient instead");
         }
             
-        public virtual void udpSend(EzyRequest request)
-        {
-            throw new InvalidOperationException("only support TCP, use EzyUTClient instead");
-        }
-
         public virtual void udpSend(EzyRequest request, bool encrypted)
-        {
-            throw new InvalidOperationException("only support TCP, use EzyUTClient instead");
-        }
-
-        public virtual void udpSend(EzyCommand cmd, EzyArray data)
         {
             throw new InvalidOperationException("only support TCP, use EzyUTClient instead");
         }

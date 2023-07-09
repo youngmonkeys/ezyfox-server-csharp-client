@@ -21,13 +21,9 @@ namespace com.tvd12.ezyfoxserver.client
 
 		bool reconnect();
 
-        void send(EzyRequest request);
+        void send(EzyRequest request, bool encrypted = false);
 
-        void send(EzyRequest request, bool encrypted);
-
-        void send(EzyCommand cmd, EzyArray data);
-
-        void send(EzyCommand cmd, EzyArray data, bool encrypted);
+        void send(EzyCommand cmd, EzyArray data, bool encrypted = false);
 
         void disconnect(int reason = (int)EzyDisconnectReason.CLOSE);
 
@@ -39,13 +35,9 @@ namespace com.tvd12.ezyfoxserver.client
 
         void udpConnect(String host, int port);
 
-        void udpSend(EzyRequest request);
+        void udpSend(EzyRequest request, bool encrypted = false);
 
-        void udpSend(EzyRequest request, bool encrypted);
-
-        void udpSend(EzyCommand cmd, EzyArray data);
-
-        void udpSend(EzyCommand cmd, EzyArray data, bool encrypted);
+        void udpSend(EzyCommand cmd, EzyArray data, bool encrypted = false);
 
         String getName();
 
