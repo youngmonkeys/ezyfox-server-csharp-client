@@ -7,7 +7,7 @@ namespace com.tvd12.ezyfoxserver.client.unity
 		private static EzyEventProcessor INSTANCE;
 		
 		[SerializeField]
-		private EzySocketConfigVariable socketConfig;
+		private EzySocketConfigHolderVariable socketConfig;
 
 		private void Awake()
 		{
@@ -29,7 +29,7 @@ namespace com.tvd12.ezyfoxserver.client.unity
 #if UNITY_WEBGL && !UNITY_EDITOR
 #else
 			EzyClients.getInstance()
-				.getClient(socketConfig.Value.ZoneName)
+				.getClient(socketConfig.Value.Value.ZoneName)
 				.processEvents();
 #endif
 		}
