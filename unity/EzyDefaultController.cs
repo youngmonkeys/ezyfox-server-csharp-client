@@ -11,6 +11,7 @@ namespace com.tvd12.ezyfoxserver.client.unity
 	public class EzyDefaultController : MonoBehaviour
 	{
 		[SerializeField]
+		private EzySocketConfigHolderVariable socketConfigHolderVariable;
 		protected EzySocketConfigVariable socketConfigVariable;
 		protected EzySocketProxy socketProxy;
 		protected EzyAppProxy appProxy;
@@ -23,6 +24,7 @@ namespace com.tvd12.ezyfoxserver.client.unity
 		protected void OnEnable()
 		{
 			LOGGER.debug("OnEnable");
+			socketConfigVariable = socketConfigHolderVariable.Value;
 			var socketProxyManager = EzySocketProxyManager.getInstance();
 			if (!socketProxyManager.hasInited())
 			{
