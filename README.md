@@ -5,6 +5,10 @@ csharp, unity client for ezyfox server
 
 csharp, unity client for ezyfox server
 
+# For Unity
+
+Please move to the [unity-client branch](https://github.com/youngmonkeys/ezyfox-server-csharp-client/tree/unity-client).
+
 # Documentation
 
 [https://youngmonkeys.org/ezyfox-csharp-client-sdk/](https://youngmonkeys.org/ezyfox-csharp-client-sdk/)

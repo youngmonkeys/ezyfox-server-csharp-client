@@ -21,11 +21,13 @@ namespace com.tvd12.ezyfoxserver.client
 
 		bool reconnect();
 
-        void send(EzyRequest request);
+        void send(EzyRequest request, bool encrypted = false);
 
-        void send(EzyCommand cmd, EzyArray data);
+        void send(EzyCommand cmd, EzyArray data, bool encrypted = false);
 
-		void disconnect(int reason = (int)EzyDisconnectReason.CLOSE);
+        void disconnect(int reason = (int)EzyDisconnectReason.CLOSE);
+
+        void close();
 
 		void processEvents();
 
@@ -33,13 +35,17 @@ namespace com.tvd12.ezyfoxserver.client
 
         void udpConnect(String host, int port);
 
-        void udpSend(EzyRequest request);
+        void udpSend(EzyRequest request, bool encrypted = false);
 
-        void udpSend(EzyCommand cmd, EzyArray data);
+        void udpSend(EzyCommand cmd, EzyArray data, bool encrypted = false);
 
         String getName();
 
 		EzyClientConfig getConfig();
+
+        bool isEnableSSL();
+
+        bool isEnableDebug();
 
         EzyUser getMe();
 
@@ -60,6 +66,18 @@ namespace com.tvd12.ezyfoxserver.client
         void setSessionId(long sessionId);
 
         void setSessionToken(String token);
+
+        void setSessionKey(byte[] sessionKey);
+
+        byte[] getSessionKey();
+
+        void setPrivateKey(byte[] privateKey);
+
+        byte[] getPrivateKey();
+
+        void setPublicKey(byte[] publicKey);
+
+        byte[] getPublicKey();
 
         EzyISocketClient getSocket();
 

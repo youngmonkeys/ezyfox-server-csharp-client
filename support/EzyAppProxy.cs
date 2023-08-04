@@ -25,34 +25,34 @@ namespace com.tvd12.ezyfoxserver.client.support
                 new Dictionary<String, IDictionary<Object, AppProxyDataHandler>>();
         }
 
-        public void send(EzyRequest request)
+        public void send(EzyRequest request, bool encrypted = false)
         {
-            app.send(request);
+            app.send(request, encrypted);
         }
 
-        public void send(String cmd)
+        public void send(String cmd, bool encrypted = false)
         {
-            app.send(cmd);
+            app.send(cmd, encrypted);
         }
 
-        public void send(String cmd, Object data)
+        public void send(String cmd, Object data, bool encrypted = false)
         {
-            app.send(cmd, binding.marshall<EzyData>(data));
+            app.send(cmd, binding.marshall<EzyData>(data), encrypted);
         }
 
-        public void udpSend(EzyRequest request)
+        public void udpSend(EzyRequest request, bool encrypted = false)
         {
-            app.udpSend(request);
+            app.udpSend(request, encrypted);
         }
 
-        public void udpSend(String cmd)
+        public void udpSend(String cmd, bool encrypted = false)
         {
-            app.udpSend(cmd);
+            app.udpSend(cmd, encrypted);
         }
 
-        public void udpSend(String cmd, Object data)
+        public void udpSend(String cmd, Object data, bool encrypted = false)
         {
-            app.udpSend(cmd, binding.marshall<EzyData>(data));
+            app.udpSend(cmd, binding.marshall<EzyData>(data), encrypted);
         }
 
         public Object on<T>(String cmd, EzyAppProxyDataHandler<T> handler)

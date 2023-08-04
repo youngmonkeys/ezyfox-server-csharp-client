@@ -13,24 +13,22 @@ namespace com.tvd12.ezyfoxserver.client.codec
 
 		public EzyMessage convert(Object value)
 		{
-			return convert(convertObject(value));
-		}
+            return this.packToMessage(this.convertToMessageContent(value), false);
+        }
 
-		private byte[] convertObject(Object value)
-		{
-			return objectToBytes.convert(value);
-		}
+        public byte[] convertToMessageContent(Object value)
+        {
+            return this.objectToBytes.convert(value);
+        }
 
-		private EzyMessage convert(byte[] content)
-		{
-            EzyMessage message = new EzySimpleMessage(newHeader(content), content, content.Length);
-            return message;
-		}
+        public EzyMessage packToMessage(byte[] content, bool encrypted)
+        {
+            return new EzySimpleMessage(this.newHeader(content, encrypted), content, content.Length);
+        }
 
-		private EzyMessageHeader newHeader(byte[] content)
+        private EzyMessageHeader newHeader(byte[] content, bool encrypted)
 		{
-            EzyMessageHeader header = new EzySimpleMessageHeader(isBigMessage(content), false, false, false, false, false);
-            return header;
+            return new EzySimpleMessageHeader(isBigMessage(content), encrypted, false, false, false, false);
 		}
 
 		private bool isBigMessage(byte[] content)

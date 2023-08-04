@@ -6,7 +6,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
 {
 	public interface EzySocketDataDecoder
 	{
-		Object decode(EzyMessage message);
+		Object decode(EzyMessage message, byte[] decryptionKey);
 
 		void decode(byte[] bytes, EzyCallback<EzyMessage> callback);
 	}

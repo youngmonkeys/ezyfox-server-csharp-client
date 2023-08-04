@@ -11,6 +11,6 @@ namespace com.tvd12.ezyfoxserver.client.socket
 
         void disconnect(int reason);
 
-        void sendMessage(EzyArray message);
+        void sendMessage(EzyArray message, bool encrypted);
     }
 }

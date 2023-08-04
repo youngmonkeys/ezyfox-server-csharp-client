@@ -18,6 +18,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
     {
         protected long sessionId;
         protected String sessionToken;
+        protected byte[] sessionKey;
         protected InetSocketAddress serverAddress;
         protected UdpClient datagramChannel;
         protected EzyUdpSocketReader socketReader;
@@ -112,9 +113,14 @@ namespace com.tvd12.ezyfoxserver.client.socket
             socketStatuses.push(EzySocketStatus.DISCONNECTED);
         }
 
-        public void sendMessage(EzyArray message)
+        public void sendMessage(EzyArray message, bool encrypted)
         {
-            EzyPackage pack = new EzySimplePackage(message, EzyTransportType.UDP);
+            EzyPackage pack = new EzySimplePackage(
+                message,
+                encrypted,
+                sessionKey,
+                EzyTransportType.UDP
+            );
             try
             {
                 responseApi.response(pack);
@@ -153,6 +159,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
         {
             Object decoder = codecFactory.newDecoder(EzyConnectionType.SOCKET);
             EzySocketDataDecoder socketDataDecoder = new EzySimpleSocketDataDecoder(decoder);
+            this.setSessionToken(sessionToken);
             this.socketReader.setDecoder(socketDataDecoder);
             this.socketWriter.setPacketQueue(packetQueue);
         }
@@ -220,6 +227,11 @@ namespace com.tvd12.ezyfoxserver.client.socket
         public void setSessionToken(String sessionToken)
         {
             this.sessionToken = sessionToken;
+        }
+
+        public void setSessionKey(byte[] sessionKey)
+        {
+            this.sessionKey = sessionKey;
         }
     }
 }

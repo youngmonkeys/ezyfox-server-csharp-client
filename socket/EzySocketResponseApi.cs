@@ -7,17 +7,30 @@ namespace com.tvd12.ezyfoxserver.client.socket
 	{
 		protected readonly EzySocketDataEncoder encoder;
 
-		public EzySocketResponseApi(EzySocketDataEncoder encoder,
-									EzyPacketQueue packetQueue)
-			: base(packetQueue)
+		public EzySocketResponseApi(
+			EzySocketDataEncoder encoder,
+			EzyPacketQueue packetQueue
+		): base(packetQueue)
 		{
 			this.encoder = encoder;
 		}
 
 		protected override Object encodeData(EzyArray data)
 		{
-			Object answer = encoder.encode(data);
-			return answer;
+			return encoder.encode(data);
 		}
-	}
+
+        protected override byte[] dataToMessageContent(EzyArray data)
+		{
+			return encoder.toMessageContent(data);
+		}
+
+        protected override byte[] encryptMessageContent(
+            byte[] messageContent,
+            byte[] encryptionKey
+        )
+		{
+			return encoder.encryptMessageContent(messageContent, encryptionKey);
+		}
+    }
 }

@@ -8,17 +8,20 @@ namespace com.tvd12.ezyfoxserver.client.request
 	public class EzyHandshakeRequest : EzyRequest
 	{
 		protected readonly String clientId;
-		protected readonly String clientKey;
+		protected readonly byte[] clientKey;
 		protected readonly String clientType;
 		protected readonly String clientVersion;
 		protected readonly bool enableEncryption;
 		protected readonly String token;
 
-		public EzyHandshakeRequest(String clientId,
-								   String clientKey,
-								   String clientType,
-								   String clientVersion,
-								   bool enableEncryption, String token)
+		public EzyHandshakeRequest(
+			String clientId,
+			byte[] clientKey,
+			String clientType,
+			String clientVersion,
+			bool enableEncryption,
+			String token
+		)
 		{
 			this.clientId = clientId;
 			this.clientKey = clientKey;

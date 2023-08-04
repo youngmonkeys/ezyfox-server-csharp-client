@@ -28,19 +28,36 @@ namespace com.tvd12.ezyfoxserver.client
             ((EzyUTSocketClient)socketClient).udpConnect(host, port);
         }
 
-        public override void udpSend(EzyRequest request)
+        public override void udpSend(EzyRequest request, bool encrypted)
         {
             Object cmd = request.getCommand();
             EzyData data = request.serialize();
-            send((EzyCommand)cmd, (EzyArray)data);
+            udpSend((EzyCommand)cmd, (EzyArray)data, encrypted);
         }
 
-        public override void udpSend(EzyCommand cmd, EzyArray data)
+        public override void udpSend(EzyCommand cmd, EzyArray data, bool encrypted)
         {
+            bool shouldEncrypted = encrypted;
+            if (encrypted && sessionKey == null)
+            {
+                if (config.isEnableDebug())
+                {
+                    shouldEncrypted = false;
+                }
+                else
+                {
+                    throw new ArgumentException(
+                        "can not send command: " + cmd + " " +
+                            "you must enable SSL or enable debug mode by configuration " +
+                            "when you create the client"
+                    );
+                }
+
+            }
             EzyArray array = requestSerializer.serialize(cmd, data);
             if (socketClient != null)
             {
-                ((EzyUTSocketClient)socketClient).udpSendMessage(array);
+                ((EzyUTSocketClient)socketClient).udpSendMessage(array, shouldEncrypted);
                 printSentData(cmd, data);
             }
         }

@@ -12,12 +12,14 @@ namespace com.tvd12.ezyfoxserver.client.codec
         protected bool rawBytes;
         protected bool udpHandshake;
 
-        public EzySimpleMessageHeader(bool bigSize,
-                                      bool encrypted, 
-                                      bool compressed, 
-                                      bool text,
-                                      bool rawBytes,
-                                      bool udpHandshake)
+        public EzySimpleMessageHeader(
+			bool bigSize,
+			bool encrypted,
+			bool compressed,
+			bool text,
+			bool rawBytes,
+			bool udpHandshake
+		)
         {
             this.bigSize = bigSize;
             this.encrypted = encrypted;
