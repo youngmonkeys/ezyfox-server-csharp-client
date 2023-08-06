@@ -155,6 +155,16 @@ namespace com.tvd12.ezyfoxserver.client.unity
 			return true;
 		}
 
+		public void send(EzyRequest request, bool encrypted = false)
+		{
+			send(request);
+		}
+
+		public void send(EzyCommand cmd, EzyArray data, bool encrypted = false)
+		{
+			send(cmd, data);
+		}
+
 		[MonoPInvokeCallback(typeof(EzyDelegates.Delegate2))]
 		public static void reconnectCallback(
 			String clientName,
@@ -212,6 +222,11 @@ namespace com.tvd12.ezyfoxserver.client.unity
 				null
 			);
 		}
+
+		public void close()
+		{
+			disconnect((int) EzyDisconnectReason.CLOSE);
+		}
 		
 		public void processEvents()
 		{
@@ -224,6 +239,16 @@ namespace com.tvd12.ezyfoxserver.client.unity
 		}
 
 		public void udpConnect(string host, int port)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void udpSend(EzyRequest request, bool encrypted = false)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void udpSend(EzyCommand cmd, EzyArray data, bool encrypted = false)
 		{
 			throw new NotImplementedException();
 		}
@@ -246,6 +271,16 @@ namespace com.tvd12.ezyfoxserver.client.unity
 		public EzyClientConfig getConfig()
 		{
 			return this.config;
+		}
+
+		public bool isEnableSSL()
+		{
+			return this.config.isEnableSSL();
+		}
+
+		public bool isEnableDebug()
+		{
+			return this.config.isEnableDebug();
 		}
 
 		public EzyUser getMe()
@@ -296,6 +331,36 @@ namespace com.tvd12.ezyfoxserver.client.unity
 		public void setSessionToken(string token)
 		{
 			this.sessionToken = token;
+		}
+
+		public void setSessionKey(byte[] sessionKey)
+		{
+			throw new NotImplementedException();
+		}
+
+		public byte[] getSessionKey()
+		{
+			throw new NotImplementedException();
+		}
+
+		public void setPrivateKey(byte[] privateKey)
+		{
+			throw new NotImplementedException();
+		}
+
+		public byte[] getPrivateKey()
+		{
+			throw new NotImplementedException();
+		}
+
+		public void setPublicKey(byte[] publicKey)
+		{
+			throw new NotImplementedException();
+		}
+
+		public byte[] getPublicKey()
+		{
+			throw new NotImplementedException();
 		}
 		
 		public EzyISocketClient getSocket()
