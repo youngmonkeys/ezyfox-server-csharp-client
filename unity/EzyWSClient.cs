@@ -142,7 +142,7 @@ namespace com.tvd12.ezyfoxserver.client.unity
 
 		public void connect(string host, int port)
 		{
-			throw new NotImplementedException();
+			throw new InvalidOperationException("not supported");
 		}
 
 		public bool reconnect()
@@ -153,6 +153,16 @@ namespace com.tvd12.ezyfoxserver.client.unity
 				reconnectCallback
 			);
 			return true;
+		}
+
+		public void send(EzyRequest request, bool encrypted = false)
+		{
+			send(request);
+		}
+
+		public void send(EzyCommand cmd, EzyArray data, bool encrypted = false)
+		{
+			send(cmd, data);
 		}
 
 		[MonoPInvokeCallback(typeof(EzyDelegates.Delegate2))]
@@ -212,30 +222,45 @@ namespace com.tvd12.ezyfoxserver.client.unity
 				null
 			);
 		}
+
+		public void close()
+		{
+			disconnect((int) EzyDisconnectReason.CLOSE);
+		}
 		
 		public void processEvents()
 		{
-			throw new NotImplementedException();
+			throw new InvalidOperationException("not supported");
 		}
 
 		public void udpConnect(int port)
 		{
-			throw new NotImplementedException();
+			throw new InvalidOperationException("not supported");
 		}
 
 		public void udpConnect(string host, int port)
 		{
-			throw new NotImplementedException();
+			throw new InvalidOperationException("not supported");
+		}
+
+		public void udpSend(EzyRequest request, bool encrypted = false)
+		{
+			throw new InvalidOperationException("not supported");
+		}
+
+		public void udpSend(EzyCommand cmd, EzyArray data, bool encrypted = false)
+		{
+			throw new InvalidOperationException("not supported");
 		}
 
 		public void udpSend(EzyRequest request)
 		{
-			throw new NotImplementedException();
+			throw new InvalidOperationException("not supported");
 		}
 
 		public void udpSend(EzyCommand cmd, EzyArray data)
 		{
-			throw new NotImplementedException();
+			throw new InvalidOperationException("not supported");
 		}
 
 		public string getName()
@@ -246,6 +271,20 @@ namespace com.tvd12.ezyfoxserver.client.unity
 		public EzyClientConfig getConfig()
 		{
 			return this.config;
+		}
+
+		/**
+		 * This method specifies whether SSL is enabled for TCP/UDP. Therefore, it returns false
+		 * by default for WebSocket.
+		 */
+		public bool isEnableSSL()
+		{
+			return false;
+		}
+
+		public bool isEnableDebug()
+		{
+			return this.config.isEnableDebug();
 		}
 
 		public EzyUser getMe()
@@ -275,17 +314,17 @@ namespace com.tvd12.ezyfoxserver.client.unity
 		
 		public EzyConnectionStatus getUdpStatus()
 		{
-			throw new NotImplementedException();
+			throw new InvalidOperationException("not supported");
 		}
 		
 		public void setUdpStatus(EzyConnectionStatus status)
 		{
-			throw new NotImplementedException();
+			throw new InvalidOperationException("not supported");
 		}
 		
 		public bool isUdpConnected()
 		{
-			throw new NotImplementedException();
+			throw new InvalidOperationException("not supported");
 		}
 		
 		public void setSessionId(long sessionId)
@@ -297,10 +336,40 @@ namespace com.tvd12.ezyfoxserver.client.unity
 		{
 			this.sessionToken = token;
 		}
+
+		public void setSessionKey(byte[] sessionKey)
+		{
+			throw new InvalidOperationException("not supported");
+		}
+
+		public byte[] getSessionKey()
+		{
+			throw new InvalidOperationException("not supported");
+		}
+
+		public void setPrivateKey(byte[] privateKey)
+		{
+			throw new InvalidOperationException("not supported");
+		}
+
+		public byte[] getPrivateKey()
+		{
+			throw new InvalidOperationException("not supported");
+		}
+
+		public void setPublicKey(byte[] publicKey)
+		{
+			throw new InvalidOperationException("not supported");
+		}
+
+		public byte[] getPublicKey()
+		{
+			throw new InvalidOperationException("not supported");
+		}
 		
 		public EzyISocketClient getSocket()
 		{
-			throw new NotImplementedException();
+			throw new InvalidOperationException("not supported");
 		}
 		
 		public EzyApp getApp()
@@ -363,7 +432,7 @@ namespace com.tvd12.ezyfoxserver.client.unity
 
 		public EzyStatistics getNetworkStatistics()
 		{
-			throw new NotImplementedException();
+			throw new InvalidOperationException("not supported");
 		}
 
 		public EzyTransportType getTransportType()
