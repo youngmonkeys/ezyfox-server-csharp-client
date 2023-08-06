@@ -21,10 +21,7 @@ public class EzyDisconnectionHandler : EzyAbstractEventHandler<EzyDisconnectionE
 				should;
 			bool reconnecting = false;
             client.setStatus(EzyConnectionStatus.DISCONNECTED);
-            if (client.getTransportType() == EzyTransportType.UDP)
-            {
-				client.setUdpStatus(EzyConnectionStatus.DISCONNECTED);
-            }
+			client.setUdpStatus(EzyConnectionStatus.DISCONNECTED);
 			if (mustReconnect)
 				reconnecting = client.reconnect();
 			if (reconnecting)

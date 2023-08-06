@@ -317,9 +317,11 @@ namespace com.tvd12.ezyfoxserver.client.unity
 			throw new InvalidOperationException("not supported");
 		}
 		
+		/**
+		 * This method sets UDP status, so it should do nothing for WebSocket
+		 */
 		public void setUdpStatus(EzyConnectionStatus status)
 		{
-			throw new InvalidOperationException("not supported");
 		}
 		
 		public bool isUdpConnected()
