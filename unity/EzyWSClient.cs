@@ -273,9 +273,13 @@ namespace com.tvd12.ezyfoxserver.client.unity
 			return this.config;
 		}
 
+		/**
+		 * This method specifies whether SSL is enabled for TCP/UDP. Therefore, it returns false
+		 * by default for WebSocket.
+		 */
 		public bool isEnableSSL()
 		{
-			throw new InvalidOperationException("not supported");
+			return false;
 		}
 
 		public bool isEnableDebug()
