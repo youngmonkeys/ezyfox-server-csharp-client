@@ -55,6 +55,11 @@ namespace com.tvd12.ezyfoxserver.client.unity
 			);
 		}
 
+		protected void Disconnect()
+		{
+			socketProxy.disconnect();
+		}
+
 		protected void OnLoginSuccess<T>(EzySocketProxyDataHandler<T> handler)
 		{
 			socketHandlers.Add(

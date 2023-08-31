@@ -226,6 +226,11 @@ namespace com.tvd12.ezyfoxserver.client.support
             client.udpSend(cmd, binding.marshall<EzyArray>(data), encrypted);
         }
 
+        public void disconnect()
+        {
+            client.disconnect();
+        }
+
         public Object onLoginSuccess<T>(EzySocketProxyDataHandler<T> handler)
         {
             DataHandler dataHandler = data =>
