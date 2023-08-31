@@ -118,6 +118,10 @@ namespace com.tvd12.ezyfoxserver.client.unity
 			);
 		}
 
+		protected void Disconnect() {
+			socketProxy.disconnect();
+		}
+
 		protected virtual void OnDestroy()
 		{
 			LOGGER.debug("OnDestroy");
