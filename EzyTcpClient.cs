@@ -10,6 +10,7 @@ using com.tvd12.ezyfoxserver.client.request;
 using com.tvd12.ezyfoxserver.client.socket;
 using static com.tvd12.ezyfoxserver.client.constant.EzyConnectionStatuses;
 using com.tvd12.ezyfoxserver.client.statistics;
+using com.tvd12.ezyfoxserver.client.concurrent;
 
 namespace com.tvd12.ezyfoxserver.client
 {
@@ -40,15 +41,24 @@ namespace com.tvd12.ezyfoxserver.client
         protected readonly EzySocketClient socketClient;
         protected readonly EzyPingSchedule pingSchedule;
         protected readonly EzyLogger logger;
+        protected readonly EzyEventLoopGroup eventLoopGroup;
 
-		public EzyTcpClient(EzyClientConfig config)
+        public EzyTcpClient(EzyClientConfig config) : this(config, null)
+        {
+        }
+
+		public EzyTcpClient(
+            EzyClientConfig config,
+            EzyEventLoopGroup eventLoopGroup
+        )
 		{
 			this.config = config;
             this.name = config.getClientName();
 			this.status = EzyConnectionStatus.NULL;
             this.status = EzyConnectionStatus.NULL;
+            this.eventLoopGroup = eventLoopGroup;
             this.pingManager = new EzySimplePingManager(config.getPing());
-			this.pingSchedule = new EzyPingSchedule(this);
+			this.pingSchedule = new EzyPingSchedule(this, eventLoopGroup);
             this.handlerManager = new EzySimpleHandlerManager(this);
             this.networkStatistics = new EzySimpleStatistics();
             this.requestSerializer = new EzySimpleRequestSerializer();

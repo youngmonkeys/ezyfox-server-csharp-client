@@ -1,4 +1,4 @@
-﻿using com.tvd12.ezyfoxserver.client.entity;
+﻿using System;
 
 namespace com.tvd12.ezyfoxserver.client.socket
 {
@@ -11,18 +11,53 @@ namespace com.tvd12.ezyfoxserver.client.socket
             while(true)
             {
                 if (!active)
+                {
                     return;
+                }
                 EzyPacket packet = packetQueue.take();
                 if (packet == null)
+                {
                     return;
+                }
                 int writtenBytes = writeToSocket(packet);
                 
                 packet.release();
                 if (writtenBytes <= 0)
+                {
                     return;
+                }
+                addSocketWriteStats(writtenBytes);
+            }
+        }
 
-                networkStatistics.getSocketStats().getNetworkStats().addWrittenPackets(1);
-                networkStatistics.getSocketStats().getNetworkStats().addWrittenBytes(writtenBytes);
+        public override bool call()
+        {
+            try
+            {
+                if (!active)
+                {
+                    return false;
+                }
+                EzyPacket packet = packetQueue.take();
+                if (packet == null)
+                {
+                    return true;
+                }
+                int writtenBytes = writeToSocket(packet);
+
+                packet.release();
+                if (writtenBytes <= 0)
+                {
+                    return false;
+                }
+
+                addSocketWriteStats(writtenBytes);
+                return true;
+            }
+            catch (Exception e)
+            {
+                logger.info("problems in socket-writer event loop", e);
+                return false;
             }
         }
 

@@ -17,7 +17,7 @@ namespace com.tvd12.ezyfoxserver.client.concurrent
         public EzyEventLoopGroup(int numberOfThreads) : this(
                 numberOfThreads,
                 EzyThreadFactory.builder()
-                    .poolName("evt-loop")
+                    .poolName("event-loop")
                     .build()
             )
         {
@@ -89,7 +89,7 @@ namespace com.tvd12.ezyfoxserver.client.concurrent
         }
 
         public void addOneTimeEvent(
-            Runnable task,
+            Action task,
             long delayTime
         )
         {
@@ -262,7 +262,7 @@ namespace com.tvd12.ezyfoxserver.client.concurrent
                         }
                         removeEvents.Clear();
                     }
-                    int elapsedTime = (DateTime.Now - startTime).Milliseconds;
+                    int elapsedTime = (int)(DateTime.Now - startTime).TotalMilliseconds;
                     int sleepTime = maxSleepTime - elapsedTime;
                     if (sleepTime > 0)
                     {
@@ -317,15 +317,15 @@ namespace com.tvd12.ezyfoxserver.client.concurrent
 
         public class EzyEventLoopOneTimeEvent : EzyLoggable, EzyEventLoopEvent
         {
-            private readonly Runnable evt;
+            private readonly Action task;
             private readonly IDictionary<EzyEventLoopEvent, EventLoop> eventLoopByEvent;
 
             public EzyEventLoopOneTimeEvent(
-                Runnable task,
+                Action task,
                 IDictionary<EzyEventLoopEvent, EventLoop> eventLoopByEvent
             )
             {
-                this.evt = task;
+                this.task = task;
                 this.eventLoopByEvent = eventLoopByEvent;
             }
 
@@ -333,7 +333,7 @@ namespace com.tvd12.ezyfoxserver.client.concurrent
             {
                 try
                 {
-                    evt.run();
+                    task();
                 }
                 catch (Exception e)
                 {

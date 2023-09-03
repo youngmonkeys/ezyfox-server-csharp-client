@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Sockets;
+using System.Threading.Tasks;
 using com.tvd12.ezyfoxserver.client.constant;
 
 namespace com.tvd12.ezyfoxserver.client.socket
@@ -7,23 +8,47 @@ namespace com.tvd12.ezyfoxserver.client.socket
     public class EzyTcpSocketReader : EzySocketReader 
     {
         protected TcpClient socket;
+        protected Task<int> readTask;
 
         public void setSocket(TcpClient socket)
         {
             this.socket = socket;
         }
 
-        protected override int readSocketData(byte[] readBytes)
+        protected override int readSocketData(byte[] buffer)
         {
             try
             {
-                int bytesToRead = socket.GetStream().Read(readBytes, 0, readBufferSize);
-                return bytesToRead;
+                return socket.GetStream().Read(buffer, 0, bufferSize);
             }
             catch(Exception ex) 
             {
                 logger.warn("I/O error at socket-reader", ex);
                 return -1;    
+            }
+        }
+
+        protected override int readSocketDataAsync(byte[] buffer)
+        {
+            try
+            {
+                if (readTask == null)
+                {
+                    readTask = socket
+                        .GetStream()
+                        .ReadAsync(buffer, 0, bufferSize);
+                }
+                int readBytes = readTask.Result;
+                if (readBytes > 0)
+                {
+                    readTask = null;
+                }
+                return readBytes;
+            }
+            catch (Exception ex)
+            {
+                logger.warn("I/O error at socket-reader", ex);
+                return -1;
             }
         }
     }
