@@ -73,5 +73,13 @@ namespace com.tvd12.ezyfoxserver.client.util
         {
             return capacity;
         }
+
+		public virtual void forEach(Action<E> consumer)
+        {
+			foreach (E item in queue)
+            {
+				consumer(item);
+            }
+        }
 	}
 }
