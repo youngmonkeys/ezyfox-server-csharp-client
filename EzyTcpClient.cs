@@ -83,6 +83,7 @@ namespace com.tvd12.ezyfoxserver.client
             client.setPingManager(pingManager);
             client.setNetworkStatistics(networkStatistics);
             client.setHandlerManager(handlerManager);
+            client.setEventLoopGroup(eventLoopGroup);
             client.setReconnectConfig(config.getReconnect());
             client.setUnloggableCommands(unloggableCommands);
 			return client;

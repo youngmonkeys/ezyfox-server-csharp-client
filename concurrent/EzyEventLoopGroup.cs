@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
@@ -40,15 +41,15 @@ namespace com.tvd12.ezyfoxserver.client.concurrent
             EzyThreadFactory threadFactory
         )
         {
-            eventLoopByEvent = new Dictionary<EzyEventLoopEvent, EventLoop>();
-            AtomicInteger index = new AtomicInteger();
+            eventLoopByEvent = new ConcurrentDictionary<EzyEventLoopEvent, EventLoop>();
+            int index = 0;
             eventLoops = new EzyRoundRobin<EventLoop>(
                 () =>
                 {
                     return new EventLoop(
-                    index.getAndIncrement(),
-                    maxSleepTime,
-                    threadFactory
+                        index++,
+                        maxSleepTime,
+                        threadFactory
                     );
                 },
                 numberOfThreads
@@ -64,7 +65,7 @@ namespace com.tvd12.ezyfoxserver.client.concurrent
             EventLoop eventLoop = eventLoops.get();
             eventLoopByEvent.Add(
                 evt is ScheduledEvent
-                    ? ((ScheduledEvent)evt).evt
+                    ? ((ScheduledEvent)evt).runEvent
                     : evt,
                 eventLoop
             );
@@ -182,10 +183,10 @@ namespace com.tvd12.ezyfoxserver.client.concurrent
                 }
                 events.Add(
                     evt is ScheduledEvent
-                        ? ((ScheduledEvent)evt).evt
-                                : evt,
-                            evt
-                        );
+                        ? ((ScheduledEvent)evt).runEvent
+                        : evt,
+                    evt
+                );
             }
 
             public void removeEvent(EzyEventLoopEvent evt)
@@ -199,10 +200,10 @@ namespace com.tvd12.ezyfoxserver.client.concurrent
             private void doRemoveEvent(EzyEventLoopEvent evt)
             {
                 events.Remove(
-                            evt is ScheduledEvent
-                        ? ((ScheduledEvent)evt).evt
-                                : evt
-                        );
+                    evt is ScheduledEvent
+                        ? ((ScheduledEvent)evt).runEvent
+                        : evt
+                );
                 try
                 {
                     evt.onRemoved();
@@ -222,12 +223,12 @@ namespace com.tvd12.ezyfoxserver.client.concurrent
             private void doStart()
             {
                 active.set(true);
-                List<EzyEventLoopEvent> evtBuffers = new List<EzyEventLoopEvent>();
+                List<EzyEventLoopEvent> eventBuffers = new List<EzyEventLoopEvent>();
                 while (active.get())
                 {
                     DateTime startTime = DateTime.Now;
-                    evtBuffers.AddRange(events.Values);
-                    foreach (EzyEventLoopEvent evt in evtBuffers)
+                    eventBuffers.AddRange(events.Values);
+                    foreach (EzyEventLoopEvent evt in eventBuffers)
                     {
                         try
                         {
@@ -253,7 +254,7 @@ namespace com.tvd12.ezyfoxserver.client.concurrent
                             logger.error("fatal error on evt loop with evt: {}", evt, e);
                         }
                     }
-                    evtBuffers.Clear();
+                    eventBuffers.Clear();
                     lock (removeEvents)
                     {
                         foreach (EzyEventLoopEvent evt in removeEvents)
@@ -351,17 +352,17 @@ namespace com.tvd12.ezyfoxserver.client.concurrent
         public class ScheduledEvent : EzyEventLoopEvent
         {
             private readonly long period;
-            public readonly EzyEventLoopEvent evt;
+            public readonly EzyEventLoopEvent runEvent;
             private DateTime nextFireTime = new DateTime();
 
             public ScheduledEvent(
-                EzyEventLoopEvent evt,
+                EzyEventLoopEvent runEvent,
                 long delayTime,
                 long period
             )
             {
                 this.period = period;
-                this.evt = evt;
+                this.runEvent = runEvent;
                 this.nextFireTime = DateTime.Now.AddMilliseconds(
                     delayTime <= 0 ? 0 : period
                 );
@@ -375,19 +376,18 @@ namespace com.tvd12.ezyfoxserver.client.concurrent
             public bool call()
             {
                 nextFireTime = nextFireTime.AddMilliseconds(period);
-                return evt.call();
+                return runEvent.call();
             }
 
             public void onFinished()
             {
-                evt.onFinished();
+                runEvent.onFinished();
             }
 
             public void onRemoved()
             {
-                evt.onRemoved();
+                runEvent.onRemoved();
             }
         }
     }
-
 }
