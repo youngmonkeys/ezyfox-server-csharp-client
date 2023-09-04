@@ -36,7 +36,6 @@ namespace com.tvd12.ezyfoxserver.client.concurrent
             return new Builder();
         }
 
-
         public class Builder : EzyBuilder<EzyThreadFactory>
         {
             public String _poolName;
@@ -45,7 +44,6 @@ namespace com.tvd12.ezyfoxserver.client.concurrent
             {
                 this._poolName = "";
             }
-
 
             public Builder poolName(String poolName)
             {
@@ -59,5 +57,4 @@ namespace com.tvd12.ezyfoxserver.client.concurrent
             }
         }
     }
-
 }

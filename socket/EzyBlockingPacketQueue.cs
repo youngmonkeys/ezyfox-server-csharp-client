@@ -39,7 +39,6 @@ namespace com.tvd12.ezyfoxserver.client.socket
 			return packet;
 		}
 
-
 		public bool isFull()
 		{
             int queueSize = queue.size();

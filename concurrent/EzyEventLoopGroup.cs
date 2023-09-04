@@ -9,7 +9,6 @@ namespace com.tvd12.ezyfoxserver.client.concurrent
 {
     public class EzyEventLoopGroup : EzyLoggable
     {
-
         private readonly EzyRoundRobin<EventLoop> eventLoops;
         private readonly IDictionary<EzyEventLoopEvent, EventLoop> eventLoopByEvent;
 
