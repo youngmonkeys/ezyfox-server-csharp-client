@@ -11,6 +11,7 @@ using com.tvd12.ezyfoxserver.client.constant;
 using com.tvd12.ezyfoxserver.client.exception;
 using static com.tvd12.ezyfoxserver.client.constant.EzySocketStatuses;
 using com.tvd12.ezyfoxserver.client.statistics;
+using com.tvd12.ezyfoxserver.client.concurrent;
 
 namespace com.tvd12.ezyfoxserver.client.socket
 {
@@ -19,6 +20,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
         protected long sessionId;
         protected String sessionToken;
         protected byte[] sessionKey;
+        protected EzyEventLoopGroup eventLoopGroup;
         protected InetSocketAddress serverAddress;
         protected UdpClient datagramChannel;
         protected EzyUdpSocketReader socketReader;
@@ -161,7 +163,9 @@ namespace com.tvd12.ezyfoxserver.client.socket
             EzySocketDataDecoder socketDataDecoder = new EzySimpleSocketDataDecoder(decoder);
             this.setSessionToken(sessionToken);
             this.socketReader.setDecoder(socketDataDecoder);
+            this.socketReader.setEventLoopGroup(eventLoopGroup);
             this.socketWriter.setPacketQueue(packetQueue);
+            this.socketWriter.setEventLoopGroup(eventLoopGroup);
         }
 
         protected void startAdapters()
@@ -232,6 +236,11 @@ namespace com.tvd12.ezyfoxserver.client.socket
         public void setSessionKey(byte[] sessionKey)
         {
             this.sessionKey = sessionKey;
+        }
+
+        public void setEventLoopGroup(EzyEventLoopGroup eventLoopGroup)
+        {
+            this.eventLoopGroup = eventLoopGroup;
         }
     }
 }

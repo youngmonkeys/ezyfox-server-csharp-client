@@ -251,7 +251,7 @@ namespace com.tvd12.ezyfoxserver.client.concurrent
                         }
                         catch (Exception e)
                         {
-                            logger.error("fatal error on event loop with evt: {}", evt, e);
+                            logger.error("fatal error on event loop with event: {}", evt, e);
                         }
                     }
                     eventBuffers.Clear();
@@ -302,7 +302,7 @@ namespace com.tvd12.ezyfoxserver.client.concurrent
                 }
                 catch (Exception e)
                 {
-                    logger.debug("stop event evelo loop group error", e);
+                    logger.debug("stop event eveloop group error", e);
                 }
                 return new List<EzyEventLoopEvent>(events.Values);
             }

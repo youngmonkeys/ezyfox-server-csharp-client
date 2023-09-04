@@ -38,7 +38,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
                 {
                     return false;
                 }
-                EzyPacket packet = packetQueue.take();
+                EzyPacket packet = packetQueue.poll();
                 if (packet == null)
                 {
                     return true;
