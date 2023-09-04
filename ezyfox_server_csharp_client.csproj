@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
   </PropertyGroup>
@@ -9,11 +9,5 @@
   <ItemGroup>
     <Folder Include="binding\" />
     <Folder Include="support\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="Program.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Program.cs" />
   </ItemGroup>
 </Project>
