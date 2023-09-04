@@ -38,9 +38,10 @@ namespace com.tvd12.ezyfoxserver.client.socket
                         .GetStream()
                         .ReadAsync(buffer, 0, bufferSize);
                 }
-                int readBytes = readTask.Result;
-                if (readBytes > 0)
+                int readBytes = 0;
+                if (readTask.IsCompleted)
                 {
+                    readBytes = readTask.Result;
                     readTask = null;
                 }
                 return readBytes;

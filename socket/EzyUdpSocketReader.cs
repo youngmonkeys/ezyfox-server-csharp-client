@@ -103,12 +103,14 @@ namespace com.tvd12.ezyfoxserver.client.socket
             {
                 readTask = datagramChannel.ReceiveAsync();
             }
-            UdpReceiveResult result = readTask.Result;
-            byte[] bytes = result.Buffer;
-            if (bytes != null)
+            byte[] bytes = null;
+            if (readTask.IsCompleted)
             {
+                UdpReceiveResult result = readTask.Result;
+                bytes = result.Buffer;
                 readTask = null;
             }
+
             return bytes;
         }
 

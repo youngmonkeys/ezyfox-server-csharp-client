@@ -179,7 +179,7 @@ namespace com.tvd12.ezyfoxserver.client.concurrent
             {
                 if (!active.get())
                 {
-                    throw new Exception("evt loop has stopped");
+                    throw new Exception("event loop has stopped");
                 }
                 events.Add(
                     evt is ScheduledEvent
@@ -216,7 +216,7 @@ namespace com.tvd12.ezyfoxserver.client.concurrent
 
             public void start()
             {
-                threadFactory.newThread(() => start())
+                threadFactory.newThread(() => doStart())
                     .Start();
             }
 
@@ -251,7 +251,7 @@ namespace com.tvd12.ezyfoxserver.client.concurrent
                         }
                         catch (Exception e)
                         {
-                            logger.error("fatal error on evt loop with evt: {}", evt, e);
+                            logger.error("fatal error on event loop with evt: {}", evt, e);
                         }
                     }
                     eventBuffers.Clear();
