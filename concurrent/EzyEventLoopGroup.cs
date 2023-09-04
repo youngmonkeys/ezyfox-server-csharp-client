@@ -149,7 +149,6 @@ namespace com.tvd12.ezyfoxserver.client.concurrent
 
         public class EventLoop : EzyLoggable
         {
-
             private readonly int index;
             private readonly int maxSleepTime;
             private readonly AtomicBoolean active;
