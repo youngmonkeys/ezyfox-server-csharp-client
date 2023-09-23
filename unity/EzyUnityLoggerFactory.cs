@@ -12,23 +12,17 @@ namespace com.tvd12.ezyfoxserver.client.unity
 		[SerializeField]
 		private bool jsDebug;
 		
-		private static bool INITIALIZED = false;
-		
 		private void Awake()
 		{
 			EzyLoggerFactory.setLoggerLevel(loggerLevel);
 			EzyWSClient.setJsDebug(jsDebug);
+			EzyLoggerFactory.setLoggerSupply(
+				type => new EzyUnityLogger(type)
+			);
 		}
 
 		public static EzyLogger getLogger(Type type)
 		{
-			if (!INITIALIZED)
-			{
-				EzyLoggerFactory.setLoggerSupply(
-					type => new EzyUnityLogger(type)
-				);
-				INITIALIZED = true;
-			}
 			return EzyLoggerFactory.getLogger(type);
 		}
 
