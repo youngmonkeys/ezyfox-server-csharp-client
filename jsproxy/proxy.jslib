@@ -86,6 +86,14 @@ var EzyFoxServerClientPlugin = {
                     .getClient(clientName)
                     .send(cmd, sendData);
             },
+            'startPing': function (clientName, callback) {
+                EzyLogger.console('start ping: clientName = ' + clientName);
+                ezy.client.pingSchedule.start();
+            },
+            'stopPing': function (clientName, callback) {
+                EzyLogger.console('start ping: clientName = ' + clientName);
+                ezy.client.pingSchedule.stop();
+            },
         }
     },
 
