@@ -7,7 +7,7 @@ namespace com.tvd12.ezyfoxserver.client.unity
 {
 	public class EzyWSPingSchedule : EzyPingSchedule
 	{
-		private static readonly EzyLogger LOGGER = EzyUnityLoggerFactory.getLogger(typeof(EzyWSClient));
+		private static readonly EzyLogger LOGGER = EzyUnityLoggerFactory.getLogger(typeof(EzyWSPingSchedule));
 		
 		public EzyWSPingSchedule(EzyClient client) : base(client)
 		{
