@@ -38,7 +38,7 @@ namespace com.tvd12.ezyfoxserver.client.unity
 			this.config = config;
 			this.status = EzyConnectionStatus.NULL;
 			this.pingManager = new EzySimplePingManager(config.getPing());
-			this.pingSchedule = new EzyPingSchedule(this);
+			this.pingSchedule = new EzyWSPingSchedule(this);
 			this.handlerManager = new EzySimpleHandlerManager(this);
 			this.settingUp = new EzySimpleSetup(handlerManager);
 		}
