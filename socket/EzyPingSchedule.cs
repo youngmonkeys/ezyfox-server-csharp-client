@@ -34,7 +34,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
             return true;
         }
 
-        public void start()
+		public virtual void start()
 		{
             int periodMillis = pingManager.getPingPeriod();
             if (eventLoopGroup != null)
@@ -60,7 +60,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
             return answer;
         }
 
-		public void stop()
+		public virtual void stop()
 		{
             lock (this)
             {
@@ -90,7 +90,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
 			}
 		}
 
-        public void setSocketEventQueue(EzySocketEventQueue socketEventQueue)
+        public virtual void setSocketEventQueue(EzySocketEventQueue socketEventQueue)
         {
             this.socketEventQueue = socketEventQueue;
         }
