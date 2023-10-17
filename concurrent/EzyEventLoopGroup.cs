@@ -362,7 +362,7 @@ namespace com.tvd12.ezyfoxserver.client.concurrent
                 this.period = period;
                 this.runEvent = runEvent;
                 this.nextFireTime = DateTime.Now.AddMilliseconds(
-                    delayTime <= 0 ? 0 : period
+                    delayTime <= 0 ? 0 : delayTime
                 );
             }
 
