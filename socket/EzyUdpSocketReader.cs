@@ -7,6 +7,7 @@ using com.tvd12.ezyfoxserver.client.constant;
 using com.tvd12.ezyfoxserver.client.entity;
 using com.tvd12.ezyfoxserver.client.codec;
 using com.tvd12.ezyfoxserver.client.concurrent;
+using System.Threading.Tasks;
 
 namespace com.tvd12.ezyfoxserver.client.socket
 {
@@ -16,6 +17,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
         protected EzySocketDataDecoder decoder;
         protected UdpClient datagramChannel;
         protected IPEndPoint serverEndPoint;
+        protected Task<UdpReceiveResult> readTask;
         protected readonly int readBufferSize;
         protected readonly EzyQueue<EzyArray> dataQueue;
 
@@ -33,16 +35,19 @@ namespace com.tvd12.ezyfoxserver.client.socket
                 try
                 {
                     if (!active)
+                    {
                         return;
+                    }
                     byte[] binary = readSocketData();
                     logger.info("udp received " + binary.Length + " bytes");
                     int bytesToRead = binary.Length;
                     if (bytesToRead <= 0)
+                    {
                         return;
+                    }
                     handleReceivedBytes(binary);
 
-                    networkStatistics.getSocketStats().getNetworkStats().addReadBytes(binary.Length);
-                    networkStatistics.getSocketStats().getNetworkStats().addReadPackets(1);
+                    addSocketReadStats(binary.Length);
                 }
                 catch (SocketException e) {
                     logger.warn("I/O error at socket-reader: " + e.Message);
@@ -56,9 +61,56 @@ namespace com.tvd12.ezyfoxserver.client.socket
             }
         }
 
+        public override bool call()
+        {
+            try
+            {
+                if (!active)
+                {
+                    return false;
+                }
+                byte[] binary = readSocketDataAsync();
+                if (binary == null)
+                {
+                    return true;
+                }
+                logger.info("udp received " + binary.Length + " bytes");
+                int bytesToRead = binary.Length;
+                if (bytesToRead <= 0)
+                {
+                    return false;
+                }
+                handleReceivedBytes(binary);
+
+                addSocketReadStats(binary.Length);
+                return true;
+            }
+            catch (Exception e)
+            {
+                logger.warn("I/O error at socket-reader", e);
+                return false;
+            }
+        }
+
         protected byte[] readSocketData() 
         {
-            byte[] bytes = datagramChannel.Receive(ref serverEndPoint);
+            return datagramChannel.Receive(ref serverEndPoint);
+        }
+
+        protected byte[] readSocketDataAsync()
+        {
+            if (readTask == null)
+            {
+                readTask = datagramChannel.ReceiveAsync();
+            }
+            byte[] bytes = null;
+            if (readTask.IsCompleted)
+            {
+                UdpReceiveResult result = readTask.Result;
+                bytes = result.Buffer;
+                readTask = null;
+            }
+
             return bytes;
         }
 

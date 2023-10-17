@@ -8,44 +8,75 @@ using com.tvd12.ezyfoxserver.client.codec;
 using com.tvd12.ezyfoxserver.client.entity;
 using com.tvd12.ezyfoxserver.client.callback;
 
-
 namespace com.tvd12.ezyfoxserver.client.socket
 {
     public abstract class EzySocketReader : EzySocketAdapter
 	{
         protected byte[] sessionKey;
         protected EzySocketDataDecoder decoder;
-        protected readonly int readBufferSize;
+        protected readonly byte[] buffer;
+        protected readonly int bufferSize;
         protected readonly EzyQueue<EzyArray> dataQueue;
         protected readonly EzyCallback<EzyMessage> decodeBytesCallback;
 
         public EzySocketReader()
 		{
             this.dataQueue = new EzySynchronizedQueue<EzyArray>();
-            this.readBufferSize = EzySocketConstants.MAX_READ_BUFFER_SIZE;
+            this.bufferSize = EzySocketConstants.MAX_READ_BUFFER_SIZE;
+            this.buffer = new byte[bufferSize];
             this.decodeBytesCallback = message => onMesssageReceived(message);
 		}
 
         protected override void update()
 		{
-            byte[] readBytes = new byte[readBufferSize];
             while(true) 
             {
                 if (!active)
+                {
                     return;
-                int bytesToRead = readSocketData(readBytes);
-                if (bytesToRead <= 0)
+                }
+                int readBytes = readSocketData(buffer);
+                if (readBytes <= 0)
+                {
                     return;
-                byte[] binary = EzyBytes.copyBytes(readBytes, bytesToRead);
+                }
+                byte[] binary = EzyBytes.copyBytes(buffer, readBytes);
                 decoder.decode(binary, decodeBytesCallback);
 
-                networkStatistics.getSocketStats().getNetworkStats().addReadBytes(binary.Length);
-                networkStatistics.getSocketStats().getNetworkStats().addReadPackets(1);
+                addSocketReadStats(readBytes);
             }
 			
 		}
 
+        public override bool call()
+        {
+            try
+            {
+                if (!active)
+                {
+                    return false;
+                }
+                int readBytes = readSocketDataAsync(buffer);
+                if (readBytes < 0)
+                {
+                    return false;
+                }
+                byte[] binary = EzyBytes.copyBytes(buffer, readBytes);
+                decoder.decode(binary, decodeBytesCallback);
+
+                addSocketReadStats(readBytes);
+                return true;
+            }
+            catch (Exception e)
+            {
+                logger.info("problems in socket-reader even loop", e);
+                return false;
+            }
+        }
+
         protected abstract int readSocketData(byte[] readBytes);
+
+        protected abstract int readSocketDataAsync(byte[] readBytes);
 
         protected override void clear()
         {
