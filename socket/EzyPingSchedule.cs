@@ -7,29 +7,51 @@ using com.tvd12.ezyfoxserver.client.concurrent;
 
 namespace com.tvd12.ezyfoxserver.client.socket
 {
-    public class EzyPingSchedule : EzyLoggable
-	{
+    public class EzyPingSchedule : EzyLoggable, EzyEventLoopEvent
+    {
         protected readonly EzyClient client;
         protected readonly EzyRequest pingRequest;
         protected readonly EzyPingManager pingManager;
+        protected readonly EzyEventLoopGroup eventLoopGroup;
         protected EzyScheduleAtFixedRate schedule;
         protected EzySocketEventQueue socketEventQueue;
 
-		public EzyPingSchedule(EzyClient client)
+		public EzyPingSchedule(
+            EzyClient client,
+            EzyEventLoopGroup eventLoopGroup
+        )
 		{
 			this.client = client;
             this.pingRequest = new EzyPingRequest();
-			this.pingManager = client.getPingManager();
+            this.eventLoopGroup = eventLoopGroup;
+            this.pingManager = client.getPingManager();
 
 		}
 
+        public bool call()
+        {
+            sendPingRequest();
+            return true;
+        }
+
 		public virtual void start()
 		{
-            lock(this) 
+            int periodMillis = pingManager.getPingPeriod();
+            if (eventLoopGroup != null)
             {
-                int periodMillis = pingManager.getPingPeriod();
-                this.schedule = newSchedule();
-                this.schedule.schedule(sendPingRequest, periodMillis, periodMillis);
+                eventLoopGroup.addScheduleEvent(
+                    this,
+                    periodMillis,
+                    periodMillis
+                );
+            }
+            else
+            {
+                lock (this)
+                {
+                    this.schedule = newSchedule();
+                    this.schedule.schedule(sendPingRequest, periodMillis, periodMillis);
+                }
             }
 		}
 

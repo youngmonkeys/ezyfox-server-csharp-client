@@ -12,6 +12,7 @@ using com.tvd12.ezyfoxserver.client.util;
 using com.tvd12.ezyfoxserver.client.statistics;
 
 using static com.tvd12.ezyfoxserver.client.constant.EzySocketStatuses;
+using com.tvd12.ezyfoxserver.client.concurrent;
 
 namespace com.tvd12.ezyfoxserver.client.socket
 {
@@ -35,6 +36,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
         protected EzySocketReader socketReader;
         protected EzySocketWriter socketWriter;
         protected EzyStatistics networkStatistics;
+        protected EzyEventLoopGroup eventLoopGroup;
 
         protected EzyConnectionFailedReason connectionFailedReason;
         protected readonly EzyCodecFactory codecFactory;
@@ -114,23 +116,36 @@ namespace com.tvd12.ezyfoxserver.client.socket
             socketStatuses.clear();
             disconnectReason = (int)EzyDisconnectReason.UNKNOWN;
             connectionFailedReason = EzyConnectionFailedReason.UNKNOWN;
-            Thread newThread = new Thread(() => connect1(sleepTime));
-            newThread.Name = "ezyfox-connection";
-            newThread.Start();
+            connect1(sleepTime);
         }
 
         protected void connect1(int sleepTime)
         {
             DateTime currentTime = DateTime.Now;
-            long dt = (long)(currentTime - connectTime).TotalMilliseconds;
-            long realSleepTime = sleepTime;
+            int dt = (int)(currentTime - connectTime).TotalMilliseconds;
+            int realSleepTime = sleepTime;
             if (sleepTime <= 0)
             {
                 if (dt < 2000) //delay 2000ms
                     realSleepTime = 2000 - dt;
             }
-            if (realSleepTime >= 0)
-                Thread.Sleep((int)realSleepTime);
+            if (eventLoopGroup != null)
+            {
+                eventLoopGroup.addOneTimeEvent(
+                    () => connect2(),
+                    realSleepTime
+                );
+            }
+            else
+            {
+                Thread newThread = new Thread(() => sleepAndConnect(realSleepTime));
+                newThread.Name = "ezyfox-connection";
+                newThread.Start();
+            }
+        }
+
+        protected void connect2()
+        {
             socketStatuses.push(EzySocketStatus.CONNECTING);
             bool success = this.connectNow();
             connectTime = DateTime.Now;
@@ -145,6 +160,22 @@ namespace com.tvd12.ezyfoxserver.client.socket
             {
                 this.resetSocket();
                 this.socketStatuses.push(EzySocketStatus.CONNECT_FAILED);
+            }
+        }
+
+        private void sleepAndConnect(int sleepTime)
+        {
+            try
+            {
+                if (sleepTime > 0)
+                {
+                    Thread.Sleep(sleepTime);
+                }
+                connect2();
+            }
+            catch (Exception e)
+            {
+                logger.info("can not connect to server", e);
             }
         }
 
@@ -168,7 +199,9 @@ namespace com.tvd12.ezyfoxserver.client.socket
             Object decoder = codecFactory.newDecoder(EzyConnectionType.SOCKET);
             EzySocketDataDecoder socketDataDecoder = new EzySimpleSocketDataDecoder(decoder);
             socketReader.setDecoder(socketDataDecoder);
+            socketReader.setEventLoopGroup(eventLoopGroup);
             socketWriter.setPacketQueue(packetQueue);
+            socketWriter.setEventLoopGroup(eventLoopGroup);
         }
 
         protected abstract void startAdapters();
@@ -378,6 +411,11 @@ namespace com.tvd12.ezyfoxserver.client.socket
         {
             this.pingSchedule = pingSchedule;
             this.pingSchedule.setSocketEventQueue(socketEventQueue);
+        }
+
+        public void setEventLoopGroup(EzyEventLoopGroup eventLoopGroup)
+        {
+            this.eventLoopGroup = eventLoopGroup;
         }
 
         public void setHandlerManager(EzyHandlerManager handlerManager)

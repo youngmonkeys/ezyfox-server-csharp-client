@@ -28,12 +28,16 @@ namespace com.tvd12.ezyfoxserver.client.socket
 			queue.clear();
 		}
 
+		public EzyPacket poll()
+        {
+			return queue.poll();
+        }
+
 		public EzyPacket take()
 		{
 			EzyPacket packet = queue.take();
 			return packet;
 		}
-
 
 		public bool isFull()
 		{
