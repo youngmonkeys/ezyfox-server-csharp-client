@@ -25,7 +25,6 @@ namespace com.tvd12.ezyfoxserver.client.unity
 
 		protected void OnEnable()
 		{
-			LOGGER.debug("OnEnable");
 			socketConfigVariable = socketConfigHolderVariable.Value;
 			var socketProxyManager = EzySocketProxyManager.getInstance();
 			if (!socketProxyManager.hasInited())
@@ -37,7 +36,6 @@ namespace com.tvd12.ezyfoxserver.client.unity
 			);
 			if (socketProxy.getClient() == null)
 			{
-				LOGGER.debug("Creating ezyClient");
 				var config = EzyClientConfig.builder()
 					.clientName(socketConfigVariable.Value.ZoneName)
 					.zoneName(socketConfigVariable.Value.ZoneName)
@@ -124,7 +122,6 @@ namespace com.tvd12.ezyfoxserver.client.unity
 
 		protected virtual void OnDestroy()
 		{
-			LOGGER.debug("OnDestroy");
 			UnbindSocketHandlers();
 			UnbindAppHandlers();
 		}
