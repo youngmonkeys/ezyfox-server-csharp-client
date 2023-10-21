@@ -74,7 +74,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
                 {
                     return true;
                 }
-                logger.info("udp received " + binary.Length + " bytes");
+                logger.debug("udp received " + binary.Length + " bytes");
                 int bytesToRead = binary.Length;
                 if (bytesToRead <= 0)
                 {
