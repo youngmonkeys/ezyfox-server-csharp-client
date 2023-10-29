@@ -30,6 +30,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
             this.udpClient.setSessionId(sessionId);
             this.udpClient.setSessionToken(sessionToken);
             this.udpClient.setSessionKey(sessionKey);
+            this.udpClient.setEventLoopGroup(eventLoopGroup);
             this.udpClient.connectTo(host, port);
         }
 

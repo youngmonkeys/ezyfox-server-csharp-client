@@ -45,8 +45,9 @@ namespace com.tvd12.ezyfoxserver.client.concurrent
         {
             lock (queue)
             {
-                E e = queue.Dequeue();
-                return e;
+                return queue.Count == 0
+                    ? default(E)
+                    : queue.Dequeue();
             }
         }
 

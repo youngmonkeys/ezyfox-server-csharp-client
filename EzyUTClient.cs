@@ -4,12 +4,20 @@ using com.tvd12.ezyfoxserver.client.entity;
 using com.tvd12.ezyfoxserver.client.config;
 using com.tvd12.ezyfoxserver.client.socket;
 using com.tvd12.ezyfoxserver.client.request;
+using com.tvd12.ezyfoxserver.client.concurrent;
 
 namespace com.tvd12.ezyfoxserver.client
 {
     public class EzyUTClient : EzyTcpClient
     {
         public EzyUTClient(EzyClientConfig config) : base(config)
+        {
+        }
+
+        public EzyUTClient(
+            EzyClientConfig config,
+            EzyEventLoopGroup eventLoopGroup
+        ) : base(config, eventLoopGroup)
         {
         }
 

@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Threading;
-
+using com.tvd12.ezyfoxserver.client.concurrent;
 using com.tvd12.ezyfoxserver.client.statistics;
 using com.tvd12.ezyfoxserver.client.util;
 namespace com.tvd12.ezyfoxserver.client.socket
 {
-    public abstract class EzySocketAdapter : EzyLoggable
+    public abstract class EzySocketAdapter : EzyLoggable, EzyEventLoopEvent
     {
         protected volatile bool active;
         protected volatile bool stopped;
         protected readonly Object adapterLock;
         protected EzyStatistics networkStatistics;
+        protected EzyEventLoopGroup eventLoopGroup;
 
         public EzySocketAdapter()
         {
@@ -23,14 +24,33 @@ namespace com.tvd12.ezyfoxserver.client.socket
         {
             lock(adapterLock) 
             {
-                if (active) 
+                if (active)
+                {
                     return;
+                }
                 active = true;
                 stopped = false;
-                Thread newThread = new Thread(run);
-                newThread.Name = getThreadName();
-                newThread.Start();
+                if (eventLoopGroup != null)
+                {
+                    eventLoopGroup.addEvent(this);
+                }
+                else
+                {
+                    Thread newThread = new Thread(run);
+                    newThread.Name = getThreadName();
+                    newThread.Start();
+                }
             }    
+        }
+
+        public virtual bool call()
+        {
+            return false;
+        }
+
+        public void onFinished()
+        {
+            setStopped(true);
         }
 
         protected abstract String getThreadName();
@@ -49,6 +69,10 @@ namespace com.tvd12.ezyfoxserver.client.socket
             {
                 clear();
                 active = false;
+                if (eventLoopGroup != null)
+                {
+                    eventLoopGroup.removeEvent(this);
+                }
             }
         }
 
@@ -88,9 +112,32 @@ namespace com.tvd12.ezyfoxserver.client.socket
             }
         }
 
+        protected void addSocketReadStats(int readBytes)
+        {
+            EzyNetworkStats networkStats = networkStatistics
+                .getSocketStats()
+                .getNetworkStats();
+            networkStats.addReadBytes(readBytes);
+            networkStats.addReadPackets(1);
+        }
+
+        protected void addSocketWriteStats(int writtenBytes)
+        {
+            EzyNetworkStats networkStats = networkStatistics
+                .getSocketStats()
+                .getNetworkStats();
+            networkStats.addWrittenPackets(1);
+            networkStats.addWrittenBytes(writtenBytes);
+        }
+
         public void setNetworkStatistics(EzyStatistics networkStatistics)
         {
             this.networkStatistics = networkStatistics;
+        }
+
+        public void setEventLoopGroup(EzyEventLoopGroup eventLoopGroup)
+        {
+            this.eventLoopGroup = eventLoopGroup;
         }
     }
 }

@@ -6,6 +6,8 @@
 
 		void clear();
 
+		EzyPacket poll();
+
 		EzyPacket take();
 
 		bool isFull();
