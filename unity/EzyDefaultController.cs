@@ -39,6 +39,7 @@ namespace com.tvd12.ezyfoxserver.client.unity
 				var config = EzyClientConfig.builder()
 					.clientName(socketConfigVariable.Value.ZoneName)
 					.zoneName(socketConfigVariable.Value.ZoneName)
+					.enableSSL(socketConfigVariable.Value.EnableSSL)
 					.build();
 				EzyClientFactory
 					.getInstance()

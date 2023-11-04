@@ -29,12 +29,16 @@ namespace com.tvd12.ezyfoxserver.client.unity
 			[SerializeField]
 			private bool udpUsage;
 
+			[SerializeField]
+			private bool enableSSL;
+
 			public string ZoneName => zoneName;
 			public string AppName => appName;
 			public string WebSocketUrl => webSocketUrl;
 			public string TcpUrl => tcpUrl;
 			public int UdpPort => udpPort;
 			public bool UdpUsage => udpUsage;
+			public bool EnableSSL => enableSSL;
 		}
 	}
 }
