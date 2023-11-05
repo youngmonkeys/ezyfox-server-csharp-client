@@ -34,7 +34,17 @@ namespace com.tvd12.ezyfoxserver.client.socket
             return true;
         }
 
-		public virtual void start()
+        public void onFinished()
+        {
+            // do nothing
+        }
+
+        public void onRemoved()
+        {
+            // do nothing
+        }
+
+        public virtual void start()
 		{
             int periodMillis = pingManager.getPingPeriod();
             if (eventLoopGroup != null)
