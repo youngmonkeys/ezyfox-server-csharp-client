@@ -2,7 +2,7 @@
 
 namespace com.tvd12.ezyfoxserver.client.unity
 {
-	public class EzyEventProcessor : MonoBehaviour
+	public abstract class EzyEventProcessor : MonoBehaviour
 	{
 		private static EzyEventProcessor INSTANCE;
 		
