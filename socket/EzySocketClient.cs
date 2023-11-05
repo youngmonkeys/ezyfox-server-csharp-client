@@ -50,6 +50,7 @@ namespace com.tvd12.ezyfoxserver.client.socket
 
         public EzySocketClient()
         {
+            this.connectTime = DateTime.Now;
             this.codecFactory = new EzySimpleCodecFactory();
             this.packetQueue = new EzyBlockingPacketQueue();
             this.socketEventQueue = new EzySocketEventQueue();
