@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace com.tvd12.ezyfoxserver.client.unity
 {
-	public class EzyUnityLoggerFactory : MonoBehaviour
+	public abstract class EzyUnityLoggerFactory : MonoBehaviour
 	{
 		[SerializeField]
 		private EzyLoggerLevel loggerLevel = EzyLoggerLevel.INFO;

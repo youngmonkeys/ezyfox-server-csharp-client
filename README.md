@@ -100,6 +100,12 @@ while(true)
 }
 ```
 
+# Backward compatibility
+- **v1.1.4-unity**: all classes extending MonoBehaviour have been made abstract. To use these classes in
+a Unity project, it is necessary to generate concrete classes that inherit from these abstract classes and
+subsequently attach them to the desired Unity components. E.g., `EzyDefaultController`, `EzyEventProcessor`,
+`EzyUnityLoggerFactory`, `EzySocketConfigHolderVariable`, and `EzySocketConfigVariable`.
+
 # Used By
 
 1. [hello-csharp](https://github.com/tvd12/ezyfox-server-example/tree/master/hello-csharp)
