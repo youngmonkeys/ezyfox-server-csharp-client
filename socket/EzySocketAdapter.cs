@@ -53,6 +53,11 @@ namespace com.tvd12.ezyfoxserver.client.socket
             setStopped(true);
         }
 
+        public void onRemoved()
+        {
+            // do nothing
+        }
+
         protected abstract String getThreadName();
 
         protected virtual void run() 
