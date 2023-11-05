@@ -345,6 +345,11 @@ namespace com.tvd12.ezyfoxserver.client.concurrent
             {
                 eventLoopByEvent.Remove(this);
             }
+
+            public void onRemoved()
+            {
+                // do nothing
+            }
         }
 
         public class ScheduledEvent : EzyEventLoopEvent

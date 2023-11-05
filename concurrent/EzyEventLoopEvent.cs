@@ -4,8 +4,8 @@
     {
         bool call();
 
-        void onFinished() { }
+        void onFinished();
 
-        void onRemoved() { }
+        void onRemoved();
     }
 }
