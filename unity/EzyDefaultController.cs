@@ -9,7 +9,7 @@ using Object = System.Object;
 
 namespace com.tvd12.ezyfoxserver.client.unity
 {
-	public class EzyDefaultController : MonoBehaviour
+	public abstract class EzyDefaultController : MonoBehaviour
 	{
 		[SerializeField]
 		private EzySocketConfigHolderVariable socketConfigHolderVariable;
