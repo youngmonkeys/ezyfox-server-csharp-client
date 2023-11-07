@@ -54,37 +54,37 @@ namespace com.tvd12.ezyfoxserver.client.security
         }
     }
 
-    class X509Key
+    public class X509Key
     {
         private byte[] key;
         private readonly AlgorithmId algid;
-        private int unusedBits = 0;
-        private BitArray bitStringKey = null;
-        protected byte[] encodedKey;
+        private int unusedBits;
+        private BitArray bitStringKey;
+        private byte[] encodedKey;
 
         public X509Key(byte[] modulus, byte[] exponent)
         {
             this.algid = new AlgorithmId();
-            DerOutputStream var4 = new DerOutputStream();
-            var4.putInteger(new BigInteger(modulus, true, true));
-            var4.putInteger(new BigInteger(exponent, true, true));
-            byte[] var5 = (new DerValue((byte)48, var4.toByteArray())).toByteArray();
-            this.setKey(new BitArray(var5.Length * 8, var5));
+            DerOutputStream outputStream = new DerOutputStream();
+            outputStream.putInteger(new BigInteger(modulus, true, true));
+            outputStream.putInteger(new BigInteger(exponent, true, true));
+            byte[] bytes = (new DerValue((byte)48, outputStream.toByteArray())).toByteArray();
+            this.setKey(new BitArray(bytes.Length * 8, bytes));
         }
 
-        protected void setKey(BitArray var1)
+        protected void setKey(BitArray bitArray)
         {
-            this.bitStringKey = (BitArray)var1.clone();
-            this.key = var1.toByteArray();
-            int var2 = var1.length() % 8;
-            this.unusedBits = var2 == 0 ? 0 : 8 - var2;
+            this.bitStringKey = (BitArray)bitArray.clone();
+            this.key = bitArray.toByteArray();
+            int remaining = bitArray.length() % 8;
+            this.unusedBits = remaining == 0 ? 0 : 8 - remaining;
         }
 
         public byte[] getEncoded()
         {
-            DerOutputStream var2 = new DerOutputStream();
-            encode(var2);
-            return var2.toByteArray();
+            DerOutputStream outputStream = new DerOutputStream();
+            encode(outputStream);
+            return outputStream.toByteArray();
         }
 
         private void encode(DerOutputStream stream)
@@ -92,66 +92,64 @@ namespace com.tvd12.ezyfoxserver.client.security
             encode(stream, this.getKey());
         }
 
-        private void encode(
-            DerOutputStream var0,
-            BitArray var2
-        )
+        private void encode(DerOutputStream outputStream, BitArray key)
         {
-            DerOutputStream var3 = new DerOutputStream();
-            algid.encode(var3);
-            var3.putUnalignedBitString(var2);
-            var0.write((byte)48, var3);
+            DerOutputStream tmp = new DerOutputStream();
+            algid.encode(tmp);
+            tmp.putUnalignedBitString(key);
+            outputStream.write(DerValue.tag_Sequence, tmp);
         }
 
         private BitArray getKey()
         {
             this.bitStringKey = new BitArray(this.key.Length * 8 - this.unusedBits, this.key);
-            return (BitArray)this.bitStringKey.clone();
+            return this.bitStringKey.clone();
         }
     }
 
     public class DerValue
     {
-        public byte tag;
-        protected DerInputBuffer buffer;
-        public readonly DerInputStream data;
+        private byte tag;
+        private DerInputBuffer buffer;
+        private readonly DerInputStream data;
         private int length;
 
-        public DerValue(byte var1, byte[] var2) : this(var1, var2, true)
-        {
-        }
+        public readonly static byte tag_BitString = 0x03;
+        public readonly static byte tag_Integer = 0x02;
+        public readonly static byte tag_ObjectId = 0x06;
+        public readonly static byte tag_Null = 0x05;
+        public readonly static byte tag_Sequence = 0x30;
 
-        public DerValue(byte var1, byte[] var2, bool var3)
+        public DerValue(byte tag, byte[] data)
         {
-            this.tag = var1;
-            this.buffer = new DerInputBuffer((byte[])var2.Clone(), var3);
-            this.length = var2.Length;
+            this.tag = tag;
+            this.buffer = new DerInputBuffer((byte[])data.Clone());
+            this.length = data.Length;
             this.data = new DerInputStream(this.buffer);
-            this.data.mark(int.MaxValue);
+            this.data.mark();
         }
 
         public byte[] toByteArray()
         {
-            DerOutputStream var1 = new DerOutputStream();
-            this.encode(var1);
+            DerOutputStream outputStream = new DerOutputStream();
+            this.encode(outputStream);
             this.data.reset();
-            return var1.toByteArray();
+            return outputStream.toByteArray();
         }
 
-        public void encode(DerOutputStream var1)
+        public void encode(DerOutputStream outputStream)
         {
-            var1.write(this.tag);
-            var1.putLength(this.length);
+            outputStream.write(this.tag);
+            outputStream.putLength(this.length);
             if (this.length > 0)
             {
-                byte[] var2 = new byte[this.length];
+                byte[] value = new byte[this.length];
                 this.buffer.reset();
-                if (this.buffer.read(var2) != this.length)
+                if (this.buffer.read(value) != this.length)
                 {
                     throw new IOException("short DER value read (encode)");
                 }
-
-                var1.write(var2);
+                outputStream.write(value);
             }
         }
     }
@@ -160,15 +158,15 @@ namespace com.tvd12.ezyfoxserver.client.security
     {
         private readonly DerInputBuffer buffer;
 
-        public DerInputStream(DerInputBuffer var1)
+        public DerInputStream(DerInputBuffer data)
         {
-            this.buffer = var1;
-            this.buffer.mark(int.MaxValue);
+            this.buffer = data;
+            this.buffer.mark();
         }
 
-        public void mark(int var1)
+        public void mark()
         {
-            this.buffer.mark(var1);
+            this.buffer.mark();
         }
 
         public void reset()
@@ -181,12 +179,10 @@ namespace com.tvd12.ezyfoxserver.client.security
     {
         private long _mark;
         private readonly MemoryStream stream;
-        private readonly bool allowBER;
 
-        public DerInputBuffer(byte[] var1, bool var2)
+        public DerInputBuffer(byte[] buf)
         {
-            this.allowBER = var2;
-            this.stream = new MemoryStream(var1);
+            this.stream = new MemoryStream(buf);
         }
 
         public int read(byte[] bytes)
@@ -194,7 +190,7 @@ namespace com.tvd12.ezyfoxserver.client.security
             return this.stream.Read(bytes);
         }
 
-        public void mark(int readAheadLimit)
+        public void mark()
         {
             this._mark = this.stream.Position;
         }
@@ -205,7 +201,7 @@ namespace com.tvd12.ezyfoxserver.client.security
         }
     }
 
-    class AlgorithmId
+    public class AlgorithmId
     {
         private readonly ObjectIdentifier algid = RSAEncryption_oid;
 
@@ -216,12 +212,12 @@ namespace com.tvd12.ezyfoxserver.client.security
 
         public void encode(DerOutputStream var1)
         {
-            DerOutputStream var2 = new DerOutputStream();
-            DerOutputStream var3 = new DerOutputStream();
-            var2.putOID(this.algid);
-            var2.putNull();
-            var3.write((byte)48, var2);
-            var1.write(var3.toByteArray());
+            DerOutputStream bytes = new DerOutputStream();
+            DerOutputStream tmp = new DerOutputStream();
+            bytes.putOID(this.algid);
+            bytes.putNull();
+            tmp.write(DerValue.tag_Sequence, bytes);
+            var1.write(tmp.toByteArray());
         }
     }
 
@@ -235,9 +231,9 @@ namespace com.tvd12.ezyfoxserver.client.security
             this.encoding = encoding;
         }
 
-        public void encode(DerOutputStream var1)
+        public void encode(DerOutputStream outputStream)
         {
-            var1.write(6, this.encoding);
+            outputStream.write(DerValue.tag_ObjectId, this.encoding);
         }
     }
 
@@ -246,34 +242,33 @@ namespace com.tvd12.ezyfoxserver.client.security
         private readonly byte[] repn;
         private readonly int _length;
 
-        private BitArray(BitArray var1)
+        private BitArray(BitArray ba)
         {
-            this._length = var1._length;
-            this.repn = (byte[])var1.repn.Clone();
+            this._length = ba._length;
+            this.repn = (byte[])ba.repn.Clone();
         }
 
-        public BitArray(int var1, byte[] var2)
+        public BitArray(int length, byte[] a)
         {
-            if (var1 < 0)
+            if (length < 0)
             {
                 throw new ArgumentException("Negative length for BitArray");
             }
-            else if (var2.Length * 8 < var1)
+            else if (a.Length * 8 < length)
             {
                 throw new ArgumentException("Byte array too short to represent bit array of given length");
             }
             else
             {
-                this._length = var1;
-                int var3 = (var1 + 8 - 1) / 8;
-                int var4 = var3 * 8 - var1;
-                byte var5 = (byte)(255 << var4);
-                this.repn = new byte[var3];
-                Array.Copy(var2, this.repn, var3);
-                if (var3 > 0)
+                this._length = length;
+                int repLength = (length + 8 - 1) / 8;
+                int unusedBits = repLength * 8 - length;
+                byte bitMask = (byte)(255 << unusedBits);
+                this.repn = new byte[repLength];
+                Array.Copy(a, this.repn, repLength);
+                if (repLength > 0)
                 {
-                    byte[] var10000 = this.repn;
-                    var10000[var3 - 1] &= var5;
+                    repn[repLength - 1] &= bitMask;
                 }
 
             }
@@ -314,11 +309,11 @@ namespace com.tvd12.ezyfoxserver.client.security
             stream.Write(bytes, 0, bytes.Length);
         }
 
-        public void write(byte var1, byte[] var2)
+        public void write(byte tag, byte[] buf)
         {
-            this.write(var1);
-            this.putLength(var2.Length);
-            this.write(var2, 0, var2.Length);
+            this.write(tag);
+            this.putLength(buf.Length);
+            this.write(buf, 0, buf.Length);
         }
 
         public void write(byte[] b, int off, int len)
@@ -326,79 +321,78 @@ namespace com.tvd12.ezyfoxserver.client.security
             stream.Write(b, off, len);
         }
 
-        public void write(byte var1, DerOutputStream var2)
+        public void write(byte tag, DerOutputStream outputStream)
         {
-            this.write(var1);
-            int count = var2.count();
+            this.write(tag);
+            int count = outputStream.count();
             this.putLength(count);
-            this.write(var2.toByteArray(), 0, count);
+            this.write(outputStream.toByteArray(), 0, count);
         }
 
-        public void writeInt(int value)
+        public void putInteger(BigInteger value)
         {
-            stream.Write(EzyBytes.getBytes(value));
-        }
-
-        public void putInteger(BigInteger var1)
-        {
-            this.write(2);
-            byte[] var2 = var1.ToByteArray();
-            EzyBytes.swapBytes(var2);
-            this.putLength(var2.Length);
-            this.write(var2, 0, var2.Length);
+            this.write(DerValue.tag_Integer);
+            byte[] buf = value.ToByteArray();
+            EzyBytes.swapBytes(buf);
+            this.putLength(buf.Length);
+            this.write(buf, 0, buf.Length);
         }
 
         public void putNull()
         {
-            this.write(5);
+            this.write(DerValue.tag_Null);
             this.putLength(0);
         }
 
         public void putUnalignedBitString(BitArray var1)
         {
-            byte[] var2 = var1.toByteArray();
-            this.write(3);
-            this.putLength(var2.Length + 1);
-            this.write((byte)(var2.Length * 8 - var1.length()));
-            this.write(var2);
+            byte[] bits = var1.toByteArray();
+            this.write(DerValue.tag_BitString);
+            this.putLength(bits.Length + 1);
+            this.write((byte)(bits.Length * 8 - var1.length()));
+            this.write(bits);
         }
 
-        public void putOID(ObjectIdentifier var1)
+        public void putOID(ObjectIdentifier oid)
         {
-            var1.encode(this);
+            oid.encode(this);
         }
 
-        public void putLength(int var1)
+        public void putLength(int len)
         {
-            if (var1 < 128)
+            if (len < 128)
             {
-                this.write((byte)var1);
+                this.write((byte)len);
+
             }
-            else if (var1 < 256)
+            else if (len < (1 << 8))
             {
-                this.write(-127);
-                this.write((byte)var1);
+                this.write((byte)0x081);
+                this.write((byte)len);
+
             }
-            else if (var1 < 65536)
+            else if (len < (1 << 16))
             {
-                this.write(-126);
-                this.write((byte)(var1 >> 8));
-                this.write((byte)var1);
+                this.write((byte)0x082);
+                this.write((byte)(len >> 8));
+                this.write((byte)len);
+
             }
-            else if (var1 < 16777216)
+            else if (len < (1 << 24))
             {
-                this.write(-125);
-                this.write((byte)(var1 >> 16));
-                this.write((byte)(var1 >> 8));
-                this.write((byte)var1);
+                this.write((byte)0x083);
+                this.write((byte)(len >> 16));
+                this.write((byte)(len >> 8));
+                this.write((byte)len);
+
             }
             else
             {
-                this.write(-124);
-                this.write((byte)(var1 >> 24));
-                this.write((byte)(var1 >> 16));
-                this.write((byte)(var1 >> 8));
-                this.write((byte)var1);
+                this.write((byte)0x084);
+                this.write((byte)(len >> 24));
+                this.write((byte)(len >> 16));
+                this.write((byte)(len >> 8));
+                this.write((byte)len);
             }
         }
 
