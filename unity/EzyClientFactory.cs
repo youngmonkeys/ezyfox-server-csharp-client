@@ -4,7 +4,7 @@ namespace com.tvd12.ezyfoxserver.client.unity
 {
 	public sealed class EzyClientFactory
 	{
-		private static readonly EzyClientFactory INSTANCE = new();
+		private static readonly EzyClientFactory INSTANCE = new EzyClientFactory();
 
 		private EzyClientFactory()
 		{
