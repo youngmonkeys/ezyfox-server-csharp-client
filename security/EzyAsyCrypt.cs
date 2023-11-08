@@ -1,11 +1,11 @@
-﻿using System;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
+using System.Text;
 using com.tvd12.ezyfoxserver.client.builder;
 
 namespace com.tvd12.ezyfoxserver.client.security
 {
-	public class EzyAsyCrypt
-	{
+    public class EzyAsyCrypt
+    {
         private readonly byte[] privateKey;
 
         protected EzyAsyCrypt(Builder builder)
@@ -15,30 +15,11 @@ namespace com.tvd12.ezyfoxserver.client.security
 
         public byte[] decrypt(byte[] message)
         {
-            using (var rsa = RSA.Create())
+            using (var rsa = new RSACryptoServiceProvider())
             {
-                rsa.ImportParameters(convertToPrivateKeyParameters());
-                return rsa.Decrypt(message, RSAEncryptionPadding.Pkcs1);
+                rsa.FromXmlString(Encoding.UTF8.GetString(privateKey));
+                return rsa.Decrypt(message, false);
             }
-        }
-
-        private RSAParameters convertToPrivateKeyParameters()
-        {
-            RSAParameters privateKeyParameters = new RSAParameters();
-            using (var rsa = RSA.Create())
-            {
-                rsa.ImportPkcs8PrivateKey(privateKey, out _);
-                privateKeyParameters.Modulus = rsa.ExportParameters(true).Modulus;
-                privateKeyParameters.Exponent = rsa.ExportParameters(true).Exponent;
-                privateKeyParameters.D = rsa.ExportParameters(true).D;
-                privateKeyParameters.P = rsa.ExportParameters(true).P;
-                privateKeyParameters.Q = rsa.ExportParameters(true).Q;
-                privateKeyParameters.DP = rsa.ExportParameters(true).DP;
-                privateKeyParameters.DQ = rsa.ExportParameters(true).DQ;
-                privateKeyParameters.InverseQ = rsa.ExportParameters(true).InverseQ;
-            }
-
-            return privateKeyParameters;
         }
 
         public static Builder builder()
@@ -63,4 +44,3 @@ namespace com.tvd12.ezyfoxserver.client.security
         }
     }
 }
-
