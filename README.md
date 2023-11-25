@@ -33,6 +33,8 @@ using com.tvd12.ezyfoxserver.client.request;
 ```csharp
 var config = EzyClientConfig.builder()
     .clientName(ZONE_NAME)
+    // .enableSSL()
+    // .enableDebug()
     .build();
 socketClient = new EzyUTClient(config);
 EzyClients.getInstance().addClient(socketClient);
@@ -95,5 +97,7 @@ while(true)
 
 # Used By
 
-1. [hello-csharp](https://github.com/tvd12/ezyfox-server-example/tree/master/hello-csharp)
-2. [space-shooter](https://youngmonkeys.org/asset/space-shooter/)
+1. [Defi Warrior](https://gamefi.org/games/defi-warrior)
+2. [EzySmashers](https://ezysmashers.ezyplatform.com/)
+3. ...
+4. Your awesome project ✨
