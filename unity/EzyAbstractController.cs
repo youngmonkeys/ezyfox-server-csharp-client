@@ -14,8 +14,9 @@ namespace com.tvd12.ezyfoxserver.client.unity
 		protected EzySocketProxy socketProxy;
 		protected EzyAppProxy appProxy;
 		
-		private readonly List<Object> socketHandlers = new();
-		private readonly List<Tuple<String, Object>> appHandlers = new();
+		private readonly List<Object> socketHandlers = new List<Object>();
+		private readonly List<Tuple<String, Object>> appHandlers =
+			new List<Tuple<string, Object>>();
 		
 		protected static readonly EzyLogger LOGGER = EzyUnityLoggerFactory
 			.getLogger<EzyAbstractController>();
