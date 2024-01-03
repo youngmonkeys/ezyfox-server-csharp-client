@@ -9,51 +9,49 @@ using Object = System.Object;
 
 namespace com.tvd12.ezyfoxserver.client.unity
 {
-	public abstract class EzyDefaultController : MonoBehaviour
+	public abstract class EzyAbstractController : MonoBehaviour
 	{
-		[SerializeField]
-		private EzySocketConfigHolderVariable socketConfigHolderVariable;
-		protected EzySocketConfigVariable socketConfigVariable;
 		protected EzySocketProxy socketProxy;
 		protected EzyAppProxy appProxy;
 		
-		private readonly List<Object> socketHandlers = new List<Object>();
-		private readonly List<Tuple<String, Object>> appHandlers =
-			new List<Tuple<string, Object>>();
+		private readonly List<Object> socketHandlers = new();
+		private readonly List<Tuple<String, Object>> appHandlers = new();
 		
 		protected static readonly EzyLogger LOGGER = EzyUnityLoggerFactory
-			.getLogger<EzyDefaultController>();
+			.getLogger<EzyAbstractController>();
 
 		protected void OnEnable()
 		{
-			socketConfigVariable = socketConfigHolderVariable.Value;
+			var socketConfig = GetSocketConfig();
 			var socketProxyManager = EzySocketProxyManager.getInstance();
 			if (!socketProxyManager.hasInited())
 			{
 				socketProxyManager.init();
 			}
 			socketProxy = socketProxyManager.getSocketProxy(
-				socketConfigVariable.Value.ZoneName
+				socketConfig.ZoneName
 			);
 			if (socketProxy.getClient() == null)
 			{
 				var config = EzyClientConfig.builder()
-					.clientName(socketConfigVariable.Value.ZoneName)
-					.zoneName(socketConfigVariable.Value.ZoneName)
-					.enableSSL(socketConfigVariable.Value.EnableSSL)
+					.clientName(socketConfig.ZoneName)
+					.zoneName(socketConfig.ZoneName)
+					.enableSSL(socketConfig.EnableSSL)
 					.build();
 				EzyClientFactory
 					.getInstance()
 					.getOrCreateClient(
 						config,
-						socketConfigVariable.Value.UdpUsage
+						socketConfig.UdpUsage
 					);
 			}
 			appProxy = socketProxy.getAppProxy(
-				socketConfigVariable.Value.AppName,
+				socketConfig.AppName,
 				true
 			);
 		}
+
+		protected abstract SocketConfig GetSocketConfig();
 
 		protected void OnLoginSuccess<T>(EzySocketProxyDataHandler<T> handler)
 		{
