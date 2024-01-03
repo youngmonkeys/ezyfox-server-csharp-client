@@ -9,6 +9,7 @@ using Object = System.Object;
 
 namespace com.tvd12.ezyfoxserver.client.unity
 {
+	[Obsolete("Please use EzyAbstractController instead.")]
 	public abstract class EzyDefaultController : MonoBehaviour
 	{
 		[SerializeField]

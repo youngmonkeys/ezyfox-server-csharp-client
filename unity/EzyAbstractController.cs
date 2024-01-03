@@ -52,7 +52,7 @@ namespace com.tvd12.ezyfoxserver.client.unity
 			);
 		}
 
-		protected abstract SocketConfig GetSocketConfig();
+		protected abstract EzySocketConfig GetSocketConfig();
 
 		protected void OnLoginSuccess<T>(EzySocketProxyDataHandler<T> handler)
 		{

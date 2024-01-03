@@ -1,7 +1,9 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace com.tvd12.ezyfoxserver.client.unity
 {
+	[Obsolete("Please use EzyAbstractEventProcessor instead.")]
 	public abstract class EzyEventProcessor : MonoBehaviour
 	{
 		private static EzyEventProcessor INSTANCE;

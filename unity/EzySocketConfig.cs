@@ -4,7 +4,7 @@ using UnityEngine;
 namespace com.tvd12.ezyfoxserver.client.unity
 {
     [Serializable]
-    public struct SocketConfig
+    public struct EzySocketConfig
     {
         [SerializeField] private string zoneName;
 
