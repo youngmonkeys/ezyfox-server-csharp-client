@@ -2,13 +2,10 @@
 
 namespace com.tvd12.ezyfoxserver.client.unity
 {
-	public abstract class EzyEventProcessor : MonoBehaviour
+	public abstract class EzyAbstractEventProcessor : MonoBehaviour
 	{
-		private static EzyEventProcessor INSTANCE;
+		private static EzyAbstractEventProcessor INSTANCE;
 		
-		[SerializeField]
-		private EzySocketConfigHolderVariable socketConfig;
-
 		private void Awake()
 		{
 			// If go back to current scene, don't make duplication
@@ -29,9 +26,11 @@ namespace com.tvd12.ezyfoxserver.client.unity
 #if UNITY_WEBGL && !UNITY_EDITOR
 #else
 			EzyClients.getInstance()
-				.getClient(socketConfig.Value.Value.ZoneName)
+				.getClient(GetZoneName())
 				.processEvents();
 #endif
 		}
+
+		protected abstract string GetZoneName();
 	}
 }
