@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using com.tvd12.ezyfoxserver.client.binding;
 using com.tvd12.ezyfoxserver.client.config;
 using com.tvd12.ezyfoxserver.client.evt;
 using com.tvd12.ezyfoxserver.client.logger;
@@ -21,13 +22,26 @@ namespace com.tvd12.ezyfoxserver.client.unity
 		protected static readonly EzyLogger LOGGER = EzyUnityLoggerFactory
 			.getLogger<EzyAbstractController>();
 
+		protected virtual EzyBinding CreateBinding()
+		{
+			return null;
+		}
+
 		protected void OnEnable()
 		{
 			var socketConfig = GetSocketConfig();
 			var socketProxyManager = EzySocketProxyManager.getInstance();
 			if (!socketProxyManager.hasInited())
 			{
-				socketProxyManager.init();
+				var binding = CreateBinding();
+				if (binding != null)
+				{
+					socketProxyManager.init(binding);
+				}
+				else
+				{
+					 socketProxyManager.init();
+				}
 			}
 			socketProxy = socketProxyManager.getSocketProxy(
 				socketConfig.ZoneName
