@@ -13,6 +13,13 @@ Please move to the [unity-client branch](https://github.com/youngmonkeys/ezyfox-
 
 [https://youngmonkeys.org/ezyfox-csharp-client-sdk/](https://youngmonkeys.org/ezyfox-csharp-client-sdk/)
 
+# How to use?
+* Since our project depends on `Newtonsoft Json` unity package, you first need to add it to your Unity project in either one of the following ways:
+   - Select `Window` >> `Package Manager` >> :heavy_plus_sign: icon >> `Add package from git URL` >> Add `com.unity.nuget.newtonsoft-json` to URL field >> Add
+   - Edit the `manifest.json` file in the `Packages` folder of your Unity project and add "com.unity.nuget.newtonsoft-json": "3.0.2"
+* Clone/copy this repository into your unity project
+* Your Unity project can now start using scripts from this repository
+
 # Code Example
 
 **1. Import**
@@ -94,6 +101,12 @@ while(true)
     }
 }
 ```
+
+# Backward compatibility
+- **v1.1.4-unity**: all classes extending MonoBehaviour have been made abstract. To use these classes in
+a Unity project, it is necessary to generate concrete classes that inherit from these abstract classes and
+subsequently attach them to the desired Unity components. E.g., `EzyDefaultController`, `EzyEventProcessor`,
+`EzyUnityLoggerFactory`, `EzySocketConfigHolderVariable`, and `EzySocketConfigVariable`.
 
 # Used By
 
