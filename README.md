@@ -113,4 +113,4 @@ subsequently attach them to the desired Unity components. E.g., `EzyDefaultContr
 1. [Defi Warrior](https://gamefi.org/games/defi-warrior)
 2. [EzySmashers](https://ezysmashers.ezyplatform.com/)
 3. ...
-4. Your awesome project ?
+4. Your awesome project ✨
