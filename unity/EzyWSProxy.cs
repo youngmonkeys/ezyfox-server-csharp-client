@@ -17,6 +17,9 @@ namespace com.tvd12.ezyfoxserver.client.unity
 		
 		[DllImport("__Internal")]
 		public static extern void setDebug(bool debug);
+
+		[DllImport("__Internal")]
+		public static extern bool isMobile();
 		
 		[DllImport("__Internal")]
 		public static extern void run3(

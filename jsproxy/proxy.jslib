@@ -94,6 +94,14 @@ var EzyFoxServerClientPlugin = {
                 EzyLogger.console('start ping: clientName = ' + clientName);
                 ezy.client.pingSchedule.stop();
             },
+            'openUrlWithCookies': function(clientName, jsonData, callback) {
+                var data = JSON.parse(jsonData);
+                document.cookie = data.cookies;
+                var newTab = window.open(data.url, data.target || '_blank');
+                if (!newTab) {
+                    EzyLogger.console('Failed to open the new tab.');
+                }
+            }
         }
     },
 
@@ -107,6 +115,14 @@ var EzyFoxServerClientPlugin = {
     
     setDebug: function (value) {
         EzyLogger.debug = value;
+    },
+
+    isMobile: function () {
+        var userAgent = window.navigator.userAgent.toLowerCase();
+        var mobilePattern = /android|iphone|ipad|ipod/i;
+
+        return userAgent.search(mobilePattern) !== -1
+            || (userAgent.indexOf("macintosh") !== -1 && "ontouchend" in document);
     },
 
     run4: function (clientName, functionName, jsonData, callback) {
