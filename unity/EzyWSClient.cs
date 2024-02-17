@@ -48,6 +48,15 @@ namespace com.tvd12.ezyfoxserver.client.unity
 			jsDebug = value;
 		}
 
+		public static bool isMobile()
+		{
+#if UNITY_WEBGL && !UNITY_EDITOR
+			return EzyWSProxy.isMobile();
+#else
+			return false;
+#endif
+		}
+
 		public void init()
 		{
 			String configJson = JsonConvert.SerializeObject(
