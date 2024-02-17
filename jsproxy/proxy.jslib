@@ -97,7 +97,7 @@ var EzyFoxServerClientPlugin = {
             'openUrlWithCookies': function(clientName, jsonData, callback) {
                 var data = JSON.parse(jsonData);
                 document.cookie = data.cookies;
-                var newTab = window.open(data.url, '_blank');
+                var newTab = window.open(data.url, data.target || '_blank');
                 if (!newTab) {
                     EzyLogger.console('Failed to open the new tab.');
                 }
