@@ -37,6 +37,7 @@ namespace com.tvd12.ezyfoxserver.client.support
         private readonly IDictionary<Object, DataHandler> loginErrorHandlers;
         private readonly IDictionary<Object, DataHandler> udpHandshakeHandlers;
         private readonly IDictionary<Object, AppProxyDataHandler> appAccessedHandlers;
+        private readonly IDictionary<Object, EventHandler> connectionFailedHandlers;
         private readonly IDictionary<Object, EventHandler> disconnectedHandlers;
         private readonly IDictionary<Object, EventHandler> reconnectingHandlers;
         private readonly IDictionary<Object, EventHandler> pingLostHandlers;
@@ -58,6 +59,7 @@ namespace com.tvd12.ezyfoxserver.client.support
             this.loginErrorHandlers = new Dictionary<Object, DataHandler>();
             this.udpHandshakeHandlers = new Dictionary<Object, DataHandler>();
             this.appAccessedHandlers = new Dictionary<Object, AppProxyDataHandler>();
+            this.connectionFailedHandlers = new Dictionary<Object, EventHandler>();
             this.disconnectedHandlers = new Dictionary<Object, EventHandler>();
             this.reconnectingHandlers = new Dictionary<Object, EventHandler>();
             this.pingLostHandlers = new Dictionary<Object, EventHandler>();
@@ -195,6 +197,7 @@ namespace com.tvd12.ezyfoxserver.client.support
                     this.transportType = client.getTransportType();
                 }
                 client.setup()
+                    .addEventHandler(EzyEventType.CONNECTION_FAILURE, new ConnectionFailureHandler(this))
                     .addEventHandler(EzyEventType.DISCONNECTION, new DisconnectionHandler(this))
                     .addEventHandler(EzyEventType.LOST_PING, new PingLostHandler(this))
                     .addEventHandler(EzyEventType.TRY_CONNECT, new TryConnectHandler(this))
@@ -275,6 +278,18 @@ namespace com.tvd12.ezyfoxserver.client.support
             return handler;
         }
 
+        public Object onConnectionFailed(
+            EzySocketProxyEventHandler<EzyConnectionFailureEvent> handler
+        )
+        {
+            EventHandler dataHandler = evt =>
+            {
+                handler.Invoke(this, (EzyConnectionFailureEvent)evt);
+            };
+            connectionFailedHandlers[handler] = dataHandler;
+            return handler;
+        }
+
         public Object onDisconnected(
             EzySocketProxyEventHandler<EzyDisconnectionEvent> handler
         )
@@ -329,6 +344,7 @@ namespace com.tvd12.ezyfoxserver.client.support
             loginErrorHandlers.Remove(handler);
             udpHandshakeHandlers.Remove(handler);
             appAccessedHandlers.Remove(handler);
+            connectionFailedHandlers.Remove(handler);
             disconnectedHandlers.Remove(handler);
             reconnectingHandlers.Remove(handler);
             pingLostHandlers.Remove(handler);
@@ -482,6 +498,24 @@ namespace com.tvd12.ezyfoxserver.client.support
                     {
                         handler.Invoke(appProxy, data);
                     }
+                }
+            }
+        }
+
+        public class ConnectionFailureHandler : EzyConnectionFailureHandler
+        {
+            private readonly EzySocketProxy parent;
+
+            public ConnectionFailureHandler(EzySocketProxy parent)
+            {
+                this.parent = parent;
+            }
+
+            protected override void onConnectionFailed(EzyConnectionFailureEvent evt)
+            {
+                foreach (EventHandler handler in parent.connectionFailedHandlers.Values)
+                {
+                    handler.Invoke(evt);
                 }
             }
         }
