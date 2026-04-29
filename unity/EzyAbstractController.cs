@@ -96,6 +96,13 @@ namespace com.tvd12.ezyfoxserver.client.unity
 			);
 		}
 
+		protected void OnConnectionFailed(EzySocketProxyEventHandler<EzyConnectionFailureEvent> handler)
+		{
+			socketHandlers.Add(
+				socketProxy.onConnectionFailed(handler)
+			);
+		}
+
 		protected void OnDisconnected(EzySocketProxyEventHandler<EzyDisconnectionEvent> handler)
 		{
 			socketHandlers.Add(
