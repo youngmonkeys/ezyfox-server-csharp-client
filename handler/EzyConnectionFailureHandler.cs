@@ -10,7 +10,6 @@ namespace com.tvd12.ezyfoxserver.client.handler
 		protected override sealed void process(EzyConnectionFailureEvent evt)
 		{
             logger.info("connection failure, reason = " + evt.getReason());
-			preHandle(evt);
 			EzyClientConfig config = client.getConfig();
 			EzyReconnectConfig reconnectConfig = config.getReconnect();
 			bool should = shouldReconnect(evt);
@@ -28,10 +27,6 @@ namespace com.tvd12.ezyfoxserver.client.handler
 				onConnectionFailed(evt);
             }
 			postHandle(evt);
-		}
-
-		protected virtual void preHandle(EzyConnectionFailureEvent evt)
-		{
 		}
 
 		protected virtual bool shouldReconnect(EzyConnectionFailureEvent evt)
