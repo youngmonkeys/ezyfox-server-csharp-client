@@ -48,11 +48,17 @@ namespace com.tvd12.ezyfoxserver.client.unity
 			);
 			if (socketProxy.getClient() == null)
 			{
-				var config = EzyClientConfig.builder()
+				var configBuilder = EzyClientConfig.builder()
 					.clientName(socketConfig.ZoneName)
 					.zoneName(socketConfig.ZoneName)
-					.enableSSL(socketConfig.EnableSSL)
-					.build();
+					.enableSSL(socketConfig.EnableSSL);
+				configBuilder
+					.reconnectConfigBuilder()
+					.enable(socketConfig.EnableReconnect)
+					.maxReconnectCount(socketConfig.MaxReconnectCount)
+					.reconnectPeriod(socketConfig.ReconnectPeriod)
+					.done();
+				var config = configBuilder.build();
 				EzyClientFactory
 					.getInstance()
 					.getOrCreateClient(
@@ -100,6 +106,13 @@ namespace com.tvd12.ezyfoxserver.client.unity
 		{
 			socketHandlers.Add(
 				socketProxy.onConnectionFailed(handler)
+			);
+		}
+
+		protected void OnRawConnectionFailed(EzySocketProxyEventHandler<EzyConnectionFailureEvent> handler)
+		{
+			socketHandlers.Add(
+				socketProxy.onRawConnectionFailed(handler)
 			);
 		}
 
