@@ -359,6 +359,7 @@ namespace com.tvd12.ezyfoxserver.client.support
             udpHandshakeHandlers.Remove(handler);
             appAccessedHandlers.Remove(handler);
             connectionFailedHandlers.Remove(handler);
+            rawConnectionFailedHandlers.Remove(handler);
             disconnectedHandlers.Remove(handler);
             reconnectingHandlers.Remove(handler);
             pingLostHandlers.Remove(handler);
