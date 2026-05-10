@@ -20,6 +20,12 @@ namespace com.tvd12.ezyfoxserver.client.unity
 
         [SerializeField] private bool enableSSL;
 
+        [SerializeField] private bool enableReconnect = true;
+
+        [SerializeField] private int maxReconnectCount = 5;
+
+        [SerializeField] private int reconnectPeriod = 3000;
+
         public EzySocketConfig(Builder builder)
         {
             zoneName = builder.GetZoneName();
@@ -29,6 +35,9 @@ namespace com.tvd12.ezyfoxserver.client.unity
             udpPort = builder.GetUdpPort();
             udpUsage = builder.IsUdpUsage();
             enableSSL = builder.IsEnableSSL();
+            enableReconnect = builder.IsEnableReconnect();
+            maxReconnectCount = builder.GetMaxReconnectCount();
+            reconnectPeriod = builder.GetReconnectPeriod();
         }
 
         private EzySocketConfig() {}
@@ -75,6 +84,24 @@ namespace com.tvd12.ezyfoxserver.client.unity
             set => enableSSL = value;
         }
 
+        public bool EnableReconnect
+        {
+            get => enableReconnect;
+            set => enableReconnect = value;
+        }
+
+        public int MaxReconnectCount
+        {
+            get => maxReconnectCount;
+            set => maxReconnectCount = value;
+        }
+
+        public int ReconnectPeriod
+        {
+            get => reconnectPeriod;
+            set => reconnectPeriod = value;
+        }
+
         public static Builder GetBuilder()
         {
             return new Builder();
@@ -89,6 +116,9 @@ namespace com.tvd12.ezyfoxserver.client.unity
             private int udpPort;
             private bool udpUsage;
             private bool enableSSL;
+            private bool enableReconnect = true;
+            private int maxReconnectCount = 5;
+            private int reconnectPeriod = 3000;
 
             public string GetZoneName()
             {
@@ -123,6 +153,21 @@ namespace com.tvd12.ezyfoxserver.client.unity
             public bool IsEnableSSL()
             {
                 return enableSSL;
+            }
+
+            public bool IsEnableReconnect()
+            {
+                return enableReconnect;
+            }
+
+            public int GetMaxReconnectCount()
+            {
+                return maxReconnectCount;
+            }
+
+            public int GetReconnectPeriod()
+            {
+                return reconnectPeriod;
             }
 
             public Builder ZoneName(string zoneName)
@@ -164,6 +209,24 @@ namespace com.tvd12.ezyfoxserver.client.unity
             public Builder EnableSSL(bool enableSSL)
             {
                 this.enableSSL = enableSSL;
+                return this;
+            }
+
+            public Builder EnableReconnect(bool enableReconnect)
+            {
+                this.enableReconnect = enableReconnect;
+                return this;
+            }
+
+            public Builder MaxReconnectCount(int maxReconnectCount)
+            {
+                this.maxReconnectCount = maxReconnectCount;
+                return this;
+            }
+
+            public Builder ReconnectPeriod(int reconnectPeriod)
+            {
+                this.reconnectPeriod = reconnectPeriod;
                 return this;
             }
 

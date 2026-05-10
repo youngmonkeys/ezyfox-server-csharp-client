@@ -22,6 +22,9 @@ namespace com.tvd12.ezyfoxserver.client.support
         private String loginUsername;
         private String loginPassword;
         private String defaultAppName;
+        private bool enableReconnect = true;
+        private int maxReconnectCount = 5;
+        private int reconnectPeriod = 3000;
         private IDictionary<String, Object> loginData;
         private Type loginResponseDataType;
         private Type loginErrorDataType;
@@ -120,6 +123,24 @@ namespace com.tvd12.ezyfoxserver.client.support
             return this;
         }
 
+        public EzySocketProxy setEnableReconnect(bool enableReconnect)
+        {
+            this.enableReconnect = enableReconnect;
+            return this;
+        }
+
+        public EzySocketProxy setMaxReconnectCount(int maxReconnectCount)
+        {
+            this.maxReconnectCount = maxReconnectCount;
+            return this;
+        }
+
+        public EzySocketProxy setReconnectPeriod(int reconnectPeriod)
+        {
+            this.reconnectPeriod = reconnectPeriod;
+            return this;
+        }
+
         public EzyClient getClient()
         {
             return client;
@@ -178,11 +199,17 @@ namespace com.tvd12.ezyfoxserver.client.support
         {
             if (inited.compareAndSet(false, true))
             {
-                EzyClientConfig clientConfig = EzyClientConfig
+                EzyClientConfig.Builder clientConfigBuilder = EzyClientConfig
                     .builder()
                     .clientName(zoneName)
-                    .zoneName(zoneName)
-                    .build();
+                    .zoneName(zoneName);
+                clientConfigBuilder
+                    .reconnectConfigBuilder()
+                    .enable(enableReconnect)
+                    .maxReconnectCount(maxReconnectCount)
+                    .reconnectPeriod(reconnectPeriod)
+                    .done();
+                EzyClientConfig clientConfig = clientConfigBuilder.build();
                 EzyClients clients = EzyClients.getInstance();
                 this.client = clients.getClient(zoneName);
                 if (client == null)
