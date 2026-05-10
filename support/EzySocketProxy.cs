@@ -38,6 +38,7 @@ namespace com.tvd12.ezyfoxserver.client.support
         private readonly IDictionary<Object, DataHandler> udpHandshakeHandlers;
         private readonly IDictionary<Object, AppProxyDataHandler> appAccessedHandlers;
         private readonly IDictionary<Object, EventHandler> connectionFailedHandlers;
+        private readonly IDictionary<Object, EventHandler> rawConnectionFailedHandlers;
         private readonly IDictionary<Object, EventHandler> disconnectedHandlers;
         private readonly IDictionary<Object, EventHandler> reconnectingHandlers;
         private readonly IDictionary<Object, EventHandler> pingLostHandlers;
@@ -60,6 +61,7 @@ namespace com.tvd12.ezyfoxserver.client.support
             this.udpHandshakeHandlers = new Dictionary<Object, DataHandler>();
             this.appAccessedHandlers = new Dictionary<Object, AppProxyDataHandler>();
             this.connectionFailedHandlers = new Dictionary<Object, EventHandler>();
+            this.rawConnectionFailedHandlers = new Dictionary<Object, EventHandler>();
             this.disconnectedHandlers = new Dictionary<Object, EventHandler>();
             this.reconnectingHandlers = new Dictionary<Object, EventHandler>();
             this.pingLostHandlers = new Dictionary<Object, EventHandler>();
@@ -290,6 +292,18 @@ namespace com.tvd12.ezyfoxserver.client.support
             return handler;
         }
 
+        public Object onRawConnectionFailed(
+            EzySocketProxyEventHandler<EzyConnectionFailureEvent> handler
+        )
+        {
+            EventHandler dataHandler = evt =>
+            {
+                handler.Invoke(this, (EzyConnectionFailureEvent)evt);
+            };
+            rawConnectionFailedHandlers[handler] = dataHandler;
+            return handler;
+        }
+
         public Object onDisconnected(
             EzySocketProxyEventHandler<EzyDisconnectionEvent> handler
         )
@@ -509,6 +523,14 @@ namespace com.tvd12.ezyfoxserver.client.support
             public ConnectionFailureHandler(EzySocketProxy parent)
             {
                 this.parent = parent;
+            }
+
+            protected override void preHandle(EzyConnectionFailureEvent evt)
+            {
+                foreach (EventHandler handler in parent.rawConnectionFailedHandlers.Values)
+                {
+                    handler.Invoke(evt);
+                }
             }
 
             protected override void onConnectionFailed(EzyConnectionFailureEvent evt)
